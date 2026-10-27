@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Привычки</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+/* ===== Цвета: берутся из темы Telegram, запасные — для браузера ===== */
+:root{
+  --bg: var(--tg-theme-secondary-bg-color, #f2f2f7);
+  --card: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #ffffff));
+  --text: var(--tg-theme-text-color, #111111);
+  --hint: var(--tg-theme-hint-color, #8e8e93);
+  --accent: var(--tg-theme-button-color, #2ea44f);
+  --accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --danger: var(--tg-theme-destructive-text-color, #e5484d);
+  --line: rgba(128,128,128,.16);
+  --radius: 18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not(.tg){ --bg:#000; --card:#1c1c1e; --text:#f2f2f7; --hint:#8e8e93; }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Roboto,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{min-height:100vh;padding:calc(12px + var(--tg-content-safe-area-inset-top,0px)) 16px calc(110px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input{font:inherit;color:var(--text)}
+.hidden{display:none!important}
+.screen{animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== Шапка ===== */
+.top{display:flex;justify-content:space-between;align-items:flex-end;margin:4px 2px 14px}
+.hello{font-size:13px;color:var(--hint);margin-bottom:2px}
+.title{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.today-ring{position:relative;width:52px;height:52px;flex:none}
+.today-ring svg{transform:rotate(-90deg)}
+.today-ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:700}
+
+/* ===== Неделя ===== */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;background:var(--card);
+  border-radius:var(--radius);padding:10px 8px;margin-bottom:16px}
+.day{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0;border-radius:12px;transition:background .2s}
+.day small{font-size:11px;color:var(--hint);text-transform:uppercase}
+.day b{font-size:15px}
+.day.sel{background:var(--accent);color:var(--accent-text)}
+.day.sel small{color:var(--accent-text);opacity:.8}
+.day.future{opacity:.35;pointer-events:none}
+.dot{width:20px;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.dot i{display:block;height:100%;background:currentColor;opacity:.9}
+.day:not(.sel) .dot i{background:var(--accent)}
+
+/* ===== Карточки привычек ===== */
+.section{font-size:13px;color:var(--hint);margin:0 4px 8px;display:flex;justify-content:space-between}
+.list{display:flex;flex-direction:column;gap:10px}
+.habit{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:var(--radius);
+  padding:12px 12px 12px 14px;transition:transform .15s}
+.habit:active{transform:scale(.98)}
+.emoji{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex:none}
+.hinfo{flex:1;min-width:0}
+.hname{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmeta{font-size:13px;color:var(--hint);margin-top:2px}
+.hmeta .fire{color:#ff8a00;font-weight:600}
+.check{width:40px;height:40px;border-radius:50%;border:2.5px solid var(--line);display:grid;place-items:center;
+  flex:none;transition:all .25s cubic-bezier(.3,1.6,.5,1)}
+.check svg{width:20px;height:20px;stroke:#fff;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .3s ease .05s}
+.check.on{border-color:transparent;transform:scale(1.06)}
+.check.on svg{stroke-dashoffset:0}
+.habit.done .hname{opacity:.55}
+
+.empty{text-align:center;padding:48px 20px;color:var(--hint)}
+.empty div{font-size:46px;margin-bottom:10px}
+
+/* ===== Кнопки ===== */
+.fab{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));height:54px;border-radius:16px;
+  background:var(--accent);color:var(--accent-text);font-weight:700;font-size:16px;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:5}
+.btn{width:100%;height:52px;border-radius:14px;background:var(--accent);color:var(--accent-text);font-weight:700;font-size:16px}
+.btn.ghost{background:transparent;color:var(--danger);font-weight:600}
+.btn:disabled{opacity:.4}
+
+/* ===== Нижний лист (добавление) ===== */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10;animation:fadebg .2s}
+@keyframes fadebg{from{opacity:0}}
+.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;z-index:11;
+  padding:10px 16px calc(18px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;animation:up .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes up{from{transform:translateY(100%)}}
+.grab{width:38px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.sheet h3{margin:0 0 14px;font-size:20px}
+.field{width:100%;height:50px;border-radius:14px;border:0;background:var(--bg);padding:0 14px;font-size:16px;outline:none}
+.label{font-size:13px;color:var(--hint);margin:16px 2px 8px}
+.emojis{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.emojis button{aspect-ratio:1;border-radius:12px;font-size:22px;background:var(--bg)}
+.emojis button.on{outline:2.5px solid var(--accent)}
+.colors{display:flex;gap:10px}
+.colors button{width:34px;height:34px;border-radius:50%}
+.colors button.on{outline:3px solid var(--text);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 13px;border-radius:20px;background:var(--bg);font-size:14px}
+.chip.on{background:var(--accent);color:var(--accent-text)}
+
+/* ===== Экран привычки ===== */
+.back{font-size:16px;color:var(--accent);margin:2px 0 14px;display:inline-flex;gap:6px;align-items:center}
+.dhead{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.dhead .emoji{width:60px;height:60px;font-size:32px;border-radius:18px}
+.dhead h2{margin:0;font-size:24px;word-break:break-word}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border-radius:var(--radius);padding:14px}
+.stat b{display:block;font-size:24px;font-weight:800}
+.stat small{color:var(--hint);font-size:13px}
+.cal{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.calnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:700}
+.calnav button{width:36px;height:36px;border-radius:10px;background:var(--bg);font-size:18px}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+.calgrid .wd{font-size:11px;color:var(--hint);padding-bottom:4px}
+.cd{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:14px;background:var(--bg)}
+.cd.on{color:#fff;font-weight:700}
+.cd.today{outline:2px solid var(--accent);outline-offset:-2px}
+.cd.fut{opacity:.3}
+.cd.pad{background:none}
+.tip{font-size:12px;color:var(--hint);text-align:center;margin-top:10px}
+
+/* ===== Онбординг ===== */
+.onb{min-height:calc(100vh - 140px);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:0 8px}
+.onb .big{font-size:72px;margin-bottom:12px}
+.onb h1{font-size:28px;margin:0 0 10px;letter-spacing:-.5px}
+.onb p{color:var(--hint);font-size:16px;line-height:1.45;margin:0 0 22px}
+.dots{display:flex;gap:6px;justify-content:center;margin:18px 0}
+.dots i{width:7px;height:7px;border-radius:4px;background:var(--line);transition:all .2s}
+.dots i.on{width:20px;background:var(--accent)}
+
+/* ===== Праздник ===== */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden}
+.confetti i{position:absolute;top:-20px;font-size:22px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.toast{position:fixed;left:50%;top:calc(18px + var(--tg-content-safe-area-inset-top,0px));transform:translateX(-50%);
+  background:var(--text);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:21;animation:fade .2s}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ================================================================
+   НАСТРОЙКИ — поменяй под себя
+   ================================================================ */
+const APP_NAME = "Привычки";          // название приложения
+const FREE_LIMIT = 0;                  // 0 = без ограничений (премиум добавим на этапе 8)
+
+const EMOJIS = ["💧","🏃","💪","📚","🧘","🍎","😴","🚭","🥦","🧠","✍️","🎯","🚶","🦷","☀️","📵"];
+const COLORS = ["#34c759","#0a84ff","#ff9f0a","#ff375f","#bf5af2","#64d2ff"];
+const TEMPLATES = [
+  {name:"Пить воду", emoji:"💧", color:"#64d2ff"},
+  {name:"Тренировка", emoji:"💪", color:"#ff9f0a"},
+  {name:"Читать 10 страниц", emoji:"📚", color:"#bf5af2"},
+  {name:"Без фастфуда", emoji:"🍎", color:"#34c759"},
+  {name:"Сон до 00:00", emoji:"😴", color:"#0a84ff"},
+  {name:"Пройти 5 км", emoji:"🚶", color:"#ff375f"},
+];
+const WD = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const MONTHS = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+
+/* ================================================================
+   TELEGRAM
+   ================================================================ */
+const tg = window.Telegram && window.Telegram.WebApp;
+const inTG = !!(tg && tg.initData);
+if (tg) {
+  tg.ready(); tg.expand();
+  if (inTG) document.documentElement.classList.add("tg");
+  try { tg.setHeaderColor("secondary_bg_color"); tg.setBackgroundColor("secondary_bg_color"); } catch(e) {}
+}
+const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || "";
+
+function haptic(type) {               // вибрация: light / medium / success
+  try {
+    if (!tg || !tg.HapticFeedback) return;
+    if (type === "success") tg.HapticFeedback.notificationOccurred("success");
+    else tg.HapticFeedback.impactOccurred(type || "light");
+  } catch(e) {}
+}
+function confirmBox(text) {           // подтверждение: в Telegram — родное окно
+  return new Promise(res => {
+    if (inTG && tg.showConfirm) tg.showConfirm(text, ok => res(ok));
+    else res(window.confirm(text));
+  });
+}
+
+/* ================================================================
+   ХРАНИЛИЩЕ
+   В Telegram — CloudStorage (данные в аккаунте пользователя),
+   в браузере — localStorage. Одно значение в CloudStorage до 4096
+   символов, поэтому длинные данные режем на куски.
+   ================================================================ */
+const useCloud = inTG && tg.CloudStorage && tg.isVersionAtLeast && tg.isVersionAtLeast("6.9");
+const KEY = "st";
+const CHUNK = 4000;
+
+function cloudGet(keys) {
+  return new Promise((res, rej) => tg.CloudStorage.getItems(keys, (err, vals) => err ? rej(err) : res(vals || {})));
+}
+function cloudSet(key, val) {
+  return new Promise((res, rej) => tg.CloudStorage.setItem(key, val, (err) => err ? rej(err) : res()));
+}
+function cloudRemove(keys) {
+  return new Promise(res => keys.length ? tg.CloudStorage.removeItems(keys, () => res()) : res());
+}
+
+async function loadRaw() {
+  if (!useCloud) { try { return localStorage.getItem(KEY) || ""; } catch(e) { return ""; } }
+  const meta = await cloudGet([KEY + "_n"]);
+  const n = parseInt(meta[KEY + "_n"] || "0", 10);
+  if (!n) return "";
+  const keys = Array.from({length:n}, (_, i) => KEY + "_" + i);
+  const vals = await cloudGet(keys);
+  return keys.map(k => vals[k] || "").join("");
+}
+
+let savedChunks = 0;
+async function saveRaw(str) {
+  if (!useCloud) { try { localStorage.setItem(KEY, str); } catch(e) {} return; }
+  const parts = [];
+  for (let i = 0; i < str.length; i += CHUNK) parts.push(str.slice(i, i + CHUNK));
+  for (let i = 0; i < parts.length; i++) await cloudSet(KEY + "_" + i, parts[i]);
+  await cloudSet(KEY + "_n", String(parts.length));
+  const extra = [];
+  for (let i = parts.length; i < savedChunks; i++) extra.push(KEY + "_" + i);
+  await cloudRemove(extra);
+  savedChunks = parts.length;
+}
+
+/* ================================================================
+   ДАННЫЕ
+   Дата хранится числом: номер дня с 1970 года (компактно).
+   ================================================================ */
+let state = { v:1, onboarded:false, habits:[] };
+// habit = { id, name, emoji, color, created(день), done:[дни] }
+
+function dayNum(d) { return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000); }
+function fromDay(n) { const d = new Date(n * 86400000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); }
+function today() { return dayNum(new Date()); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+let saveTimer = null;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveRaw(JSON.stringify(state)).catch(() => toast("Не удалось сохранить")), 350);
+}
+
+function isDone(h, day) { return h.done.includes(day); }
+function toggle(h, day) {
+  const i = h.done.indexOf(day);
+  if (i >= 0) h.done.splice(i, 1); else { h.done.push(day); h.done.sort((a, b) => a - b); }
+  save();
+  return i < 0;
+}
+
+/* Серия: дни подряд до сегодня. Если сегодня ещё не отмечено,
+   но вчера было — серия жива, считаем от вчера. */
+function streak(h) {
+  const set = new Set(h.done);
+  let d = today();
+  if (!set.has(d)) d -= 1;
+  let n = 0;
+  while (set.has(d)) { n++; d--; }
+  return n;
+}
+function bestStreak(h) {
+  let best = 0, cur = 0, prev = null;
+  for (const d of h.done) { cur = (prev !== null && d === prev + 1) ? cur + 1 : 1; best = Math.max(best, cur); prev = d; }
+  return best;
+}
+function monthPercent(h, y, m) {
+  const first = dayNum(new Date(y, m, 1));
+  const last = Math.min(dayNum(new Date(y, m + 1, 0)), today());
+  const since = h.done.length ? Math.min(h.created, h.done[0]) : h.created;   // учитываем отметки задним числом
+  const start = Math.max(first, since);
+  if (last < start) return 0;
+  const total = last - start + 1;
+  const done = h.done.filter(d => d >= start && d <= last).length;
+  return Math.round(done / total * 100);
+}
+function daysWord(n) {
+  const a = n % 10, b = n % 100;
+  if (a === 1 && b !== 11) return "день";
+  if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return "дня";
+  return "дней";
+}
+
+/* ================================================================
+   ОТРИСОВКА
+   ================================================================ */
+const app = document.getElementById("app");
+let screen = "list";     // list | detail | onboarding
+let selDay = today();
+let detailId = null;
+let calY, calM;
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === "class") e.className = attrs[k];
+    else if (k === "style") e.style.cssText = attrs[k];
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), attrs[k]);
+    else if (k === "html") e.innerHTML = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  for (const c of kids.flat()) if (c != null) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+function tint(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+function render() {
+  app.innerHTML = "";
+  if (tg && tg.BackButton) { screen === "detail" ? tg.BackButton.show() : tg.BackButton.hide(); }
+  if (screen === "onboarding") return renderOnboarding();
+  if (screen === "detail") return renderDetail();
+  renderList();
+}
+
+/* ---------- Главный экран ---------- */
+function renderList() {
+  const t = today();
+  const doneToday = state.habits.filter(h => isDone(h, t)).length;
+  const total = state.habits.length;
+  const frac = total ? doneToday / total : 0;
+  const C = 2 * Math.PI * 21;
+
+  const top = el("div", {class:"top"},
+    el("div", {},
+      el("div", {class:"hello"}, userName ? `Привет, ${userName}` : "Привет!"),
+      el("div", {class:"title"}, selDay === t ? "Сегодня" : fmtDay(selDay))),
+    el("div", {class:"today-ring", html:
+      `<svg width="52" height="52"><circle cx="26" cy="26" r="21" stroke="var(--line)" stroke-width="5" fill="none"/>
+       <circle cx="26" cy="26" r="21" stroke="var(--accent)" stroke-width="5" fill="none" stroke-linecap="round"
+       stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}" style="transition:stroke-dashoffset .5s"/></svg>
+       <span>${doneToday}/${total}</span>`}));
+
+  // Неделя: Пн–Вс текущей недели
+  const now = new Date();
+  const mondayOffset = (now.getDay() + 6) % 7;
+  const monday = t - mondayOffset;
+  const week = el("div", {class:"week"});
+  for (let i = 0; i < 7; i++) {
+    const d = monday + i;
+    const cnt = state.habits.filter(h => isDone(h, d)).length;
+    const f = total ? cnt / total : 0;
+    week.append(el("button", {class:"day" + (d === selDay ? " sel" : "") + (d > t ? " future" : ""),
+      onclick: () => { selDay = d; haptic("light"); render(); }},
+      el("small", {}, WD[i]), el("b", {}, String(fromDay(d).getDate())),
+      el("div", {class:"dot", html:`<i style="width:${f * 100}%"></i>`})));
+  }
+
+  app.append(el("div", {class:"screen"}, top, week, listBlock()));
+  app.append(el("button", {class:"fab", onclick: openAdd}, "+ Привычка"));
+}
+
+function listBlock() {
+  if (!state.habits.length) {
+    return el("div", {class:"empty"}, el("div", {}, "🌱"), "Пока пусто.", el("br"), "Добавь первую привычку — начни с одной.");
+  }
+  const wrap = el("div", {});
+  wrap.append(el("div", {class:"section"}, el("span", {}, "Мои привычки"),
+    el("span", {}, selDay === today() ? "" : "отметки за выбранный день")));
+  const list = el("div", {class:"list"});
+  for (const h of state.habits) list.append(habitCard(h));
+  wrap.append(list);
+  return wrap;
+}
+
+function habitCard(h) {
+  const on = isDone(h, selDay);
+  const s = streak(h);
+  const card = el("div", {class:"habit" + (on ? " done" : ""), onclick: () => openDetail(h.id)});
+  const check = el("button", {class:"check" + (on ? " on" : ""),
+    style: on ? `background:${h.color}` : "",
+    html:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    onclick: (e) => { e.stopPropagation(); onToggle(h, check, card); }});
+  card.append(
+    el("div", {class:"emoji", style:`background:${tint(h.color, .16)}`}, h.emoji),
+    el("div", {class:"hinfo"},
+      el("div", {class:"hname"}, h.name),
+      el("div", {class:"hmeta", html: s > 0
+        ? `<span class="fire">🔥 ${s}</span> ${daysWord(s)} подряд`
+        : "Начни серию сегодня"})),
+    check);
+  return card;
+}
+
+function onToggle(h, check, card) {
+  const t = today();
+  const wasAll = state.habits.length && state.habits.every(x => isDone(x, t));
+  const nowOn = toggle(h, selDay);
+  haptic(nowOn ? "medium" : "light");
+  const allNow = state.habits.every(x => isDone(x, t));
+  if (nowOn && selDay === t && allNow && !wasAll) { celebrate(); haptic("success"); }
+  check.classList.toggle("on", nowOn);
+  setTimeout(render, 280);
+}
+
+/* ---------- Добавление ---------- */
+function openAdd() {
+  if (FREE_LIMIT && state.habits.length >= FREE_LIMIT) { toast("Лимит бесплатной версии"); return; }
+  haptic("light");
+  let emoji = EMOJIS[0], color = COLORS[0];
+  const bgEl = el("div", {class:"sheet-bg", onclick: close});
+  const input = el("input", {class:"field", placeholder:"Например: читать 10 страниц", maxlength:"40"});
+  const saveBtn = el("button", {class:"btn", disabled:"", onclick: () => {
+    const name = input.value.trim(); if (!name) return;
+    addHabit(name, emoji, color); close();
+  }}, "Добавить");
+  input.addEventListener("input", () => { saveBtn.disabled = !input.value.trim(); });
+  input.addEventListener("keydown", e => { if (e.key === "Enter") saveBtn.click(); });
+
+  const emojis = el("div", {class:"emojis"});
+  EMOJIS.forEach((em, i) => emojis.append(el("button", {class: i === 0 ? "on" : "", onclick: (e) => {
+    emoji = em; [...emojis.children].forEach(b => b.classList.remove("on")); e.currentTarget.classList.add("on"); haptic("light");
+  }}, em)));
+  const colors = el("div", {class:"colors"});
+  COLORS.forEach((c, i) => colors.append(el("button", {class: i === 0 ? "on" : "", style:`background:${c}`, onclick: (e) => {
+    color = c; [...colors.children].forEach(b => b.classList.remove("on")); e.currentTarget.classList.add("on"); haptic("light");
+  }})));
+  const chips = el("div", {class:"chips"});
+  TEMPLATES.filter(tp => !state.habits.some(h => h.name === tp.name)).forEach(tp =>
+    chips.append(el("button", {class:"chip", onclick: () => { addHabit(tp.name, tp.emoji, tp.color); close(); }}, `${tp.emoji} ${tp.name}`)));
+
+  const sheet = el("div", {class:"sheet"},
+    el("div", {class:"grab"}), el("h3", {}, "Новая привычка"),
+    input,
+    el("div", {class:"label"}, "Иконка"), emojis,
+    el("div", {class:"label"}, "Цвет"), colors,
+    chips.children.length ? el("div", {class:"label"}, "Или выбери готовую") : null,
+    chips.children.length ? chips : null,
+    el("div", {style:"height:18px"}), saveBtn);
+  document.body.append(bgEl, sheet);
+  setTimeout(() => input.focus(), 250);
+  function close() { bgEl.remove(); sheet.remove(); }
+}
+function addHabit(name, emoji, color) {
+  state.habits.push({id: uid(), name, emoji, color, created: today(), done: []});
+  save(); haptic("success"); selDay = today(); render();
+}
+
+/* ---------- Экран привычки ---------- */
+function openDetail(id) {
+  detailId = id; screen = "detail";
+  const n = new Date(); calY = n.getFullYear(); calM = n.getMonth();
+  haptic("light"); render(); window.scrollTo(0, 0);
+}
+function goBack() { screen = "list"; render(); }
+if (tg && tg.BackButton) tg.BackButton.onClick(goBack);
+
+function renderDetail() {
+  const h = state.habits.find(x => x.id === detailId);
+  if (!h) { screen = "list"; return render(); }
+  const s = streak(h), best = bestStreak(h);
+
+  const cal = el("div", {class:"cal"});
+  const nav = el("div", {class:"calnav"},
+    el("button", {onclick: () => { calM--; if (calM < 0) { calM = 11; calY--; } render(); }}, "‹"),
+    el("span", {}, `${MONTHS[calM]} ${calY}`),
+    el("button", {onclick: () => { calM++; if (calM > 11) { calM = 0; calY++; } render(); }}, "›"));
+  const grid = el("div", {class:"calgrid"});
+  WD.forEach(w => grid.append(el("div", {class:"wd"}, w)));
+  const first = new Date(calY, calM, 1);
+  const pad = (first.getDay() + 6) % 7;
+  for (let i = 0; i < pad; i++) grid.append(el("div", {class:"cd pad"}));
+  const daysIn = new Date(calY, calM + 1, 0).getDate();
+  const t = today();
+  for (let d = 1; d <= daysIn; d++) {
+    const dn = dayNum(new Date(calY, calM, d));
+    const on = isDone(h, dn);
+    grid.append(el("button", {class:"cd" + (on ? " on" : "") + (dn === t ? " today" : "") + (dn > t ? " fut" : ""),
+      style: on ? `background:${h.color}` : "",
+      onclick: () => { if (dn > t) return; toggle(h, dn); haptic("light"); render(); }}, String(d)));
+  }
+  cal.append(nav, grid, el("div", {class:"tip"}, "Нажми на день, чтобы отметить или снять отметку"));
+
+  app.append(el("div", {class:"screen"},
+    inTG ? null : el("button", {class:"back", onclick: goBack}, "‹ Назад"),
+    el("div", {class:"dhead"},
+      el("div", {class:"emoji", style:`background:${tint(h.color, .16)}`}, h.emoji),
+      el("h2", {}, h.name)),
+    el("div", {class:"stats"},
+      stat(`🔥 ${s}`, "текущая серия"),
+      stat(String(best), "лучшая серия"),
+      stat(monthPercent(h, calY, calM) + "%", "выполнено за месяц"),
+      stat(String(h.done.length), "всего дней")),
+    cal,
+    el("button", {class:"btn ghost", onclick: async () => {
+      if (await confirmBox(`Удалить «${h.name}»? Вся история пропадёт.`)) {
+        state.habits = state.habits.filter(x => x.id !== h.id); save(); haptic("medium"); goBack();
+      }
+    }}, "Удалить привычку")));
+}
+function stat(v, l) { return el("div", {class:"stat"}, el("b", {}, v), el("small", {}, l)); }
+
+/* ---------- Онбординг ---------- */
+let onbStep = 0;
+const picked = new Set([0, 1]);
+function renderOnboarding() {
+  const slides = [
+    {big:"🔥", h:`Это ${APP_NAME}`, p:"Отмечай привычки каждый день и смотри, как растёт серия. Чем длиннее огонёк — тем жальче его прервать."},
+    {big:"✅", h:"Один тап в день", p:"Никаких отчётов и таблиц. Открыл, нажал на кружок — готово. Всё сохраняется в твоём Telegram."},
+  ];
+  const wrap = el("div", {class:"onb screen"});
+  if (onbStep < slides.length) {
+    const s = slides[onbStep];
+    wrap.append(el("div", {class:"big"}, s.big), el("h1", {}, s.h), el("p", {}, s.p));
+  } else {
+    wrap.append(el("div", {class:"big"}, "🌱"), el("h1", {}, "С чего начнём?"),
+      el("p", {}, "Выбери 1–3 привычки. Лучше начать с малого."));
+    const chips = el("div", {class:"chips", style:"justify-content:center"});
+    TEMPLATES.forEach((tp, i) => chips.append(el("button", {class:"chip" + (picked.has(i) ? " on" : ""),
+      onclick: (e) => { picked.has(i) ? picked.delete(i) : picked.add(i); e.currentTarget.classList.toggle("on"); haptic("light"); }},
+      `${tp.emoji} ${tp.name}`)));
+    wrap.append(chips);
+  }
+  const dots = el("div", {class:"dots"});
+  for (let i = 0; i <= slides.length; i++) dots.append(el("i", {class: i === onbStep ? "on" : ""}));
+  wrap.append(dots);
+  app.append(wrap);
+  app.append(el("button", {class:"fab", onclick: () => {
+    haptic("light");
+    if (onbStep < slides.length) { onbStep++; return render(); }
+    [...picked].sort().forEach(i => { const tp = TEMPLATES[i];
+      state.habits.push({id: uid(), name: tp.name, emoji: tp.emoji, color: tp.color, created: today(), done: []}); });
+    state.onboarded = true; save(); screen = "list"; haptic("success"); render();
+  }}, onbStep < slides.length ? "Дальше" : "Начать"));
+}
+
+/* ---------- Мелочи ---------- */
+function fmtDay(d) {
+  const x = fromDay(d);
+  return x.toLocaleDateString("ru-RU", {weekday:"short", day:"numeric", month:"short"});
+}
+function celebrate() {
+  const box = el("div", {class:"confetti"});
+  const set = ["🎉","🔥","✨","💪","⭐"];
+  for (let i = 0; i < 28; i++) box.append(el("i", {style:`left:${Math.random() * 100}%;animation-delay:${Math.random() * .5}s`}, set[i % set.length]));
+  document.body.append(box); setTimeout(() => box.remove(), 2400);
+  toast("Все привычки на сегодня выполнены!");
+}
+function toast(text) {
+  const t = el("div", {class:"toast"}, text);
+  document.body.append(t); setTimeout(() => t.remove(), 2200);
+}
+// Новый день наступил, пока приложение открыто — обновим экран
+let lastDay = today();
+setInterval(() => { if (today() !== lastDay) { lastDay = today(); selDay = lastDay; render(); } }, 60000);
+
+/* ================================================================
+   ЗАПУСК
+   ================================================================ */
+(async function start() {
+  app.append(el("div", {class:"empty"}, "Загрузка…"));
+  try {
+    const raw = await loadRaw();
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data && Array.isArray(data.habits)) state = data;
+      if (useCloud) savedChunks = Math.ceil(raw.length / CHUNK);
+    }
+  } catch(e) { toast("Не удалось загрузить данные"); }
+  screen = state.onboarded ? "list" : "onboarding";
+  render();
+})();
+</script>
+</body>
+</html>
