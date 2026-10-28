@@ -93,6 +93,7 @@ input{font:inherit;color:var(--text);-webkit-user-select:text;user-select:text}
 /* ===== Нижнее меню ===== */
 .tabs{position:fixed;left:12px;right:12px;bottom:calc(10px + var(--bottom));height:64px;border-radius:22px;background:var(--card);
   display:grid;grid-template-columns:1fr 76px 1fr;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.14);z-index:6}
+.tabs.five{grid-template-columns:1fr 1fr 72px 1fr 1fr}
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--hint)}
 .tab svg{width:24px;height:24px}
 .tab.on{color:var(--accent)}
@@ -298,6 +299,29 @@ input{font:inherit;color:var(--text);-webkit-user-select:text;user-select:text}
 .order .ico{width:36px;height:36px;font-size:19px;border-radius:11px}
 .sheet .card{background:var(--soft)}
 
+/* ===== v5: друзья, челленджи, рейтинг ===== */
+.newch{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:12px;text-align:left}
+.newch i{width:44px;height:44px;border-radius:14px;background:var(--accent);color:var(--accent-text);display:grid;place-items:center;font-style:normal;font-size:24px;font-weight:600}
+.newch b{display:block;font-size:16px}
+.newch small{color:var(--hint);font-size:13px}
+.lb{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.lb:first-of-type{border-top:0}
+.lb .pl{width:30px;text-align:center;font-weight:800;font-size:16px;color:var(--hint);flex:none}
+.lb .pl.medal{font-size:24px}
+.lb > div{flex:1;min-width:0}
+.lb b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb small{color:var(--hint);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.lb .sc{font-weight:800;font-size:16px;color:var(--fire);flex:none}
+.lb.me{background:var(--soft);border-radius:12px;padding:10px 8px;margin:0 -8px}
+.lb .ok{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:14px;flex:none;background:var(--soft);color:var(--hint)}
+.lb .ok.on{background:#34c759;color:#fff}
+.chbig{display:grid;place-items:center;text-align:center;padding:6px 0 4px}
+.chbig b{font-size:40px;font-weight:800;letter-spacing:-1px}
+.chbig small{color:var(--hint);font-size:14px}
+.err{text-align:center;color:var(--hint);padding:30px 16px;line-height:1.5}
+.rowtime{display:flex;align-items:center;gap:12px;padding:0 0 12px}
+.rowtime input{flex:1;height:44px;border-radius:12px;border:0;background:var(--soft);padding:0 12px;font:inherit;font-size:16px;color:var(--text)}
+
 /* ===== Праздник и уведомления ===== */
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
 .confetti i{position:absolute;top:-30px;font-size:24px;font-style:normal;animation:fall 1.8s cubic-bezier(.3,.6,.6,1) forwards}
@@ -316,6 +340,9 @@ input{font:inherit;color:var(--text);-webkit-user-select:text;user-select:text}
    ===================================================================== */
 const APP_NAME = "Огонёк";
 const BOT_LINK = "https://t.me/ogonyok_app_bot?startapp";   // ссылка для приглашений
+const BOT_USERNAME = "ogonyok_app_bot";
+// Напоминание через календарь телефона: готовые файлы .ics (по одному на каждые 30 минут)
+const ICS_BASE = "https://hwr2rhyh6d-web.github.io/habit-app/ics/";
 
 const EMOJI_CATS = [
   ["Здоровье", ["💧","💊","😴","🛌","🦷","🧴","🧼","🚿","🛁","🩺","❤️","🫀","🧠","👁️","🌙","☀️","🧘","🌡️","🩹","💉","🫁","👃","🧖","💆"]],
@@ -437,6 +464,7 @@ if (tg) {
   try { if (can("7.7")) tg.disableVerticalSwipes(); } catch(e) {}
 }
 const userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || "";
+let SERVER_ON = false;   // включается сам, если ответил сервер Telegram Serverless
 
 function haptic(type) {
   try {
@@ -504,6 +532,7 @@ async function flush() {
   try { await saveRaw(JSON.stringify(state)); }
   catch(e) { toast("Не удалось сохранить — проверь интернет"); }
   saving = false;
+  syncSoon();
   if (pending) { pending = false; flush(); }
 }
 document.addEventListener("visibilitychange", () => { if (document.hidden && loaded) { clearTimeout(saveTimer); flush(); } });
@@ -517,7 +546,7 @@ document.addEventListener("visibilitychange", () => { if (document.hidden && loa
    Для type="quit" (отказ): start — момент старта (мс), relapses:[мс] — срывы.
    notes:{день: текст} — заметки к дням.
    ===================================================================== */
-let state = { v:3, onboarded:false, habits:[], timer:null, settings:{theme:"fire", quote:true}, badges:null, flags:{} };
+let state = { v:3, onboarded:false, habits:[], timer:null, settings:{theme:"fire", quote:true, remind:null, weekly:true, rating:false}, badges:null, flags:{} };
 
 const dayNum = d => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
 const fromDay = n => { const d = new Date(n * 86400000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
@@ -528,7 +557,7 @@ const fmtN = n => Math.round(n).toLocaleString("ru-RU");
 
 function migrate(data) {
   const s = Object.assign({ v:3, onboarded:true, habits:[], timer:null, badges:null, flags:{} }, data);
-  s.settings = Object.assign({theme:"fire", quote:true}, s.settings || {});
+  s.settings = Object.assign({theme:"fire", quote:true, remind:null, weekly:true, rating:false}, s.settings || {});
   s.flags = s.flags || {};
   s.habits = (s.habits || []).map(h => Object.assign({
     type:"check", target:1, unit:"", days:[0,1,2,3,4,5,6], log:{}, done:[], notes:{}
@@ -721,27 +750,33 @@ const ICONS = {
   gear:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>',
   reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5"/></svg>',
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 21h8M9 18h6"/></svg>',
 };
 
 function render() {
   app.innerHTML = "";
-  const inDetail = screen === "detail";
+  const inDetail = screen === "detail" || screen === "challenge";
   document.body.classList.toggle("no-tabs", inDetail || screen === "onboarding");
   if (tg && tg.BackButton && can("6.1")) (inDetail || sheetClose) ? tg.BackButton.show() : tg.BackButton.hide();
   if (screen === "loading") return app.append(el("div", {class:"empty"}, "Загрузка…"));
   if (screen === "onboarding") return renderOnboarding();
   if (screen === "detail") return renderDetail();
-  if (tab === "stats") renderStats(); else renderToday();
+  if (screen === "challenge") return renderChallenge();
+  if (tab === "stats") renderStats();
+  else if (tab === "friends") renderFriends();
+  else if (tab === "rating") renderRating();
+  else renderToday();
   renderTabs();
   checkBadges();
 }
 function renderTabs() {
-  app.append(el("nav", {class:"tabs"},
-    el("button", {class:"tab" + (tab === "today" ? " on" : ""), onclick: () => { tab = "today"; haptic("select"); render(); }},
-      el("span", {html:ICONS.home}), "Сегодня"),
-    el("button", {class:"plus", "aria-label":"Добавить привычку", onclick: () => openEditor(), html:ICONS.plus}),
-    el("button", {class:"tab" + (tab === "stats" ? " on" : ""), onclick: () => { tab = "stats"; haptic("select"); render(); window.scrollTo(0, 0); }},
-      el("span", {html:ICONS.stats}), "Статистика")));
+  const go = (t, load) => () => { tab = t; haptic("select"); render(); window.scrollTo(0, 0); if (load) load(); };
+  const T = (t, icon, label, load) => el("button", {class:"tab" + (tab === t ? " on" : ""), onclick: go(t, load)}, el("span", {html:ICONS[icon]}), label);
+  const plus = el("button", {class:"plus", "aria-label":"Добавить", onclick: () => tab === "friends" && SERVER_ON ? openNewChallenge() : openEditor(), html:ICONS.plus});
+  app.append(el("nav", {class:"tabs five"},
+    T("today", "home", "Сегодня"), T("friends", "users", "Друзья", loadFriends), plus,
+    T("rating", "trophy", "Рейтинг", loadRating), T("stats", "stats", "Статистика")));
 }
 
 /* ---------------- Экран «Сегодня» ---------------- */
@@ -780,7 +815,7 @@ function renderToday() {
   }
   const quote = state.settings.quote && state.habits.length ? el("div", {class:"quote"}, el("span", {}, "💬"),
     el("div", {}, el("p", {}, QUOTES[t % QUOTES.length]), el("small", {}, "Мысль дня"))) : null;
-  app.append(el("div", {class:"screen"}, top, week, quote, listBlock()));
+  app.append(el("div", {class:"screen"}, top, week, selDay === t ? weekCard() : null, quote, listBlock()));
 }
 
 function listBlock() {
@@ -1143,6 +1178,7 @@ function goBack() {
   if (pickerClose) return pickerClose();
   if (sheetClose) return closeSheet();
   if (screen === "detail") { screen = "main"; render(); }
+  if (screen === "challenge") { screen = "main"; tab = "friends"; render(); loadFriends(); }
 }
 if (tg && tg.BackButton) tg.BackButton.onClick(goBack);
 
@@ -1320,6 +1356,297 @@ function invite() {
   if (inTG && can("6.1")) tg.openTelegramLink(url); else window.open(url, "_blank");
 }
 
+/* =====================================================================
+   СЕРВЕР: синхронизация, челленджи, рейтинг
+   ===================================================================== */
+// Вызов эндпоинта на Telegram Serverless (Telegram сам проверяет, кто пользователь)
+function serverCall(name, input, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    if (!inTG || !tg.Serverless || typeof tg.Serverless.call !== "function") return reject(new Error("Сервер недоступен"));
+    let done = false;
+    const timer = setTimeout(() => { if (!done) { done = true; reject(new Error("Сервер не отвечает")); } }, timeoutMs || 12000);
+    try {
+      tg.Serverless.call(name, input || {}, (err, data) => {
+        if (done) return; done = true; clearTimeout(timer);
+        if (err) reject(new Error((err.type === "ENDPOINT_ERROR" && (err.description || err.message)) || "Сервер недоступен"));
+        else resolve(data || {});
+      });
+    } catch(e) { done = true; clearTimeout(timer); reject(new Error("Сервер недоступен")); }
+  });
+}
+// Старые адреса → эндпоинты
+function api(method, path, body) {
+  const input = Object.assign({ tz: tzOffset() }, body || {});
+  if (path === "/api/sync") return serverCall("sync", input);
+  if (path === "/api/rating") return serverCall("rating", input);
+  if (path === "/api/ch") return serverCall(method === "POST" ? "chCreate" : "chList", input);
+  const m = path.match(/^\/api\/ch\/([A-Za-z0-9]+)(?:\/(join|leave|mark))?$/);
+  if (m) { input.id = m[1]; return serverCall(m[2] ? "ch" + m[2][0].toUpperCase() + m[2].slice(1) : "chGet", input); }
+  return Promise.reject(new Error("Неизвестный запрос"));
+}
+async function detectServer() {
+  if (!inTG || !tg.Serverless || typeof tg.Serverless.call !== "function") return;
+  try { const r = await serverCall("ping", {}, 6000); if (!r || !r.ok) return; } catch(e) { return; }
+  SERVER_ON = true;
+  if (screen === "main" && !sheetClose) render();
+  syncSoon(500);
+  const sp = tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+  if (sp && /^ch_[A-Za-z0-9]{4,20}$/.test(sp)) {
+    if (state.onboarded) { tab = "friends"; openChallenge(sp.slice(3)); }
+    else state.flags.pendingCh = sp.slice(3);
+  }
+}
+const tzOffset = () => -new Date().getTimezoneOffset();
+
+function dayRateAll(d) {
+  const p = state.habits.filter(h => isScheduled(h, d) && firstDay(h) <= d);
+  return p.length ? p.filter(h => isDone(h, d)).length / p.length : -1;
+}
+function avgRateAll(from, to) {
+  const t = today(); let s = 0, n = 0;
+  for (let d = from; d <= to; d++) { const r = dayRateAll(d); if (d === t && r <= 0) continue; if (r >= 0) { s += r; n++; } }
+  return n ? Math.round(s / n * 100) : null;
+}
+function buildSnap() {
+  const t = today(), monday = t - wdOf(t);
+  let perfect = 0;
+  for (let d = monday; d <= t; d++) if (dayRateAll(d) === 1 && state.habits.some(h => h.type !== "quit" && isScheduled(h, d) && firstDay(h) <= d)) perfect++;
+  const hs = state.habits.map(h => ({ n: h.name, e: h.emoji || "🎯", s: streak(h), d: isDone(h, t), sch: isScheduled(h, t) }));
+  const top = hs.slice().sort((a, b) => b.s - a.s)[0];
+  return { day: t, best: top ? top.s : 0, top: top ? {n: top.n, e: top.e} : null, habits: hs.slice(0, 40),
+           week: { pct: avgRateAll(monday, t), prev: avgRateAll(monday - 7, monday - 1), perfect } };
+}
+let syncTimer = null;
+function syncSoon(ms) {
+  if (!SERVER_ON || !loaded) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    const S = state.settings;
+    api("POST", "/api/sync", { snap: buildSnap(), settings: { rating: S.rating } }).catch(() => {});
+  }, ms == null ? 2500 : ms);
+}
+// Напоминание: открываем готовый файл календаря — телефон сам предложит добавить ежедневное событие
+function addCalendarReminder(hhmm) {
+  const url = ICS_BASE + hhmm.replace(":", "") + ".ics";
+  state.settings.remind = hhmm; save(); haptic("success");
+  if (inTG && can("6.1")) tg.openLink(url); else window.open(url, "_blank");
+  toast("Нажми «Добавить» в календаре — и напоминание готово", 3200);
+}
+
+/* ---------- Итоги прошлой недели (в приложении, по понедельникам и вторникам) ---------- */
+function weekCard() {
+  const t = today(), wd = wdOf(t), monday = t - wd, lastMon = monday - 7;
+  if (wd > 1 || state.flags.weekSeen === monday) return null;
+  if (!state.habits.some(h => firstDay(h) <= monday - 1)) return null;
+  const pct = avgRateAll(lastMon, monday - 1), prev = avgRateAll(lastMon - 7, lastMon - 1);
+  if (pct === null) return null;
+  let perfect = 0;
+  for (let d = lastMon; d < monday; d++) if (dayRateAll(d) === 1 && state.habits.some(h => h.type !== "quit" && isScheduled(h, d) && firstDay(h) <= d)) perfect++;
+  const best = state.habits.map(h => ({h, s: streak(h)})).sort((a, b) => b.s - a.s)[0];
+  const diff = prev !== null && prev !== pct ? ` (${pct > prev ? "+" : "−"}${Math.abs(pct - prev)}%)` : "";
+  const mood = pct >= 90 ? "Огонь! Ты в отличной форме 🔥" : pct >= 60 ? "Хорошая неделя — ещё чуть-чуть до идеальной 💪" : "Неделя была непростой. Начни эту с одной привычки 🌱";
+  return el("div", {class:"card", style:"position:relative;margin-bottom:12px"},
+    el("button", {style:"position:absolute;right:10px;top:8px;width:32px;height:32px;border-radius:50%;background:var(--soft);color:var(--hint)", "aria-label":"Скрыть",
+      onclick: () => { state.flags.weekSeen = monday; save(); haptic("light"); render(); }}, "✕"),
+    el("h4", {}, "📊 Итоги прошлой недели"),
+    el("div", {style:"font-size:15px;line-height:1.6"},
+      el("div", {}, "✅ Выполнено: ", el("b", {}, pct + "%"), diff),
+      perfect ? el("div", {}, "⭐ Идеальных дней: ", el("b", {}, String(perfect))) : null,
+      best && best.s ? el("div", {}, `🔥 Лучшая серия: ${best.h.name} — `, el("b", {}, String(best.s))) : null,
+      el("div", {style:"color:var(--hint);margin-top:4px"}, mood)));
+}
+
+/* ---------- Друзья: челленджи ---------- */
+let chList = null, chErr = false, chCur = null, chLoading = false;
+function loadFriends() {
+  if (!SERVER_ON) return;
+  api("GET", "/api/ch").then(r => { chList = r.items; chErr = false; })
+    .catch(() => { chErr = true; })
+    .finally(() => { if (screen === "main" && tab === "friends" && !sheetClose) render(); });
+}
+const chGlyph = c => glyphHTML({emoji: c.emoji, icon: c.icon, color: c.color || "#ff7a00"});
+const chIco = c => el("div", {class:"ico", style:`background:${tint(c.color || "#ff7a00", .16)}`, html: chGlyph(c)});
+function chStatus(c) {
+  if (c.notStarted) return "начнётся завтра";
+  if (c.finished) return "🏁 завершён";
+  return `день ${c.dayIndex} из ${c.days} · ${c.membersCount} ${plural(c.membersCount, "участник", "участника", "участников")}`;
+}
+function soonCard(emoji, title, text) {
+  return [el("div", {class:"empty", style:"padding-top:36px"}, el("div", {}, emoji), el("b", {style:"color:var(--text);font-size:17px"}, title), el("br"), text),
+    el("button", {class:"invite", style:"width:100%;text-align:left", onclick: invite},
+      el("div", {}, el("b", {}, "Позвать друга"), el("small", {}, "Пусть заводит Огонёк уже сейчас")), el("span", {}, "🔥"))];
+}
+function renderFriends() {
+  const wrap = el("div", {class:"screen"});
+  wrap.append(el("div", {class:"top"}, el("div", {}, el("div", {class:"hello"}, "Вместе легче"), el("div", {class:"title"}, "Друзья")),
+    el("button", {class:"gear", "aria-label":"Настройки", html:ICONS.gear, onclick: openSettings})));
+  if (!SERVER_ON) { wrap.append(...soonCard("🤝", "Челленджи с друзьями — скоро", "Создашь челлендж, отправишь ссылку — и будете соревноваться, кто дольше продержится.")); return app.append(wrap); }
+  wrap.append(el("button", {class:"newch", onclick: openNewChallenge}, el("i", {}, "+"),
+    el("div", {}, el("b", {}, "Новый челлендж"), el("small", {}, "Создай и позови друзей по ссылке"))));
+  if (chList === null && !chErr) wrap.append(el("div", {class:"err"}, "Загрузка…"));
+  else if (chErr && !chList) wrap.append(el("div", {class:"err"}, "Сервер недоступен.", el("br"), el("button", {class:"btn sec", style:"max-width:200px;margin-top:12px", onclick: loadFriends}, "Повторить")));
+  else if (!chList.length) wrap.append(el("div", {class:"empty", style:"padding-top:30px"}, el("div", {}, "🤝"),
+    "Пока нет челленджей.", el("br"), "Создай свой — например, «30 дней без сахара» — и отправь ссылку друзьям."));
+  else {
+    wrap.append(el("div", {class:"section"}, "Мои челленджи"));
+    wrap.append(el("div", {class:"list"}, chList.map(c => {
+      const active = !c.finished && !c.notStarted;
+      const act = el("button", {class:"act" + (c.doneToday ? " on" : ""), "aria-label":"Отметить",
+        style: c.doneToday ? `background:${c.color}` : `color:${c.color}`,
+        html: c.doneToday ? `<span class="glyph">${ICONS.check}</span>` : `<svg class="pr" width="44" height="44"><circle cx="22" cy="22" r="19" stroke="var(--line)" stroke-width="3" fill="none"/></svg>`,
+        onclick: async e => { e.stopPropagation(); if (!active) return; await markChallenge(c.id, !c.doneToday); }});
+      return el("div", {class:"habit" + (c.doneToday ? " done" : ""), onclick: () => openChallenge(c.id)},
+        chIco(c), el("div", {class:"hinfo"}, el("div", {class:"hname"}, c.title),
+          el("div", {class:"hmeta"}, el("span", {}, chStatus(c)), c.myStreak ? el("span", {class:"fire"}, `🔥 ${c.myStreak}`) : null)),
+        active ? act : null);
+    })));
+  }
+  app.append(wrap);
+}
+async function markChallenge(id, done) {
+  haptic(done ? "medium" : "light");
+  try {
+    const v = await api("POST", `/api/ch/${id}/mark`, {done, tz: tzOffset()});
+    if (chList) chList = chList.map(c => c.id === id ? Object.assign(c, {doneToday: v.doneToday, myStreak: v.myStreak, myCount: v.myCount}) : c);
+    if (chCur && chCur.id === id) chCur = v;
+    if (done) { haptic("success"); const all = v.members && v.members.every(m => m.today);
+      toast(all && v.members.length > 1 ? "Все участники сегодня отметились! 🔥" : "Отмечено 🔥"); }
+    render();
+  } catch(e) { toast(e.message); }
+}
+function openChallenge(id) {
+  screen = "challenge"; chCur = {id, loading: true}; render(); window.scrollTo(0, 0);
+  api("GET", `/api/ch/${id}`).then(v => { chCur = v; }).catch(e => { chCur = {id, error: e.message}; })
+    .finally(() => { if (screen === "challenge") render(); });
+}
+function inviteChallenge(c) {
+  haptic("light");
+  const url = `https://t.me/${BOT_USERNAME}?startapp=ch_${c.id}`;
+  const text = `Присоединяйся к челленджу «${c.title}» в Огоньке 🔥 ${c.days} ${plural(c.days, "день", "дня", "дней")} — кто дольше продержится?`;
+  const share = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+  if (inTG && can("6.1")) tg.openTelegramLink(share); else window.open(share, "_blank");
+}
+function renderChallenge() {
+  const c = chCur || {};
+  const wrap = el("div", {class:"screen"});
+  if (!inTG) wrap.append(el("button", {class:"back", onclick: goBack}, "‹ Назад"));
+  if (c.loading) { wrap.append(el("div", {class:"err"}, "Загрузка…")); return app.append(wrap); }
+  if (c.error) { wrap.append(el("div", {class:"err"}, el("div", {style:"font-size:44px"}, "😕"), c.error)); return app.append(wrap); }
+  const active = !c.finished && !c.notStarted;
+  wrap.append(el("div", {class:"dhead"}, el("div", {class:"ico", style:`background:${tint(c.color, .16)}`, html: chGlyph(c)}),
+    el("div", {style:"min-width:0"}, el("h2", {}, c.title), el("p", {}, chStatus(c)))));
+  if (c.joined) {
+    wrap.append(el("div", {class:"card"},
+      el("div", {class:"chbig"}, el("b", {class:"num"}, `${c.myCount} / ${c.days}`), el("small", {}, `дней выполнено${c.myStreak ? ` · 🔥 ${c.myStreak} подряд` : ""}`)),
+      el("div", {class:"pbar", style:"margin:12px 0"}, el("i", {style:`width:${Math.min(100, c.myCount / c.days * 100)}%;background:${c.color}`})),
+      active ? el("button", {class:"btn", style: c.doneToday ? "background:var(--soft);color:var(--text)" : `background:${c.color}`,
+        onclick: () => markChallenge(c.id, !c.doneToday)}, c.doneToday ? "✓ Сегодня выполнено" : "Отметить сегодня") :
+        el("div", {class:"tip"}, c.finished ? "Челлендж завершён. Ты молодец! 🏁" : "Челлендж начнётся завтра")));
+  } else {
+    wrap.append(el("div", {class:"card"}, el("div", {class:"tip", style:"margin:0 0 12px;font-size:14px"},
+      `Тебя позвали в челлендж на ${c.days} ${plural(c.days, "день", "дня", "дней")}. Отмечайся каждый день и соревнуйся с друзьями!`),
+      el("button", {class:"btn", style:`background:${c.color}`, onclick: async () => {
+        try { chCur = await api("POST", `/api/ch/${c.id}/join`, {tz: tzOffset()}); haptic("success"); chList = null; celebrate("Ты в челлендже! 🔥"); render(); }
+        catch(e) { toast(e.message); } }}, "Присоединиться")));
+  }
+  const board = el("div", {class:"card"}, el("h4", {}, "Участники", el("small", {}, "сегодня")));
+  (c.members || []).forEach((m, i) => board.append(el("div", {class:"lb" + (m.me ? " me" : "")},
+    el("span", {class:"pl" + (i < 3 && m.count ? " medal" : "")}, i < 3 && m.count ? ["🥇","🥈","🥉"][i] : String(i + 1)),
+    el("div", {}, el("b", {}, m.name + (m.me ? " (ты)" : "")), el("small", {}, `${m.count} из ${c.days} · 🔥 ${m.streak} подряд`)),
+    el("span", {class:"ok" + (m.today ? " on" : "")}, m.today ? "✓" : "·"))));
+  wrap.append(board);
+  wrap.append(el("div", {class:"btns"},
+    el("button", {class:"btn sec", onclick: () => inviteChallenge(c)}, "📨  Пригласить друзей"),
+    c.joined ? el("button", {class:"btn ghost", onclick: async () => {
+      if (!await confirmBox(`Выйти из челленджа «${c.title}»? Твой прогресс в нём удалится.`)) return;
+      try { await api("POST", `/api/ch/${c.id}/leave`, {}); toast("Ты вышел из челленджа"); chList = null; goBack(); } catch(e) { toast(e.message); }
+    }}, "Выйти из челленджа") : null));
+  app.append(wrap);
+}
+const CH_TEMPLATES = [
+  {title:"30 дней без сахара", emoji:"🍬", color:"#ff2d55", days:30},
+  {title:"21 день спорта", emoji:"💪", color:"#ff7a00", days:21},
+  {title:"Читать каждый день", emoji:"📚", color:"#af52de", days:30},
+  {title:"8 стаканов воды", emoji:"💧", color:"#32ade6", days:14},
+  {title:"Без соцсетей до обеда", emoji:"📵", color:"#5856d6", days:14},
+  {title:"10 000 шагов", emoji:"👟", color:"#34c759", days:30},
+];
+function openNewChallenge() {
+  haptic("light");
+  const h = {emoji:"🔥", icon:null, color:"#ff7a00"};
+  let days = 30;
+  const pv = el("div", {class:"ico"}), pvName = el("b", {}), pvSub = el("small", {style:"display:block;color:var(--hint);font-size:13px;margin-top:2px"});
+  const name = el("input", {class:"field", placeholder:"Например: 30 дней без сахара", maxlength:"40"});
+  const upd = () => { pv.innerHTML = glyphHTML(h); pv.style.background = tint(h.color, .16); rowIco.innerHTML = glyphHTML(h); rowIco.style.background = tint(h.color, .16);
+    pvName.textContent = name.value.trim() || "Новый челлендж"; pvSub.textContent = `${days} ${plural(days, "день", "дня", "дней")} · с друзьями`;
+    btn.disabled = !name.value.trim(); };
+  name.addEventListener("input", upd);
+  const rowIco = el("div", {class:"ico"});
+  const iconRow = el("button", {class:"icon-row", onclick: () => openIconPicker(h, upd)}, rowIco, el("span", {}, "Иконка"), el("small", {}, "Выбрать ›"));
+  const colors = el("div", {class:"colors"});
+  COLORS.slice(0, 16).forEach(c => colors.append(el("button", {"data-c":c, class: c === h.color ? "on" : "", style:`background:${c};color:${c}`, onclick: () => {
+    h.color = c; [...colors.children].forEach(b => b.classList.toggle("on", b.dataset.c === c)); haptic("select"); upd(); }})));
+  const dchips = el("div", {class:"chips"});
+  const drawDays = () => { dchips.innerHTML = ""; [7,14,21,30,60,100].forEach(d => dchips.append(el("button", {class:"chip" + (d === days ? " on" : ""),
+    onclick: () => { days = d; haptic("select"); drawDays(); upd(); }}, `${d} ${plural(d, "день", "дня", "дней")}`))); };
+  drawDays();
+  const tpl = el("div", {class:"chips"}, CH_TEMPLATES.map(t => el("button", {class:"chip", onclick: () => {
+    name.value = t.title; h.emoji = t.emoji; h.icon = null; h.color = t.color; days = t.days; drawDays();
+    [...colors.children].forEach(b => b.classList.toggle("on", b.dataset.c === t.color)); haptic("select"); upd(); }}, `${t.emoji} ${t.title}`)));
+  const btn = el("button", {class:"btn", onclick: async () => {
+    const title = name.value.trim(); if (!title) return;
+    btn.disabled = true; btn.textContent = "Создаю…";
+    try {
+      const c = await api("POST", "/api/ch", {title, emoji: h.emoji, icon: h.icon, color: h.color, days, tz: tzOffset()});
+      closeSheet(true); chList = null; haptic("success");
+      tab = "friends"; screen = "challenge"; chCur = c; render(); window.scrollTo(0, 0);
+      setTimeout(() => toast("Готово! Теперь позови друзей 👇", 2600), 300);
+    } catch(e) { toast(e.message); btn.disabled = false; btn.textContent = "Создать челлендж"; }
+  }}, "Создать челлендж");
+  openSheet([
+    el("div", {class:"grab"}), el("h3", {}, "Новый челлендж"),
+    el("div", {class:"preview"}, pv, el("div", {}, pvName, pvSub)),
+    el("div", {class:"label", style:"margin-top:4px"}, "Идеи"), tpl,
+    el("div", {class:"label"}, "Название"), name,
+    el("div", {class:"label"}, "Сколько дней"), dchips,
+    el("div", {class:"label"}, "Иконка и цвет"), iconRow, el("div", {style:"height:12px"}), colors,
+    el("div", {style:"height:20px"}), btn,
+  ], () => render());
+  upd();
+}
+
+/* ---------- Рейтинг ---------- */
+let rating = null, ratingErr = false;
+function loadRating() {
+  if (!SERVER_ON) return;
+  syncSoon(0);
+  setTimeout(() => api("GET", "/api/rating").then(r => { rating = r; ratingErr = false; }).catch(() => { ratingErr = true; })
+    .finally(() => { if (screen === "main" && tab === "rating" && !sheetClose) render(); }), 600);
+}
+function renderRating() {
+  const wrap = el("div", {class:"screen"});
+  wrap.append(el("div", {class:"top"}, el("div", {}, el("div", {class:"hello"}, "Самые длинные серии"), el("div", {class:"title"}, "Рейтинг")),
+    el("button", {class:"gear", "aria-label":"Настройки", html:ICONS.gear, onclick: openSettings})));
+  if (!SERVER_ON) { wrap.append(...soonCard("🏆", "Общий рейтинг — скоро", "Здесь появятся самые длинные серии всех, кто пользуется Огоньком.")); return app.append(wrap); }
+  if (!state.settings.rating) wrap.append(el("div", {class:"card"},
+    el("div", {style:"font-size:15px;line-height:1.45;margin-bottom:12px"}, "🏆 Покажи свою лучшую серию и соревнуйся со всеми, кто пользуется Огоньком. Видно только имя и число дней."),
+    el("button", {class:"btn", onclick: () => { state.settings.rating = true; save(); syncSoon(0); haptic("success"); loadRating(); render(); }}, "Участвовать в рейтинге")));
+  if (rating === null && !ratingErr) wrap.append(el("div", {class:"err"}, "Загрузка…"));
+  else if (ratingErr && !rating) wrap.append(el("div", {class:"err"}, "Сервер недоступен.", el("br"), el("button", {class:"btn sec", style:"max-width:200px;margin-top:12px", onclick: loadRating}, "Повторить")));
+  else {
+    if (rating.me) wrap.append(el("div", {class:"stats"}, stat(`#${rating.me.place}`, `место из ${rating.total}`), stat(`🔥 ${rating.me.streak}`, "твоя серия")));
+    const card = el("div", {class:"card"}, el("h4", {}, "Топ-50", el("small", {}, `${rating.total} ${plural(rating.total, "участник", "участника", "участников")}`)));
+    if (!rating.top.length) card.append(el("div", {class:"tip"}, "Пока пусто — стань первым!"));
+    rating.top.forEach(r => card.append(el("div", {class:"lb" + (r.me ? " me" : "")},
+      el("span", {class:"pl" + (r.place <= 3 ? " medal" : "")}, r.place <= 3 ? ["🥇","🥈","🥉"][r.place - 1] : String(r.place)),
+      el("div", {}, el("b", {}, r.name + (r.me ? " (ты)" : "")), el("small", {}, `${r.streak} ${plural(r.streak, "день", "дня", "дней")} подряд`)),
+      el("span", {class:"sc num"}, `🔥 ${r.streak}`))));
+    wrap.append(card);
+    wrap.append(el("div", {class:"tip"}, "Считается самая длинная текущая серия. Обновляется, когда человек открывает приложение."));
+  }
+  app.append(wrap);
+}
+
 /* ---------------- Тема ---------------- */
 function applyTheme() {
   const th = THEMES.find(x => x.id === state.settings.theme) || THEMES[0];
@@ -1359,9 +1686,29 @@ function openSettings() {
   drawOrder();
 
   const link = (url) => { if (inTG && can("6.1")) tg.openTelegramLink(url); else window.open(url, "_blank"); };
+  // Напоминание через календарь телефона (работает без сервера)
+  const S = state.settings;
+  const sel = el("select", {style:"flex:1;height:44px;border-radius:12px;border:0;background:var(--soft);padding:0 12px;font:inherit;font-size:16px;color:var(--text)"});
+  for (let m = 0; m < 24 * 60; m += 30) {
+    const v = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+    sel.append(el("option", {value: v, selected: v === (S.remind || "21:00")}, v));
+  }
+  const notif = [el("div", {class:"label"}, "Напоминание"),
+    el("div", {class:"card", style:"padding:12px 14px"},
+      el("div", {class:"rowtime", style:"padding:0 0 10px"}, el("span", {style:"font-size:15px;font-weight:500"}, "🔔  Каждый день в"), sel),
+      el("button", {class:"btn", onclick: () => addCalendarReminder(sel.value)}, "Добавить в календарь")),
+    el("div", {class:"tip", style:"text-align:left"}, S.remind ? `Сейчас: ${S.remind}. Чтобы сменить время — удали старое событие «Огонёк» в календаре и добавь новое.` : "Телефон будет напоминать сам — даже без интернета.")];
+  if (SERVER_ON) {
+    const swRt = el("div", {class:"switch" + (S.rating ? " on" : "")});
+    const rowRt = el("button", {class:"setrow", style:"width:100%;text-align:left", onclick: () => {
+      S.rating = !S.rating; swRt.classList.toggle("on", S.rating); haptic("select"); save(); }},
+      el("span", {}, "🏆  Показывать меня в рейтинге"), swRt);
+    notif.push(el("div", {class:"label"}, "Рейтинг"), el("div", {class:"card", style:"padding:2px 14px"}, rowRt));
+  }
   openSheet([
     el("div", {class:"grab"}), el("h3", {}, "Настройки"),
     el("div", {class:"label", style:"margin-top:0"}, "Тема"), themes,
+    notif,
     el("div", {class:"label"}, "Главный экран"), el("div", {class:"card", style:"padding:2px 14px"}, quoteRow),
     el("div", {class:"label"}, "Порядок привычек"), el("div", {class:"card", style:"padding:4px 14px"}, order),
     el("div", {class:"label"}, "Огонёк"),
@@ -1516,6 +1863,7 @@ function renderOnboarding() {
     if (onbStep < slides.length) { onbStep++; return render(); }
     [...picked].sort((a, b) => a - b).forEach(i => addHabit(TEMPLATES[i]));
     state.onboarded = true; save(true); screen = "main"; tab = "today"; haptic("success"); render();
+    if (SERVER_ON && state.flags.pendingCh) { const id = state.flags.pendingCh; delete state.flags.pendingCh; tab = "friends"; openChallenge(id); }
   }}, onbStep < slides.length ? "Дальше" : "Начать"));
 }
 
@@ -1596,6 +1944,7 @@ setInterval(() => {
   if (state.timer && state.timer.day !== today()) stopTimer(true);
   screen = state.onboarded ? "main" : "onboarding";
   render();
+  detectServer();
 })();
 </script>
 </body>
