@@ -339,7 +339,29 @@ input{font:inherit;color:var(--text);-webkit-user-select:text;user-select:text}
 .lvl-badge{margin-top:-14px;position:relative;background:var(--card);border-radius:14px;padding:4px 12px;font-size:13px;font-weight:800;color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .prof h2{margin:10px 0 0;font-size:24px;letter-spacing:-.4px}
 .prof p{margin:2px 0 0;color:var(--hint);font-size:14px}
-.xp{margin:14px 0 4px}
+.xp{margin:14px 0 4px;display:block;width:100%;text-align:left;color:inherit;-webkit-tap-highlight-color:transparent}
+.xp .chev{display:inline-block;font-style:normal;margin-left:6px;color:var(--hint);transition:transform .2s}
+.xp[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.lvl-wrap{display:none}
+.lvl-wrap.open{display:block;margin-top:12px;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.lvl-group{border-radius:14px;background:var(--soft);padding:10px 12px;margin-bottom:8px}
+.lvl-group.cur{background:color-mix(in srgb,var(--accent) 14%,var(--card));box-shadow:inset 0 0 0 1.5px var(--accent)}
+.lvl-group.done .lvl-head{opacity:.75}
+.lvl-head{display:flex;align-items:center;gap:8px}
+.lvl-head i{font-style:normal;font-size:20px}
+.lvl-head b{font-size:15px}
+.lvl-head small{margin-left:auto;color:var(--hint);font-size:12px}
+.lvl-rows{margin-top:6px}
+.lvl-row{display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:13px;color:var(--hint)}
+.lvl-row span{width:16px;text-align:center;color:var(--accent);font-weight:700}
+.lvl-row b{font-weight:600}
+.lvl-row small{margin-left:auto}
+.lvl-row.ok{color:var(--text)}
+.lvl-row.me{color:var(--text)}
+.lvl-row.me b{color:var(--accent)}
+.seg.diff button.on{background:var(--accent);color:var(--accent-text)}
+.linkbtn{color:var(--accent);font-weight:600;font-size:inherit;padding:0}
 .xp-row{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px}
 .xp-row small{color:var(--hint);font-weight:500}
 .xp .pbar{margin:0;height:12px;border-radius:6px}
@@ -454,55 +476,80 @@ const QUOTES = [
 // Награды. t(c) — условие по сводке; tier — цвет медали; secret — условие скрыто, пока не получишь.
 const BADGES = [
   // Серии
-  {id:"first",  e:"✨", name:"Первая искра",   d:"Первая отметка",                         t:c => c.marks >= 1},
-  {id:"s3",     e:"🔥", name:"Разгорается",    d:"Серия 3 дня подряд",                     t:c => c.best >= 3},
-  {id:"s7",     e:"📅", name:"Неделя огня",    d:"Серия 7 дней подряд",                    t:c => c.best >= 7,   tier:"bronze"},
-  {id:"s21",    e:"🌱", name:"21 день",        d:"Серия 21 день — привычка крепнет",        t:c => c.best >= 21},
-  {id:"s30",    e:"🌙", name:"Месяц",          d:"Серия 30 дней подряд",                   t:c => c.best >= 30,  tier:"silver"},
-  {id:"s66",    e:"🧠", name:"Автопилот",      d:"Серия 66 дней — привычка на автомате",    t:c => c.best >= 66},
-  {id:"s100",   e:"💯", name:"Сотня",          d:"Серия 100 дней подряд",                  t:c => c.best >= 100, tier:"gold"},
-  {id:"s180",   e:"🌗", name:"Полгода",        d:"Серия 180 дней подряд",                  t:c => c.best >= 180, tier:"gold"},
-  {id:"s365",   e:"👑", name:"Год огня",       d:"Серия 365 дней подряд",                  t:c => c.best >= 365, tier:"diamond"},
+  {id:"first", xp:30,  e:"✨", name:"Первая искра",   d:"Первая отметка",                         t:c => c.marks >= 1},
+  {id:"s3", xp:30,     e:"🔥", name:"Разгорается",    d:"Серия 3 дня подряд",                     t:c => c.best >= 3},
+  {id:"s7", xp:40,     e:"📅", name:"Неделя огня",    d:"Серия 7 дней подряд",                    t:c => c.best >= 7,   tier:"bronze"},
+  {id:"s21", xp:60,    e:"🌱", name:"21 день",        d:"Серия 21 день — привычка крепнет",        t:c => c.best >= 21},
+  {id:"s30", xp:70,    e:"🌙", name:"Месяц",          d:"Серия 30 дней подряд",                   t:c => c.best >= 30,  tier:"silver"},
+  {id:"s66", xp:80,    e:"🧠", name:"Автопилот",      d:"Серия 66 дней — привычка на автомате",    t:c => c.best >= 66},
+  {id:"s100", xp:90,   e:"💯", name:"Сотня",          d:"Серия 100 дней подряд",                  t:c => c.best >= 100, tier:"gold"},
+  {id:"s180", xp:100,   e:"🌗", name:"Полгода",        d:"Серия 180 дней подряд",                  t:c => c.best >= 180, tier:"gold"},
+  {id:"s365", xp:100,   e:"👑", name:"Год огня",       d:"Серия 365 дней подряд",                  t:c => c.best >= 365, tier:"diamond"},
   // Количество
-  {id:"m10",    e:"🎯", name:"10 отметок",     d:"10 выполненных дней всего",              t:c => c.marks >= 10,   tier:"bronze"},
-  {id:"m50",    e:"🎯", name:"50 отметок",     d:"50 выполненных дней всего",              t:c => c.marks >= 50,   tier:"silver"},
-  {id:"m100",   e:"🎯", name:"100 отметок",    d:"100 выполненных дней всего",             t:c => c.marks >= 100,  tier:"gold"},
-  {id:"m500",   e:"🏹", name:"500 отметок",    d:"500 выполненных дней всего",             t:c => c.marks >= 500,  tier:"gold"},
-  {id:"m1000",  e:"🚀", name:"Тысяча",         d:"1000 выполненных дней всего",            t:c => c.marks >= 1000, tier:"diamond"},
+  {id:"m10", xp:30,    e:"🎯", name:"10 отметок",     d:"10 выполненных дней всего",              t:c => c.marks >= 10,   tier:"bronze"},
+  {id:"m50", xp:50,    e:"🎯", name:"50 отметок",     d:"50 выполненных дней всего",              t:c => c.marks >= 50,   tier:"silver"},
+  {id:"m100", xp:70,   e:"🎯", name:"100 отметок",    d:"100 выполненных дней всего",             t:c => c.marks >= 100,  tier:"gold"},
+  {id:"m500", xp:90,   e:"🏹", name:"500 отметок",    d:"500 выполненных дней всего",             t:c => c.marks >= 500,  tier:"gold"},
+  {id:"m1000", xp:100,  e:"🚀", name:"Тысяча",         d:"1000 выполненных дней всего",            t:c => c.marks >= 1000, tier:"diamond"},
   // Время суток
-  {id:"early",  e:"🌅", name:"Ранняя пташка",  d:"Отметил привычку до 7 утра",             t:c => c.flags.early},
-  {id:"owl",    e:"🦉", name:"Сова",           d:"Отметил привычку после полуночи",        t:c => c.flags.owl},
-  {id:"bolt",   e:"⚡", name:"Молния",         d:"Выполнил всё за день до полудня",        t:c => c.flags.lightning},
+  {id:"early", xp:30,  e:"🌅", name:"Ранняя пташка",  d:"Отметил привычку до 7 утра",             t:c => c.flags.early},
+  {id:"owl", xp:30,    e:"🦉", name:"Сова",           d:"Отметил привычку после полуночи",        t:c => c.flags.owl},
+  {id:"bolt", xp:40,   e:"⚡", name:"Молния",         d:"Выполнил всё за день до полудня",        t:c => c.flags.lightning},
   // Постоянство
-  {id:"p10",    e:"⭐", name:"Идеальная десятка", d:"10 дней, когда выполнено всё",        t:c => c.perfect >= 10},
-  {id:"pweek",  e:"🗓️", name:"Идеальная неделя", d:"7 идеальных дней подряд",              t:c => c.perfectRow >= 7,  tier:"silver"},
-  {id:"pmonth", e:"🌟", name:"Идеальный месяц", d:"30 идеальных дней",                     t:c => c.perfect >= 30,    tier:"gold"},
-  {id:"wknd",   e:"🏖️", name:"Выходные не помеха", d:"Выполнил всё и в субботу, и в воскресенье", t:c => c.weekend},
-  {id:"day5",   e:"🤹", name:"Многостаночник", d:"5 привычек выполнено за один день",      t:c => c.maxDay >= 5},
+  {id:"p10", xp:50,    e:"⭐", name:"Идеальная десятка", d:"10 дней, когда выполнено всё",        t:c => c.perfect >= 10},
+  {id:"pweek", xp:60,  e:"🗓️", name:"Идеальная неделя", d:"7 идеальных дней подряд",              t:c => c.perfectRow >= 7,  tier:"silver"},
+  {id:"pmonth", xp:80, e:"🌟", name:"Идеальный месяц", d:"30 идеальных дней",                     t:c => c.perfect >= 30,    tier:"gold"},
+  {id:"wknd", xp:40,   e:"🏖️", name:"Выходные не помеха", d:"Выполнил всё и в субботу, и в воскресенье", t:c => c.weekend},
+  {id:"day5", xp:40,   e:"🤹", name:"Многостаночник", d:"5 привычек выполнено за один день",      t:c => c.maxDay >= 5},
   // Возвращение и отказ
-  {id:"phoenix",e:"🦅", name:"Феникс",       d:"После срыва снова дошёл до серии 7 дней", t:c => c.phoenix},
-  {id:"quit30", e:"🕊️", name:"Свобода",        d:"30 дней без вредной привычки",           t:c => c.quit >= 30, tier:"silver"},
-  {id:"quit100",e:"🛡️", name:"Несломленный",   d:"100 дней без вредной привычки",          t:c => c.quit >= 100, tier:"gold"},
+  {id:"phoenix", xp:70,e:"🦅", name:"Феникс",       d:"После срыва снова дошёл до серии 7 дней", t:c => c.phoenix},
+  {id:"quit30", xp:60, e:"🕊️", name:"Свобода",        d:"30 дней без вредной привычки",           t:c => c.quit >= 30, tier:"silver"},
+  {id:"quit100", xp:90,e:"🛡️", name:"Несломленный",   d:"100 дней без вредной привычки",          t:c => c.quit >= 100, tier:"gold"},
   // По типам привычек
-  {id:"water",  e:"💧", name:"Водяной",        d:"100 стаканов воды",                      t:c => c.water >= 100},
-  {id:"steps",  e:"👟", name:"Марафонец",      d:"100 000 шагов",                          t:c => c.steps >= 100000},
-  {id:"time10", e:"⏱️", name:"10 часов",       d:"10 часов по таймеру",                    t:c => c.hours >= 10, tier:"bronze"},
-  {id:"time50", e:"📚", name:"Книжный червь",  d:"50 часов по таймеру",                    t:c => c.hours >= 50, tier:"gold"},
-  {id:"focus2", e:"🎧", name:"Глубокий фокус", d:"2 часа по таймеру за один день",         t:c => c.focus2},
+  {id:"water", xp:50,  e:"💧", name:"Водяной",        d:"100 стаканов воды",                      t:c => c.water >= 100},
+  {id:"steps", xp:60,  e:"👟", name:"Марафонец",      d:"100 000 шагов",                          t:c => c.steps >= 100000},
+  {id:"time10", xp:50, e:"⏱️", name:"10 часов",       d:"10 часов по таймеру",                    t:c => c.hours >= 10, tier:"bronze"},
+  {id:"time50", xp:80, e:"📚", name:"Книжный червь",  d:"50 часов по таймеру",                    t:c => c.hours >= 50, tier:"gold"},
+  {id:"focus2", xp:50, e:"🎧", name:"Глубокий фокус", d:"2 часа по таймеру за один день",         t:c => c.focus2},
   // Исследователь
-  {id:"h5",     e:"🧩", name:"Коллекционер",   d:"5 привычек одновременно",                t:c => c.habits >= 5},
-  {id:"h10",    e:"🏗️", name:"Мастер",         d:"10 привычек одновременно",               t:c => c.habits >= 10},
-  {id:"notes",  e:"📝", name:"Летописец",      d:"10 заметок к дням",                      t:c => c.notes >= 10},
-  {id:"notes50",e:"✍️", name:"Писатель",       d:"50 заметок к дням",                      t:c => c.notes >= 50},
-  {id:"theme",  e:"🎨", name:"Дизайнер",       d:"Сменил тему оформления",                 t:c => c.flags.theme},
-  {id:"share",  e:"📣", name:"Вдохновитель",   d:"Поделился своей серией",                 t:c => c.shared},
-  {id:"team",   e:"🤝", name:"Командный игрок", d:"Первый челлендж с друзьями",            t:c => c.flags.team},
+  {id:"h5", xp:30,     e:"🧩", name:"Коллекционер",   d:"5 привычек одновременно",                t:c => c.habits >= 5},
+  {id:"h10", xp:50,    e:"🏗️", name:"Мастер",         d:"10 привычек одновременно",               t:c => c.habits >= 10},
+  {id:"notes", xp:30,  e:"📝", name:"Летописец",      d:"10 заметок к дням",                      t:c => c.notes >= 10},
+  {id:"notes50", xp:60,e:"✍️", name:"Писатель",       d:"50 заметок к дням",                      t:c => c.notes >= 50},
+  {id:"theme", xp:30,  e:"🎨", name:"Дизайнер",       d:"Сменил тему оформления",                 t:c => c.flags.theme},
+  {id:"share", xp:30,  e:"📣", name:"Вдохновитель",   d:"Поделился своей серией",                 t:c => c.shared},
+  {id:"team", xp:40,   e:"🤝", name:"Командный игрок", d:"Первый челлендж с друзьями",            t:c => c.flags.team},
   // Секретные
-  {id:"bday",   e:"🎂", name:"День рождения",  d:"Открыл Огонёк в его день рождения — 27 октября", t:c => c.flags.bday, secret:true},
-  {id:"lucky",  e:"🍀", name:"Счастливая",     d:"Серия ровно 77 дней",                    t:c => c.lucky, secret:true},
-  {id:"ny",     e:"🎆", name:"Новогодняя",     d:"Отметил привычку 1 января",               t:c => c.flags.ny, secret:true},
+  {id:"bday", xp:50,   e:"🎂", name:"День рождения",  d:"Открыл Огонёк в его день рождения — 27 октября", t:c => c.flags.bday, secret:true},
+  {id:"lucky", xp:80,  e:"🍀", name:"Счастливая",     d:"Серия ровно 77 дней",                    t:c => c.lucky, secret:true},
+  {id:"ny", xp:50,     e:"🎆", name:"Новогодняя",     d:"Отметил привычку 1 января",               t:c => c.flags.ny, secret:true},
 ];
 const TIME_CHIPS = [10,15,20,30,45,60,90,120];
+
+// Сложность привычки 1–5 = сколько опыта даёт один выполненный день.
+const DIFF_NAMES = ["", "Очень легко", "Легко", "Средне", "Сложно", "Очень сложно"];
+const DIFF_WORDS = [
+  [5, /кур|сигар|вейп|алког|пив|вин[оа]|наркот|азарт|ставк|порн/],
+  [4, /трениров|зал|спорт|бег|пробеж|плаван|кардио|отжим|подтяг|присед|планк|холодн|закал|без сахар|без сладк|сладк|фастфуд|соцсет|тикток|рилс|игр|диет|пп\b|правильн.*питан|работ.*над|проект|программ|код/],
+  [3, /чтени|читать|книг|англ|язык|учёб|учеб|урок|универ|домашк|медитац|йог|растяж|подъём|подъем|встать|встава|ранн|сон до|спать до|лечь до|дневник|журнал|экономи|бюджет|уборк|готов/],
+  [2, /вод[аыу]|стакан|витамин|зарядк|прогулк|гуля|шаг|кровать|зуб|душ\b|умыв|спасибо|благодар|улыб|овощ|фрукт|кофе|чай/],
+];
+function autoDiff(h) {
+  const n = (h.name || "").toLowerCase(), t = h.target || 1, u = (h.unit || "").toLowerCase();
+  if (h.type === "quit") return /кур|сигар|вейп|алког|пив|вин[оа]|наркот|азарт|ставк|порн/.test(n) ? 5 : 4;
+  if (h.type === "time") { const base = t <= 10 ? 2 : t <= 30 ? 3 : t <= 60 ? 4 : 5;
+    return base; }
+  if (h.type === "count") {
+    if (/шаг/.test(u + n)) return t >= 15000 ? 5 : t >= 10000 ? 4 : t >= 6000 ? 3 : 2;
+    if (/стакан|вод/.test(u + n)) return t >= 10 ? 3 : 2;
+    if (/отжим|присед|подтяг|прес|берпи/.test(u + n)) return t >= 100 ? 5 : t >= 50 ? 4 : 3;
+    if (/страниц/.test(u)) return t >= 50 ? 4 : t >= 20 ? 3 : 2;
+    if (/км|километр/.test(u)) return t >= 10 ? 5 : t >= 5 ? 4 : 3;
+  }
+  for (const [d, re] of DIFF_WORDS) if (re.test(n)) return d;
+  return 3;
+}
+const diffOf = h => (h.diff >= 1 && h.diff <= 5) ? h.diff : autoDiff(h);
 
 // Готовые привычки: type: check | count | time
 const TEMPLATES = [
@@ -1059,6 +1106,7 @@ function openEditor(existing) {
     const g = h.type === "count" ? `${fmtN(target.count)} ${h.unit}` : h.type === "time" ? fmtDur(target.time * 60) : h.type === "quit" ? "отказ" : "отметка";
     pvSub.textContent = h.type === "quit" ? "отказ · счётчик дней без срыва" : `${g} · ${scheduleText(h)}`;
     daysBox.style.display = h.type === "quit" ? "none" : "";
+    drawDiff();
     saveBtn.disabled = !name.value.trim() || (!h.days.length && h.type !== "quit");
   };
   const name = el("input", {class:"field", placeholder:"Например: читать перед сном", maxlength:"40", value:h.name});
@@ -1116,6 +1164,21 @@ function openEditor(existing) {
     }
   }
 
+  // Сложность 1–5: Огонёк оценивает сам, можно поменять
+  const diffSeg = el("div", {class:"seg diff"});
+  const diffInfo = el("div", {class:"tip", style:"text-align:left"});
+  for (let d = 1; d <= 5; d++) diffSeg.append(el("button", {onclick: () => { h.diff = d; haptic("select"); drawDiff(); }}, String(d)));
+  function drawDiff() {
+    const auto = autoDiff({ ...h, name: name.value, target: h.type === "count" ? target.count : h.type === "time" ? target.time : 1 });
+    const cur = h.diff || auto;
+    [...diffSeg.children].forEach((b, i) => b.classList.toggle("on", i + 1 === cur));
+    diffInfo.innerHTML = "";
+    diffInfo.append(`${DIFF_NAMES[cur]} · +${cur} опыта за выполненный день. `,
+      h.diff ? (h.diff !== auto ? el("button", {class:"linkbtn", onclick: () => { delete h.diff; haptic("select"); drawDiff(); }}, `Вернуть оценку Огонька (${auto})`) : "")
+             : el("span", {}, "Огонёк оценил сам — можешь поменять."));
+  }
+  const diffBox = el("div", {}, el("div", {class:"label"}, "Сложность"), diffSeg, diffInfo);
+
   // Дни недели
   const wdays = el("div", {class:"wdays"});
   const drawDays = () => [...wdays.children].forEach((b, i) => b.classList.toggle("on", h.days.includes(i)));
@@ -1170,7 +1233,7 @@ function openEditor(existing) {
     el("div", {class:"grab"}), el("h3", {}, existing ? "Изменить привычку" : "Новая привычка"),
     preview, ready, el("div", {class:"label"}, "Название"), name,
     el("div", {class:"label"}, "Как отмечать"), seg, typeBox,
-    daysBox,
+    daysBox, diffBox,
     el("div", {class:"label"}, "Иконка и цвет"), iconRow,
     el("div", {style:"height:12px"}), colors,
     el("div", {style:"height:20px"}), saveBtn,
@@ -1181,6 +1244,7 @@ function addHabit(tp) {
   const h = { id: uid(), name: tp.name, emoji: tp.emoji, icon: tp.icon || null, color: tp.color, type: tp.type || "check",
     target: tp.target || 1, unit: tp.unit || "", days: tp.days ? tp.days.slice() : [0,1,2,3,4,5,6],
     created: today(), done: [], log: {}, notes: {} };
+  if (tp.diff >= 1 && tp.diff <= 5) h.diff = tp.diff;
   if (h.type === "quit") { h.start = tp.start || Date.now(); h.relapses = []; }
   state.habits.push(h);
   save(); haptic("success"); selDay = today(); tab = "today";
@@ -1275,7 +1339,7 @@ function renderDetail() {
   const head = el("div", {class:"dhead"},
     icoEl(h),
     el("div", {style:"min-width:0"}, el("h2", {}, h.name),
-      el("p", {}, h.type === "quit" ? `отказ · с ${fmtDayLong(dayNum(new Date(h.start)))}` : [h.type !== "check" ? goalText(h) : "отметка", scheduleText(h)].join(" · "))),
+      el("p", {}, (h.type === "quit" ? `отказ · с ${fmtDayLong(dayNum(new Date(h.start)))}` : [h.type !== "check" ? goalText(h) : "отметка", scheduleText(h)].join(" · ")) + ` · сложность ${diffOf(h)}/5`)),
     el("div", {style:"margin-left:auto;display:flex;gap:8px;align-self:flex-start"},
       el("button", {class:"edit", style:"margin:0", "aria-label":"Поделиться", html:ICONS.share, onclick: () => openShare(h)}),
       el("button", {class:"edit", style:"margin:0", "aria-label":"Изменить", html:ICONS.pen, onclick: () => openEditor(h)})));
@@ -1735,16 +1799,41 @@ function ratingInto(wrap) {
 
 /* ---------------- Профиль и уровни ---------------- */
 const LEVEL_TITLES = [[1,"Искра"],[3,"Огонёк"],[5,"Костёр"],[8,"Пламя"],[12,"Пожар"],[17,"Вулкан"],[25,"Солнце"],[35,"Звезда"]];
+const LEVEL_EMOJI = {"Искра":"✨","Огонёк":"🕯️","Костёр":"🔥","Пламя":"☄️","Пожар":"💥","Вулкан":"🌋","Солнце":"☀️","Звезда":"🌟"};
+const LEVEL_MAX_SHOW = 40;
+const levelCost = L => 50 + 25 * (L - 1);    // уровень L → L+1
+const levelStart = L => { let x = 0; for (let i = 1; i < L; i++) x += levelCost(i); return x; };   // опыт, с которого начинается уровень L
+const titleOf = L => LEVEL_TITLES.filter(([l]) => l <= L).pop()[1];
+const badgeXP = b => b.xp || 30;
 function xpTotal() {
-  const marks = state.habits.reduce((s, h) => s + totalDays(h), 0);
-  const badges = unlockedBadges().length;
-  return marks * 10 + badges * 50;
+  const marks = state.habits.reduce((s, h) => s + totalDays(h) * diffOf(h), 0);
+  const ids = new Set(unlockedBadges());
+  return marks + BADGES.filter(b => ids.has(b.id)).reduce((s, b) => s + badgeXP(b), 0);
 }
-function levelOf(xp) {                       // уровень L → L+1 стоит 100 + 50·(L−1) опыта
-  let L = 1, need = 100, rest = xp;
-  while (rest >= need) { rest -= need; L++; need = 100 + 50 * (L - 1); }
-  return { level: L, into: rest, need, title: LEVEL_TITLES.filter(([l]) => l <= L).pop()[1] };
+function levelOf(xp) {
+  let L = 1, need = levelCost(1), rest = xp;
+  while (rest >= need) { rest -= need; L++; need = levelCost(L); }
+  return { level: L, into: rest, need, title: titleOf(L) };
 }
+// Список всех уровней — раскрывается в карточке профиля
+function levelsList(lv, xp) {
+  const box = el("div", {class:"lvls"});
+  LEVEL_TITLES.forEach(([from], i) => {
+    const to = i + 1 < LEVEL_TITLES.length ? LEVEL_TITLES[i + 1][0] - 1 : null;
+    const t = titleOf(from), cur = lv.level >= from && (to === null || lv.level <= to), done = to !== null && lv.level > to;
+    const lvls = [];
+    for (let L = from; L <= (to === null ? Math.max(LEVEL_MAX_SHOW, lv.level + 2) : to); L++) lvls.push(L);
+    box.append(el("div", {class:"lvl-group" + (cur ? " cur" : done ? " done" : "")},
+      el("div", {class:"lvl-head"}, el("i", {}, LEVEL_EMOJI[t]), el("b", {}, t),
+        el("small", {}, to === null ? `ур. ${from}+` : from === to ? `ур. ${from}` : `ур. ${from}–${to}`)),
+      el("div", {class:"lvl-rows"}, lvls.map(L => el("div", {class:"lvl-row" + (L === lv.level ? " me" : L < lv.level ? " ok" : "")},
+        el("span", {}, L < lv.level ? "✓" : L === lv.level ? "●" : ""), el("b", {}, `Уровень ${L}`),
+        el("small", {class:"num"}, L === lv.level ? `${xp} из ${fmtN(levelStart(L + 1))}` : `${fmtN(levelStart(L))} опыта`))))));
+  });
+  box.append(el("div", {class:"tip", style:"margin-top:4px"}, "Опыт: за каждый выполненный день привычки — от 1 до 5 (по сложности), за награду — от 30 до 100."));
+  return box;
+}
+let lvlOpen = false;
 function nextGoal(c) {
   const cands = [];
   for (const [id, n] of [["s3",3],["s7",7],["s21",21],["s30",30],["s66",66],["s100",100],["s180",180],["s365",365]])
@@ -1766,14 +1855,21 @@ function renderProfile() {
   fillAvatar(ava, state.profile, name);
   const avaWrap = el("button", {class:"ava-wrap", "aria-label":"Изменить профиль", onclick: openProfileEdit}, ava, el("span", {class:"ava-edit"}, "✏️"));
   const days = state.habits.length ? today() - Math.min(...state.habits.map(firstDay)) + 1 : 0;
+  const xpNow = xpTotal();
+  const lvlBox = el("div", {class:"lvl-wrap" + (lvlOpen ? " open" : "")}, lvlOpen ? levelsList(lv, xpNow) : null);
+  const xpBox = el("button", {class:"xp", "aria-expanded": String(lvlOpen), onclick: () => {
+      lvlOpen = !lvlOpen; haptic("select");
+      xpBox.setAttribute("aria-expanded", String(lvlOpen)); lvlBox.classList.toggle("open", lvlOpen);
+      lvlBox.innerHTML = ""; if (lvlOpen) lvlBox.append(levelsList(lv, xpNow));
+    }},
+    el("div", {class:"xp-row"}, el("span", {}, `Уровень ${lv.level} → ${lv.level + 1}`, el("em", {class:"chev"}, "›")), el("small", {class:"num"}, `${lv.into} / ${lv.need} опыта`)),
+    el("div", {class:"pbar"}, el("i", {style:`width:${lv.into / lv.need * 100}%`})),
+    el("div", {class:"tip", style:"margin-top:8px"}, "Нажми, чтобы увидеть все уровни"));
   wrap.append(el("div", {class:"card"},
     el("div", {class:"prof"}, avaWrap, el("div", {class:"lvl-badge"}, `Ур. ${lv.level}`),
       el("h2", {}, name), el("p", {}, `${lv.title}${u.username ? " · @" + u.username : ""}`),
       el("button", {class:"edit-link", onclick: openProfileEdit}, "Изменить имя и аватар")),
-    el("div", {class:"xp"},
-      el("div", {class:"xp-row"}, el("span", {}, `Уровень ${lv.level} → ${lv.level + 1}`), el("small", {class:"num"}, `${lv.into} / ${lv.need} опыта`)),
-      el("div", {class:"pbar"}, el("i", {style:`width:${lv.into / lv.need * 100}%`}))),
-    el("div", {class:"tip", style:"margin-top:8px"}, "+10 опыта за каждую выполненную привычку, +50 за награду")));
+    xpBox, lvlBox));
 
   wrap.append(el("div", {class:"stats"},
     stat(String(c.marks), plural(c.marks, "день выполнен", "дня выполнено", "дней выполнено")),
@@ -1791,7 +1887,7 @@ function renderProfile() {
     el("div", {class:"badges"}, BADGES.map(b => {
       const has = got.has(b.id), hidden = b.secret && !has;
       return el("button", {class:"badge" + (has ? "" : " lock"),
-        onclick: () => { haptic("select"); toast(hidden ? "🤫 Секретная награда — узнаешь, когда получишь" : `${b.e} ${b.name} — ${b.d}${has ? " ✅" : ""}`, 2600); }},
+        onclick: () => { haptic("select"); toast(hidden ? `🤫 Секретная награда · +${badgeXP(b)} опыта` : `${b.e} ${b.name} — ${b.d} · +${badgeXP(b)} опыта${has ? " ✅" : ""}`, 2800); }},
         el("i", {class: has ? (b.tier ? "t-" + b.tier : b.secret ? "t-secret" : "") : ""}, hidden ? "❓" : b.e),
         el("small", {}, hidden ? "Секрет" : b.name));
     }))));
@@ -1890,7 +1986,7 @@ function openProfileEdit() {
 function checkLevel() {
   if (!loaded) return;
   const L = levelOf(xpTotal()).level;
-  if (!state.flags.level) { state.flags.level = L; save(); return; }
+  if (!state.flags.level || L < state.flags.level) { state.flags.level = L; save(); return; }
   if (L > state.flags.level) {
     state.flags.level = L; save();
     const t = levelOf(xpTotal()).title;
