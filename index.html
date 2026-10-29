@@ -387,6 +387,206 @@ input{font:inherit;color:var(--text);-webkit-user-select:text;user-select:text}
 .toast{position:fixed;left:50%;bottom:calc(88px + var(--bottom));transform:translateX(-50%);max-width:calc(100% - 32px);
   background:var(--text);color:var(--bg);padding:11px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:31;
   animation:fade .2s;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+/* ===== v11: мысли, архив, магазин, медали, прогноз, итоги месяца ===== */
+.q-like{font-size:20px;line-height:1;padding:2px;flex:none;transition:transform .15s}
+.q-like:active{transform:scale(1.35)}
+.fav-q{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.fav-q:first-child{border-top:0}
+.fav-q p{margin:0;flex:1;font-size:15px;line-height:1.45;font-weight:500}
+.fav-q button{width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--hint);flex:none}
+.arch{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.arch:first-child{border-top:0}
+.arch > div:nth-child(2){flex:1;min-width:0}
+.arch b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arch small{color:var(--hint);font-size:12px}
+.arch-back{height:34px;padding:0 12px;border-radius:10px;background:var(--accent);color:var(--accent-text);font-weight:700;font-size:13px;flex:none}
+.arch-del{width:34px;height:34px;border-radius:10px;background:var(--soft);flex:none}
+.frame{position:relative;padding:5px;border-radius:50%;display:inline-grid;place-items:center;box-shadow:0 0 22px var(--glow)}
+.frame::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--fr)}
+.frame.spin::before{animation:spin 4s linear infinite}
+.frame > *{position:relative}
+@keyframes spin{to{transform:rotate(360deg)}}
+.shop-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 55%,#000),var(--accent));color:#fff;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;box-shadow:0 6px 18px rgba(106,48,0,.25)}
+.shop-card i{font-style:normal;font-size:30px}
+.shop-card div{flex:1;min-width:0}
+.shop-card b{display:block;font-size:16px}
+.shop-card small{opacity:.8;font-size:13px}
+.shop-card span{font-weight:700;font-size:22px;opacity:.9}
+.shop-bal{display:flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#ff9a00,#ff3d00);color:#fff;border-radius:18px;padding:14px;margin-bottom:12px}
+.shop-bal b{font-size:30px;font-weight:900;letter-spacing:-.5px}
+.shop-bal small{opacity:.92;font-size:12px}
+.shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.shop-item{background:var(--soft);border-radius:18px;padding:14px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.shop-item.on{box-shadow:inset 0 0 0 2px var(--accent)}
+.shop-prev{height:74px;display:grid;place-items:center}
+.shop-dot{width:54px;height:54px;border-radius:50%;display:block;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.shop-emo{font-style:normal;font-size:44px}
+.shop-item b{font-size:14px}
+.shop-btn{height:32px;min-width:100px;padding:0 12px;border-radius:11px;background:var(--card);font-weight:700;font-size:13px;display:grid;place-items:center}
+.shop-btn.on{background:var(--accent);color:var(--accent-text)}
+.shop-btn.buy{background:linear-gradient(135deg,#ffb000,#ff5a00);color:#fff}
+.shop-btn.buy.no{opacity:.45}
+.themes button.locked i{display:grid;place-items:center;font-size:15px;font-style:normal;opacity:.5}
+.fxb{position:fixed;width:0;height:0;pointer-events:none;z-index:40}
+.fxb i{position:absolute;left:0;top:0;font-style:normal;transform:translate(-50%,-50%);animation:fxb .95s cubic-bezier(.2,.7,.3,1) both}
+@keyframes fxb{0%{opacity:1;transform:translate(-50%,-50%) scale(.3)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy) + 40px)) scale(1)}}
+.medals{display:grid;grid-template-columns:repeat(6,1fr);gap:10px 4px}
+.medal{display:flex;flex-direction:column;align-items:center;gap:3px}
+.medal i{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:19px;background:var(--soft);color:var(--hint);filter:grayscale(1);opacity:.4}
+.medal.got i{background:linear-gradient(160deg,#fff1a8,#e0a800);box-shadow:0 3px 10px rgba(224,168,0,.4);filter:none;opacity:1}
+.medal.cur:not(.got) i{box-shadow:inset 0 0 0 2px var(--accent);filter:grayscale(.3);opacity:.85}
+.medal small{font-size:10px;color:var(--hint);font-weight:600}
+.next > i.medal-big{background:var(--soft);filter:grayscale(.3)}
+.next > i.medal-big.got{background:linear-gradient(160deg,#fff1a8,#e0a800);filter:none;box-shadow:0 4px 12px rgba(224,168,0,.4)}
+.mch .label{font-size:12px}
+.fc{display:flex;align-items:center;gap:12px;padding:9px 0}
+.fc + .fc{border-top:1px solid var(--line)}
+.fc i{font-style:normal;font-size:22px;width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex:none}
+.fc div{flex:1;min-width:0}
+.fc b{display:block;font-size:14px}
+.fc small{color:var(--hint);font-size:12px}
+.fc span{font-size:13px;font-weight:700;color:var(--accent);text-align:right;max-width:46%}
+.wrap-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border-radius:var(--radius);padding:16px;margin-bottom:12px;color:#fff;
+  background:linear-gradient(120deg,#5e5ce6,#ff2d55 55%,#ff9500);background-size:220% 220%;animation:wbg 6s ease infinite;box-shadow:0 8px 22px rgba(255,45,85,.25)}
+@keyframes wbg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.wrap-banner div{flex:1}
+.wrap-banner small{display:block;opacity:.92;font-size:12px}
+.wrap-banner b{display:block;font-size:21px;font-weight:900;margin:2px 0 8px;letter-spacing:-.3px}
+.wb-cta{display:inline-block;background:rgba(255,255,255,.24);padding:5px 12px;border-radius:10px;font-size:13px;font-weight:700}
+.wrap-banner i{font-style:normal;font-size:44px}
+.wrap-months{display:flex;gap:8px;overflow-x:auto;margin:-4px 0 12px;padding-bottom:2px;align-items:center}
+.wrap-months small{color:var(--hint);font-size:12px;flex:none}
+.wrap-months button{flex:none;height:32px;padding:0 12px;border-radius:10px;background:var(--card);font-size:13px;font-weight:600}
+.story{position:fixed;inset:0;z-index:50;color:#fff;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(64px + var(--top)) 26px calc(36px + var(--bottom));transition:background .45s;animation:fadebg .2s;overflow:hidden}
+.story.out{animation:fadeout .2s forwards}
+.st-bars{position:absolute;left:12px;right:12px;top:calc(12px + var(--top));display:flex;gap:4px}
+.st-bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.st-bars i b{display:block;height:100%;width:0;background:#fff}
+.st-bars i.done b{width:100%}
+.st-bars i.cur b{animation:stbar 5.5s linear forwards}
+@keyframes stbar{to{width:100%}}
+.st-close{position:absolute;right:14px;top:calc(26px + var(--top));width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.25);color:#fff;font-size:16px;z-index:2}
+.st-slide{display:flex;flex-direction:column;gap:6px}
+.st-slide.in > *{animation:stin .55s cubic-bezier(.2,.9,.3,1) both}
+.st-slide.in > *:nth-child(2){animation-delay:.08s}
+.st-slide.in > *:nth-child(3){animation-delay:.16s}
+.st-slide.in > *:nth-child(4){animation-delay:.24s}
+.st-slide.in > *:nth-child(5){animation-delay:.32s}
+@keyframes stin{from{opacity:0;transform:translateY(22px)}}
+.ws-kicker{font-size:13px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;opacity:.85}
+.story h1{font-size:44px;line-height:1.05;margin:6px 0;letter-spacing:-1px}
+.story h2{font-size:24px;margin:0;line-height:1.2}
+.story p{font-size:17px;line-height:1.4;opacity:.92;margin:8px 0 0}
+.ws-big{font-size:96px;font-weight:900;letter-spacing:-3px;line-height:1;margin:4px 0}
+.ws-big small{font-size:40px;opacity:.7;letter-spacing:-1px}
+.ws-ico{width:110px;height:110px;border-radius:30px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:60px;margin:10px 0}
+.ws-ico svg{width:56px;height:56px}
+.ws-persona{font-size:110px;line-height:1.1}
+.ws-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.ws-list div{display:flex;align-items:baseline;gap:12px;background:rgba(255,255,255,.13);border-radius:16px;padding:12px 14px}
+.ws-list b{font-size:23px;font-weight:900;white-space:nowrap}
+.ws-list span{opacity:.92;font-size:15px}
+.ws-card{width:56%;align-self:center;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.45);margin:8px 0 16px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}
+
+/* ===== v13: стили карточек, окно награды, тест на тип ===== */
+.cs-chips{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 14px;padding:0 16px 2px;scrollbar-width:none}
+.cs-chips::-webkit-scrollbar{display:none}
+.cs-chips .chip{flex:none}
+.cs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cs-item{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.cs-item img{width:100%;aspect-ratio:9/16;border-radius:12px;display:block;box-shadow:0 4px 14px rgba(0,0,0,.18);transition:transform .15s}
+.cs-item.on img{box-shadow:0 0 0 3px var(--card),0 0 0 6px var(--accent)}
+.cs-item:active img{transform:scale(.96)}
+.bpop{position:fixed;inset:0;z-index:45;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:20px;animation:fadebg .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.bpop.out{animation:fadeout .2s forwards}
+.bpop-card{width:100%;max-width:360px;background:var(--card);border-radius:28px;padding:10px 20px 18px;text-align:center;animation:bpin .45s cubic-bezier(.2,1.3,.4,1)}
+@keyframes bpin{from{transform:scale(.6);opacity:0}}
+.bpop-stage{position:relative;height:200px;display:grid;place-items:center;margin-bottom:4px}
+.bpop-rays{position:absolute;width:260px;height:260px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,var(--r1) 0 8deg,transparent 8deg 22.5deg);opacity:.35;
+  -webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:spin 14s linear infinite}
+.bpop-medal{position:relative;width:132px;height:132px;border-radius:50%;display:grid;place-items:center;font-size:64px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25),inset 0 0 0 7px rgba(255,255,255,.45);animation:bpmed .7s cubic-bezier(.2,1.4,.4,1) .1s both}
+@keyframes bpmed{from{transform:scale(0) rotate(-40deg)}}
+.bpop-medal span{filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}
+.bpop-kick{display:block;color:var(--accent);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.8px}
+.bpop-card h2{margin:6px 0 4px;font-size:26px;letter-spacing:-.4px}
+.bpop-card p{margin:0 0 12px;color:var(--hint);font-size:15px;line-height:1.4}
+.bpop-xp{display:inline-block;background:var(--soft);border-radius:12px;padding:7px 14px;font-weight:800;font-size:15px;margin-bottom:16px}
+.type-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border-radius:var(--radius);padding:15px 16px;margin-bottom:12px;color:#fff;
+  background:linear-gradient(120deg,#7928ca,#ff0080 60%,#ff8a00);background-size:220% 220%;animation:wbg 7s ease infinite;box-shadow:0 8px 22px rgba(121,40,202,.25)}
+.type-card.has{animation:none;background-size:auto}
+.type-card i{font-style:normal;font-size:34px}
+.type-card div{flex:1;min-width:0}
+.type-card b{display:block;font-size:17px;font-weight:800}
+.type-card small{display:block;opacity:.88;font-size:12px}
+.type-card span{font-size:22px;opacity:.85}
+.story.quiz .st-slide{gap:10px}
+.st-bars i.now b{width:100%}
+.qz-q{font-size:32px !important;line-height:1.15 !important}
+.qz-ans{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.qz-ans button{background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.35);color:#fff;border-radius:18px;padding:18px 16px;font-size:17px;font-weight:700;text-align:left;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);transition:transform .12s,background .12s}
+.qz-ans button:active{transform:scale(.97);background:rgba(255,255,255,.32)}
+.qz-back{align-self:flex-start;color:#fff;opacity:.8;font-weight:600;margin-top:10px}
+.qz-load{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.qz-spin{font-size:84px;animation:qzs 1.2s ease-in-out infinite}
+@keyframes qzs{50%{transform:scale(1.18) rotate(12deg)}}
+.story.scroll{justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tp .tp-tag{font-size:19px;font-weight:600;opacity:1;margin-top:0}
+.tp-code{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.tp-code span{background:rgba(255,255,255,.18);border-radius:10px;padding:5px 10px;font-size:13px;font-weight:700}
+.tp .ws-list span small{display:block;opacity:.75;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.tp .ws-list div{align-items:center}
+.tp-share{margin-top:18px;background:#fff !important;color:#111 !important}
+.tp-again{margin-top:10px;background:rgba(255,255,255,.18) !important;color:#fff !important}
+.seg4 button{font-size:13px}
+/* ===== v14: путь огня ===== */
+.path{margin-top:2px}
+.path-head{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 12px}
+.path-head b{font-size:17px;letter-spacing:-.2px}
+.path-head small{color:var(--hint);font-size:12px;font-weight:600}
+.stage{position:relative;display:flex;gap:14px;padding-bottom:14px}
+.stage::before{content:"";position:absolute;left:25px;top:52px;bottom:-2px;width:3px;border-radius:2px;background:var(--line)}
+.stage.done::before{background:linear-gradient(var(--b),var(--a))}
+.stage.last::before{display:none}
+.stage-node{position:relative;flex:none;width:53px;height:53px;border-radius:50%;display:grid;place-items:center;background:var(--soft)}
+.stage-node i{font-style:normal;font-size:25px;line-height:1}
+.stage.done .stage-node,.stage.cur .stage-node{background:linear-gradient(150deg,var(--a),var(--b));box-shadow:0 6px 16px color-mix(in srgb,var(--b) 40%,transparent)}
+.stage.cur .stage-node{width:60px;height:60px;margin-left:-3.5px;animation:glowp 2.4s ease-in-out infinite}
+.stage.cur .stage-node i{font-size:30px}
+@keyframes glowp{50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--b) 22%,transparent),0 8px 22px color-mix(in srgb,var(--b) 45%,transparent)}}
+.stage.lock .stage-node i{filter:grayscale(1);opacity:.35}
+.stage-body{flex:1;min-width:0;padding-top:4px}
+.stage.cur .stage-body{background:linear-gradient(135deg,color-mix(in srgb,var(--a) 16%,var(--card)),color-mix(in srgb,var(--b) 10%,var(--card)));
+  border-radius:18px;padding:12px 14px 13px;margin-top:-2px;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--b) 45%,transparent)}
+.stage-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.stage-top b{font-size:16px}
+.stage.cur .stage-top b{font-size:18px}
+.stage-top span{color:var(--hint);font-size:12px;font-weight:600;white-space:nowrap}
+.stage-body p{margin:3px 0 4px;font-size:13px;line-height:1.35;color:var(--hint)}
+.stage.cur .stage-body p{color:var(--text);opacity:.85}
+.stage.lock .stage-top b{color:var(--hint)}
+.stage-ok{color:var(--b);font-weight:700;font-size:12px}
+.stage-lock{color:var(--hint);font-size:12px}
+.pips{display:flex;align-items:center;margin:10px 0 10px}
+.pip{position:relative;flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:inset 0 0 0 2px var(--line)}
+.pip b{font-size:13px;font-weight:800;color:var(--hint);position:relative}
+.pip.ok{background:linear-gradient(150deg,var(--a),var(--b));box-shadow:none}
+.pip.ok b{color:#fff}
+.pip.me{background:conic-gradient(var(--b) var(--p),var(--line) 0);box-shadow:0 0 0 3px color-mix(in srgb,var(--b) 25%,transparent)}
+.pip.me::before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--card)}
+.pip.me b{color:var(--text)}
+.pip-line{flex:1;height:3px;min-width:8px;background:var(--line);border-radius:2px}
+.pip-line.ok{background:linear-gradient(90deg,var(--a),var(--b))}
+.stage-bar{height:8px;border-radius:4px;background:color-mix(in srgb,var(--text) 8%,transparent);overflow:hidden;margin-bottom:7px}
+.stage-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--a),var(--b))}
+.stage-next{display:block;font-size:12.5px;font-weight:600;line-height:1.35}
+.path-how{background:var(--soft);border-radius:16px;padding:12px 14px;margin-top:4px}
+.path-how b{display:block;font-size:14px;margin-bottom:6px}
+.path-how div{display:flex;align-items:center;gap:10px;font-size:13px;padding:4px 0}
+.path-how em{margin-left:auto;font-style:normal;font-weight:800;color:var(--accent)}
 </style>
 </head>
 <body>
@@ -438,7 +638,7 @@ const THEMES = [
   {id:"tg",     name:"Telegram", c:null},
 ];
 
-// Цитата дня — меняется каждый день
+// Мысль дня: большой набор, у каждого человека своя последовательность (без повторов, пока не пройдёт весь круг)
 const QUOTES = [
   "Не нужно быть великим, чтобы начать. Но нужно начать, чтобы стать великим.",
   "Маленький шаг каждый день сильнее большого рывка раз в месяц.",
@@ -449,7 +649,7 @@ const QUOTES = [
   "Лучшее время начать было вчера. Следующее лучшее — сейчас.",
   "Дисциплина — это помнить, чего ты хочешь.",
   "Прогресс, а не идеал.",
-  "Плохой день с привычкой лучше, чем хороший день без неё.",
+  "Даже в трудный день одна привычка делает тебя сильнее.",
   "Сделай сегодня то, за что завтра скажешь себе спасибо.",
   "Огонь не гаснет, пока в него подкладывают дрова. Подкинь своё полено сегодня.",
   "Сравнивай себя только с собой вчерашним.",
@@ -457,7 +657,7 @@ const QUOTES = [
   "Ты сильнее, чем твоё «не хочется».",
   "Через год ты будешь рад, что начал сегодня.",
   "Не жди понедельника. Понедельник — это сегодня.",
-  "Пропустил один раз — случайность. Пропустил дважды — начало новой привычки.",
+  "Пропустил день — не беда. Вернись завтра, и огонь снова твой.",
   "Пять минут лучше, чем ноль минут.",
   "Главное — не скорость, а то, что ты не останавливаешься.",
   "Каждая отметка — голос за того, кем ты хочешь стать.",
@@ -470,6 +670,130 @@ const QUOTES = [
   "Сила воли заканчивается. Привычки — нет.",
   "Ты уже прошёл больше, чем думаешь.",
   "Начни с одного. Потом станет два.",
+  "Самое сложное — первые две минуты. Дальше тело подхватит.",
+  "Ты не ленивый. Ты просто ещё не начал.",
+  "Не обещай себе много. Сделай немного — но сегодня.",
+  "Серия строится не в хорошие дни, а в те, когда не хотелось.",
+  "Скучно — значит, привычка становится нормой. Это хороший знак.",
+  "Ошибся — отметь вывод и иди дальше. Виноватым быть не обязательно.",
+  "Твой будущий я уже благодарит тебя за сегодняшнее усилие.",
+  "Не ищи идеальный момент. Сделай момент подходящим.",
+  "Делай меньше, но не пропускай.",
+  "Каждый день — новая страница. Напиши на ней хоть одну строчку.",
+  "Один процент лучше каждый день — это огромная разница через год.",
+  "Ты управляешь не результатом, а действием. Сделай действие.",
+  "Устал — отдохни. Но не сдавайся.",
+  "Огонь в тебе разгорается от того, что ты делаешь, а не от того, о чём думаешь.",
+  "Если хочется бросить — вспомни, зачем начинал.",
+  "Привычка — это решение, которое ты больше не принимаешь заново.",
+  "Не всё сразу. Но всё — постепенно.",
+  "Сначала ты строишь привычки. Потом привычки строят тебя.",
+  "Нет настроения? Сделай минимальную версию. Это тоже засчитывается.",
+  "Спокойный темп, который ты держишь, лучше быстрого, который ты бросишь.",
+  "Ты не обязан чувствовать себя готовым. Просто начни.",
+  "Секрет в том, чтобы приходить снова и снова.",
+  "Отдых — часть плана, а не провал плана.",
+  "Хорошее утро начинается с одного правильного действия.",
+  "Вечер — лучшее время сказать себе: «Сегодня я справился».",
+  "Твоя серия — это история о том, что ты держишь слово.",
+  "Мелочи, повторённые много раз, перестают быть мелочами.",
+  "Лучше сделать на 60%, чем идеально — никогда.",
+  "Дай себе шанс удивиться тому, на что ты способен.",
+  "Каждый раз, когда ты отмечаешь привычку, ты тренируешь характер.",
+  "Сегодня — достаточно хороший день, чтобы стать чуть лучше.",
+  "Порядок в делах начинается с порядка в маленьких решениях.",
+  "Если сложно — разбей на кусочки поменьше.",
+  "Не сравнивай свою середину с чужим финалом.",
+  "Твой путь не обязан быть быстрым. Он обязан быть твоим.",
+  "Чем раньше начнёшь, тем раньше станет легко.",
+  "Ты можешь больше, чем вчера думал.",
+  "Иногда победа — это просто не сдаться сегодня.",
+  "Энергия приходит в процессе, а не до него.",
+  "Сделанное лучше идеального.",
+  "Время пройдёт в любом случае. Вопрос — с чем ты придёшь к его концу.",
+  "Маленькая победа утром задаёт тон всему дню.",
+  "Будь добрее к себе, но не мягче к своим целям.",
+  "Один пропуск — это просто пауза. Главное — вернуться завтра.",
+  "Никто не видит твоих усилий сегодня. Все увидят результат завтра.",
+  "Огонь, который ты разжёг, согревает и других.",
+  "Ты — тот, кто приходит. Даже когда трудно.",
+  "Самые сильные люди — не те, кто не падает, а те, кто встаёт.",
+  "Не жди вдохновения. Пусть оно догоняет тебя.",
+  "Твой режим — твоя суперсила.",
+  "Чуть-чуть каждый день — и через месяц ты не узнаешь себя.",
+  "Прогресс любит тишину. Делай, а не рассказывай.",
+  "Не думай о всей лестнице. Думай о следующей ступеньке.",
+  "Если не знаешь, с чего начать, — начни с самого простого.",
+  "Привычки не меняют жизнь за день. Они меняют её навсегда.",
+  "Сегодня ты строишь фундамент, который никто не видит.",
+  "Немного лучше, чем вчера, — уже отличный день.",
+  "Когда сомневаешься — выбери действие.",
+  "Ты не опоздал. Ты как раз вовремя, чтобы начать.",
+  "Твой огонёк горит ровно настолько, насколько ты о нём заботишься.",
+  "Один стакан воды. Одна страница. Одна минута. С этого всё и начинается.",
+  "Дисциплина — это любовь к себе завтрашнему.",
+  "Трудный день не отменяет твой путь. Завтра — новый шанс.",
+  "Успех — это много маленьких «да» самому себе.",
+  "Ты не должен быть мотивирован. Ты должен быть последователен.",
+  "Каждый новый день — это возможность снова выбрать себя.",
+  "Ты уже не тот, кем был месяц назад. И это круто.",
+  "Улучшай систему, а не ругай себя.",
+  "Сделай первое движение — второе будет легче.",
+  "Ты сам решаешь, каким будет твой день.",
+  "Сила не в рывке, а в постоянстве.",
+  "Будь терпелив: деревья тоже растут не за ночь.",
+  "Отложенное «потом» часто превращается в «никогда». Сделай сейчас.",
+  "Записанная цель становится планом. Отмеченная привычка — фактом.",
+  "Хорошие дни ты создаёшь сам — по одному.",
+  "Ты справлялся раньше. Справишься и сейчас.",
+  "Начни день с того, что важно, а не с того, что срочно.",
+  "Немного движения лучше, чем идеальный план без движения.",
+  "Твоё тело запоминает всё, что ты делаешь регулярно.",
+  "Не бойся начинать заново. В этот раз ты начинаешь с опытом.",
+  "Цель без привычки — просто мечта.",
+  "Самое ценное, что ты можешь подарить себе, — регулярность.",
+  "Смотри не на то, сколько осталось, а на то, сколько уже пройдено.",
+  "Сегодня отличный день, чтобы не нарушать обещание себе.",
+  "Ты растёшь, даже когда этого не замечаешь.",
+  "Сила — это привычка, которую ты тренируешь каждый день.",
+  "Сделай это ради того человека, которым хочешь стать.",
+  "Каждый вечер спроси себя: «Что я сделал для своей цели?»",
+  "Простые вещи, сделанные каждый день, творят чудеса.",
+  "Убери одно препятствие — и привычка станет легче.",
+  "Твой лучший проект — это ты сам.",
+  "Важно не то, как ты начал, а то, что ты продолжаешь.",
+  "Сначала ты делаешь через силу. Потом — по привычке. Потом — с удовольствием.",
+  "Каждая галочка — это кирпичик в доме твоей мечты.",
+  "Никогда не поздно стать тем, кем ты мог бы быть.",
+  "Ты не обязан делать всё. Сделай главное.",
+  "Пусть сегодня будет днём, о котором ты не пожалеешь.",
+  "Ты уже на пути. Не сворачивай.",
+  "Привычка — это мост между целью и результатом.",
+  "Будь упрямым в целях и гибким в способах.",
+  "Каждый день у тебя есть 24 часа. Подари себе хотя бы 10 минут.",
+  "Огонь разгорается от маленькой искры. Будь этой искрой для себя.",
+  "Не дай «не хочу» решать за тебя.",
+  "Сегодня тяжело — значит, ты растёшь.",
+  "Постоянство побеждает талант, когда талант ленится.",
+  "Ты сильнее своих оправданий.",
+  "Твой ритм — твоё правило. Держи его.",
+  "Лучшая версия тебя собирается из обычных дней.",
+  "Не жди результата сразу. Жди его неизбежно.",
+  "Внимание к мелочам делает большие вещи возможными.",
+  "Пусть твои действия говорят громче твоих планов.",
+  "Даже маленький огонёк освещает дорогу.",
+  "Сегодня ты на один день ближе к своей цели.",
+  "Заботься о себе так, как заботился бы о лучшем друге.",
+  "Хочешь перемен — начни с одной привычки.",
+  "Пусть сегодня будет на одну отметку больше, чем вчера.",
+  "Ты не теряешь время, когда вкладываешь его в себя.",
+  "Будущее строится сегодня. Прямо сейчас.",
+  "Улыбнись: ты уже делаешь больше, чем большинство.",
+  "Ровное пламя горит дольше яркой вспышки.",
+  "Самое важное — не останавливаться надолго.",
+  "Сделай сегодня так, чтобы завтра было легче.",
+  "Иногда достаточно просто прийти. Остальное приложится.",
+  "Ты выбираешь, что будет привычкой: лень или рост.",
 ];
 
 // Награды. test(c) получает сводку по всем привычкам.
@@ -519,6 +843,16 @@ const BADGES = [
   {id:"theme", xp:30,  e:"🎨", name:"Дизайнер",       d:"Сменил тему оформления",                 t:c => c.flags.theme},
   {id:"share", xp:30,  e:"📣", name:"Вдохновитель",   d:"Поделился своей серией",                 t:c => c.shared},
   {id:"team", xp:40,   e:"🤝", name:"Командный игрок", d:"Первый челлендж с друзьями",            t:c => c.flags.team},
+  // Друзья и активность
+  {id:"inv1",   e:"🔗", name:"Зажигалка",      d:"Отправил другу приглашение в Огонёк",     t:c => c.flags.invited, xp:40},
+  {id:"inv5",   e:"📨", name:"Душа компании",  d:"Отправил 5 приглашений друзьям",          t:c => (c.flags.invites || 0) >= 5, xp:70, tier:"silver"},
+  {id:"refin",  e:"🎟️", name:"По приглашению", d:"Пришёл в Огонёк по ссылке друга",         t:c => !!c.flags.refIn, xp:30},
+  {id:"dayshr", e:"📸", name:"Мой день",       d:"Поделился карточкой своего дня",          t:c => c.flags.dayShared, xp:30},
+  {id:"wrapv",  e:"🎁", name:"Итоги",          d:"Посмотрел итоги месяца",                  t:c => c.flags.wrapViewed, xp:30},
+  {id:"shop1",  e:"🎨", name:"Стилист",        d:"Поставил рамку или эффект в «Оформлении»", t:c => c.flags.styled || c.flags.bought, xp:30},
+  {id:"type",   e:"🔮", name:"Узнай себя",     d:"Прошёл тест «Твой тип по привычкам»",     t:c => c.typed, xp:30},
+  {id:"medal1", e:"🏅", name:"Медалист",       d:"Получил первую медаль месяца",            t:c => c.medals >= 1, xp:60, tier:"bronze"},
+  {id:"medal6", e:"🎖️", name:"Коллекция медалей", d:"6 медалей месяца",                      t:c => c.medals >= 6, xp:100, tier:"gold"},
   // Секретные
   {id:"bday", xp:50,   e:"🎂", name:"День рождения",  d:"Открыл Огонёк в его день рождения — 27 октября", t:c => c.flags.bday, secret:true},
   {id:"lucky", xp:80,  e:"🍀", name:"Счастливая",     d:"Серия ровно 77 дней",                    t:c => c.lucky, secret:true},
@@ -664,7 +998,8 @@ document.addEventListener("visibilitychange", () => { if (document.hidden && loa
    Для type="quit" (отказ): start — момент старта (мс), relapses:[мс] — срывы.
    notes:{день: текст} — заметки к дням.
    ===================================================================== */
-let state = { v:3, onboarded:false, habits:[], timer:null, settings:{theme:"fire", quote:true, remind:null, weekly:true, rating:false}, badges:null, flags:{}, profile:{} };
+let state = { v:3, onboarded:false, habits:[], timer:null, settings:{theme:"fire", quote:true, remind:null, weekly:true, rating:false, cardStyle:"fire"}, badges:null, flags:{}, profile:{},
+  archive:[], shop:{owned:[], frame:null, effect:null, spent:0}, medals:{}, favThoughts:[], badgeDates:{} };
 
 const dayNum = d => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
 const fromDay = n => { const d = new Date(n * 86400000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
@@ -675,13 +1010,19 @@ const fmtN = n => Math.round(n).toLocaleString("ru-RU");
 
 function migrate(data) {
   const s = Object.assign({ v:3, onboarded:true, habits:[], timer:null, badges:null, flags:{} }, data);
-  s.settings = Object.assign({theme:"fire", quote:true, remind:null, weekly:true, rating:false}, s.settings || {});
+  s.settings = Object.assign({theme:"fire", quote:true, remind:null, weekly:true, rating:false, cardStyle:"fire"}, s.settings || {});
+  if (s.persona && !TYPES[s.persona.code]) delete s.persona;
   s.flags = s.flags || {};
   s.profile = s.profile || {};
-  s.habits = (s.habits || []).map(h => Object.assign({
-    type:"check", target:1, unit:"", days:[0,1,2,3,4,5,6], log:{}, done:[], notes:{}
-  }, h));
-  s.habits.forEach(h => {
+  const fixH = h => Object.assign({ type:"check", target:1, unit:"", days:[0,1,2,3,4,5,6], log:{}, done:[], notes:{} }, h);
+  s.habits = (s.habits || []).map(fixH);
+  s.archive = (Array.isArray(s.archive) ? s.archive : []).map(fixH);
+  s.shop = Object.assign({owned:[], frame:null, effect:null, spent:0}, s.shop || {});
+  if (!Array.isArray(s.shop.owned)) s.shop.owned = [];
+  s.medals = s.medals && typeof s.medals === "object" ? s.medals : {};
+  s.favThoughts = Array.isArray(s.favThoughts) ? s.favThoughts.filter(i => i >= 0 && i < QUOTES.length) : [];
+  s.badgeDates = s.badgeDates && typeof s.badgeDates === "object" ? s.badgeDates : {};
+  s.habits.concat(s.archive).forEach(h => {
     if (!Array.isArray(h.done)) h.done = [];
     if (!h.log || typeof h.log !== "object") h.log = {};
     if (!h.notes || typeof h.notes !== "object") h.notes = {};
@@ -704,7 +1045,14 @@ function fmtSpan(ms) {                  // «12 дн 4 ч 31 мин»
   return `${mm} мин`;
 }
 
-const isScheduled = (h, day) => h.type === "quit" || h.days.length === 7 || h.days.includes(wdOf(day));
+const isScheduled = (h, day) => {
+  if (h.type === "quit") return true;
+  if (h.freq) {                      // N раз в неделю: «в планах» только сегодня и пока норма недели не выполнена
+    if (isDone(h, day)) return true;
+    return day === today() && weekDoneExcept(h, day) < h.freq;
+  }
+  return h.days.length === 7 || h.days.includes(wdOf(day));
+};
 function value(h, day) {               // текущее значение за день
   if (h.type === "check") return h.done.includes(day) ? 1 : 0;
   if (h.type === "quit") return quitDone(h, day) ? 1 : 0;
@@ -739,6 +1087,7 @@ function firstDay(h) {
    Сегодняшний невыполненный день серию тоже не рвёт — день ещё не закончился. */
 function streak(h) {
   if (h.type === "quit") return Math.floor((Date.now() - lastStart(h)) / 86400000);
+  if (h.freq) return weekStreak(h);
   const t = today(), start = firstDay(h);
   let n = 0;
   for (let d = t; d >= start; d--) {
@@ -754,6 +1103,7 @@ function bestStreak(h) {
     let best = 0; for (let i = 1; i < pts.length; i++) best = Math.max(best, pts[i] - pts[i - 1]);
     return Math.floor(best / 86400000);
   }
+  if (h.freq) return weekBest(h);
   const t = today();
   let best = 0, cur = 0;
   for (let d = firstDay(h); d <= t; d++) {
@@ -764,6 +1114,7 @@ function bestStreak(h) {
   return best;
 }
 function rate(h, from, to) {           // % выполнения запланированных дней в периоде
+  if (h.freq && h.type !== "quit") return weekRate(h, from, to);
   const start = Math.max(from, firstDay(h)), end = Math.min(to, today());
   let plan = 0, done = 0;
   for (let d = start; d <= end; d++) {
@@ -826,6 +1177,7 @@ function progressText(h, day) {
   return "";
 }
 function scheduleText(h) {
+  if (h.freq) return `${h.freq} ${plural(h.freq, "раз", "раза", "раз")} в неделю`;
   if (h.days.length === 7) return "каждый день";
   if (h.days.length === 5 && [0,1,2,3,4].every(d => h.days.includes(d))) return "по будням";
   if (h.days.length === 2 && h.days.includes(5) && h.days.includes(6)) return "по выходным";
@@ -890,6 +1242,7 @@ function render() {
   renderTabs();
   checkBadges();
   checkLevel();
+  checkMedals();
 }
 function renderTabs() {
   const go = (t, load) => () => { tab = t; haptic("select"); render(); window.scrollTo(0, 0); if (load) load(); };
@@ -917,6 +1270,7 @@ function renderToday() {
       el("div", {class:"hello"}, greet),
       el("div", {class:"title"}, selDay === t ? "Сегодня" : selDay === t - 1 ? "Вчера" : fmtDayLong(selDay))),
     el("div", {class:"top-r"},
+    state.habits.length ? el("button", {class:"gear", "aria-label":"Поделиться днём", html:ICONS.share, onclick: openDayShare}) : null,
     el("button", {class:"gear", "aria-label":"Настройки", html:ICONS.gear, onclick: openSettings}),
     el("div", {class:"ring", html:
       `<svg width="56" height="56"><circle cx="28" cy="28" r="23" stroke="var(--line)" stroke-width="6" fill="none"/>
@@ -935,9 +1289,12 @@ function renderToday() {
       el("small", {}, WD[i]), el("b", {class:"num"}, String(fromDay(d).getDate())),
       el("div", {class:"bar", html:`<i style="width:${fr * 100}%"></i>`})));
   }
-  const quote = state.settings.quote && state.habits.length ? el("div", {class:"quote"}, el("span", {}, "💬"),
-    el("div", {}, el("p", {}, QUOTES[t % QUOTES.length]), el("small", {}, "Мысль дня"))) : null;
-  app.append(el("div", {class:"screen"}, top, week, selDay === t ? weekCard() : null, quote, listBlock()));
+  const quote = state.settings.quote && state.habits.length ? thoughtCard(selDay) : null;
+  const wb = (() => { const n = new Date(); if (selDay !== t || n.getDate() > 5) return null;
+    const pm = new Date(n.getFullYear(), n.getMonth() - 1, 1), key = medalKey(pm.getFullYear(), pm.getMonth());
+    if (state.flags.wrapSeen === key || !monthStats(pm.getFullYear(), pm.getMonth()).marks) return null;
+    return wrapBanner(pm.getFullYear(), pm.getMonth()); })();
+  app.append(el("div", {class:"screen"}, top, week, wb, selDay === t ? weekCard() : null, quote, listBlock()));
 }
 
 function listBlock() {
@@ -966,8 +1323,10 @@ function habitCard(h, off) {
   if (h.type === "quit") meta.append(el("span", {class:"num", "data-quit":h.id}, "без срывов " + fmtSpan(Date.now() - lastStart(h))));
   else if (running) meta.append(el("span", {class:"live num", "data-live":h.id}, "▶ " + fmtClock(value(h, d))), el("span", {}, "из " + fmtDur(h.target * 60)));
   else if (h.type !== "check") meta.append(el("span", {class:"num"}, progressText(h, d)));
-  if (s > 0 && !running && h.type !== "quit") meta.append(el("span", {class:"fire num"}, `🔥 ${s}`));
-  if (h.type === "check" && !s) meta.append(el("span", {}, off ? scheduleText(h) : "Начни серию сегодня"));
+  if (h.freq && h.type !== "quit") { const wt = weekTotal(h, weekStartOf(d));
+    meta.append(el("span", {class:"num"}, wt >= h.freq ? `норма недели ✓ ${wt}/${h.freq}` : `${wt}/${h.freq} на неделе`)); }
+  if (s > 0 && !running && h.type !== "quit") meta.append(el("span", {class:"fire num"}, `🔥 ${streakUnit(h, s)}`));
+  if (h.type === "check" && !s && !h.freq) meta.append(el("span", {}, off ? scheduleText(h) : "Начни серию сегодня"));
 
   // кнопка действия
   const R = 19, C = 2 * Math.PI * R;
@@ -1035,12 +1394,15 @@ function markMoment(allDone) {
 }
 function afterComplete(h, day) {
   haptic("success");
+  fxBurst();
   if (day !== today()) return;
   const plan = state.habits.filter(x => isScheduled(x, day));
   const allDone = plan.length > 0 && plan.every(x => isDone(x, day));
   markMoment(allDone);
   if (plan.length > 1 && allDone) celebrate("Все привычки на сегодня выполнены! 🎉");
-  else {
+  else if (h.freq) {
+    if (weekTotal(h, weekStartOf(day)) === h.freq) celebrate(`🎯 Норма недели выполнена: ${h.name}!`);
+  } else {
     const s = streak(h);
     if ([3, 7, 14, 21, 30, 50, 66, 100, 150, 200, 365].includes(s)) celebrate(`🔥 ${s} ${plural(s, "день", "дня", "дней")} подряд — ${h.name}!`);
   }
@@ -1107,7 +1469,7 @@ function openEditor(existing) {
     pvSub.textContent = h.type === "quit" ? "отказ · счётчик дней без срыва" : `${g} · ${scheduleText(h)}`;
     daysBox.style.display = h.type === "quit" ? "none" : "";
     drawDiff();
-    saveBtn.disabled = !name.value.trim() || (!h.days.length && h.type !== "quit");
+    saveBtn.disabled = !name.value.trim() || (!h.days.length && h.type !== "quit" && !h.freq);
   };
   const name = el("input", {class:"field", placeholder:"Например: читать перед сном", maxlength:"40", value:h.name});
   name.addEventListener("input", updPreview);
@@ -1189,7 +1551,19 @@ function openEditor(existing) {
     [["Каждый день",[0,1,2,3,4,5,6]],["Будни",[0,1,2,3,4]],["Выходные",[5,6]]].map(([l, arr]) =>
       el("button", {class:"chip", onclick: () => { h.days = arr.slice(); drawDays(); haptic("select"); updPreview(); }}, l)));
   drawDays();
-  const daysBox = el("div", {}, el("div", {class:"label"}, "Дни недели"), wdays, daysQuick);
+  let freqMode = !!h.freq, freqN = h.freq || 3;
+  const modeSeg = el("div", {class:"seg", style:"margin-bottom:10px"});
+  const freqRow = el("div", {class:"chips"});
+  const drawFreq = () => { freqRow.innerHTML = ""; for (let n = 1; n <= 6; n++) freqRow.append(el("button", {class:"chip" + (n === freqN ? " on" : ""),
+    onclick: () => { freqN = n; h.freq = n; haptic("select"); drawFreq(); updPreview(); }}, `${n} ${plural(n, "раз", "раза", "раз")}`)); };
+  const daysPart = el("div", {}, wdays, daysQuick);
+  const freqPart = el("div", {}, freqRow, el("div", {class:"tip", style:"text-align:left"}, "В любые дни недели. Серия считается неделями: выполнил норму — неделя засчитана."));
+  const drawMode = () => { [...modeSeg.children].forEach((b, i) => b.classList.toggle("on", (i === 1) === freqMode));
+    daysPart.style.display = freqMode ? "none" : ""; freqPart.style.display = freqMode ? "" : "none"; };
+  [["По дням недели", false], ["N раз в неделю", true]].forEach(([l, v]) => modeSeg.append(el("button", {onclick: () => {
+    freqMode = v; if (v) h.freq = freqN; else delete h.freq; haptic("select"); drawMode(); updPreview(); }}, l)));
+  drawFreq(); drawMode();
+  const daysBox = el("div", {}, el("div", {class:"label"}, "Расписание"), modeSeg, daysPart, freqPart);
 
   // Иконка: открывает отдельный выбор «Эмодзи / Иконки»
   const rowIco = el("div", {class:"ico"});
@@ -1217,12 +1591,15 @@ function openEditor(existing) {
   }
 
   const saveBtn = el("button", {class:"btn", onclick: () => {
+    if (h.type === "quit") delete h.freq;
+    if (h.freq) h.days = [0,1,2,3,4,5,6];
     h.name = name.value.trim(); if (!h.name || (!h.days.length && h.type !== "quit")) return;
     h.target = h.type === "count" ? target.count : h.type === "time" ? target.time : 1;
     if (h.type === "quit") { h.days = [0,1,2,3,4,5,6]; if (!h.start) h.start = Date.now(); if (!Array.isArray(h.relapses)) h.relapses = []; }
     if (existing) {
       if (state.timer && state.timer.id === existing.id && h.type !== "time") stopTimer(true);
       Object.assign(existing, h);
+      if (!h.freq) delete existing.freq;
       save(); haptic("success"); toast("Сохранено");
     } else addHabit(h);
     closeSheet();
@@ -1246,6 +1623,7 @@ function addHabit(tp) {
     created: today(), done: [], log: {}, notes: {} };
   if (tp.diff >= 1 && tp.diff <= 5) h.diff = tp.diff;
   if (h.type === "quit") { h.start = tp.start || Date.now(); h.relapses = []; }
+  if (tp.freq && h.type !== "quit") { h.freq = tp.freq; h.days = [0,1,2,3,4,5,6]; }
   state.habits.push(h);
   save(); haptic("success"); selDay = today(); tab = "today";
   toast(`Добавлено: ${h.icon ? "" : h.emoji + " "}${h.name}`);
@@ -1325,6 +1703,8 @@ function openDetail(id) {
   haptic("light"); render(); window.scrollTo(0, 0);
 }
 function goBack() {
+  if (popClose) return popClose();
+  if (storyClose) return storyClose();
   if (pickerClose) return pickerClose();
   if (sheetClose) return closeSheet();
   if (screen === "detail") { screen = "main"; render(); }
@@ -1348,7 +1728,11 @@ function renderDetail() {
     stat(`🔥 ${s}`, plural(s, "день без срыва", "дня без срыва", "дней без срыва")),
     stat(String(best), "рекорд, дней"),
     stat(String(h.relapses.length), plural(h.relapses.length, "срыв", "срыва", "срывов") + " всего"),
-    stat(rate(h, t - 29, t) + "%", "чистых дней за 30")) : el("div", {class:"stats"},
+    stat(rate(h, t - 29, t) + "%", "чистых дней за 30")) : h.freq ? el("div", {class:"stats"},
+    stat(`🔥 ${s}`, plural(s, "неделя подряд", "недели подряд", "недель подряд")),
+    stat(`${weekTotal(h, weekStartOf(t))}/${h.freq}`, "на этой неделе"),
+    stat(String(best), "рекорд, недель"),
+    stat(String(totalDays(h)), plural(totalDays(h), "день выполнен", "дня выполнено", "дней выполнено"))) : el("div", {class:"stats"},
     stat(`🔥 ${s}`, plural(s, "день подряд", "дня подряд", "дней подряд")),
     stat(String(best), "лучшая серия"),
     stat(rate(h, t - 29, t) + "%", "выполнено за 30 дней"),
@@ -1431,6 +1815,7 @@ function renderDetail() {
   app.append(el("div", {class:"screen"},
     inTG ? null : el("button", {class:"back", onclick: goBack}, "‹ Назад"),
     head, stats, todayCard, notesCard, cal, chart,
+    el("button", {class:"btn sec", style:"margin-bottom:6px", onclick: () => archiveHabit(h)}, "🗄  В архив"),
     el("button", {class:"btn ghost", onclick: async () => {
       if (await confirmBox(`Удалить «${h.name}»? Вся история пропадёт.`)) {
         if (state.timer && state.timer.id === h.id) state.timer = null;
@@ -1448,14 +1833,21 @@ function renderStats() {
   wrap.append(el("div", {class:"top"}, el("div", {}, el("div", {class:"hello"}, "Твой прогресс"), el("div", {class:"title"}, "Статистика")),
     el("button", {class:"gear", "aria-label":"Настройки", html:ICONS.gear, onclick: openSettings})));
   if (!state.habits.length) { wrap.append(el("div", {class:"empty"}, el("div", {}, "📊"), "Добавь привычки — и здесь появится твой прогресс.")); return app.append(wrap); }
+  const wm = wrapMonths();
+  if (wm.length) {
+    wrap.append(wrapBanner(...wm[0]));
+    if (wm.length > 1) wrap.append(el("div", {class:"wrap-months"}, el("small", {}, "Прошлые:"),
+      wm.slice(1).map(([y, m]) => el("button", {onclick: () => openWrapped(y, m)}, `🎁 ${MONTHS[m]}${y !== new Date().getFullYear() ? " " + y : ""}`))));
+  }
 
   const dayRate = d => { const p = state.habits.filter(h => isScheduled(h, d) && firstDay(h) <= d);
     return p.length ? p.filter(h => isDone(h, d)).length / p.length : -1; };
   const avg = (from, to) => { let s = 0, n = 0; for (let d = from; d <= to; d++) { if (d === t && dayRate(d) <= 0) continue; const r = dayRate(d); if (r >= 0) { s += r; n++; } } return n ? Math.round(s / n * 100) : null; };
   const monday = t - wdOf(t);
   const weekPct = avg(monday, t), lastWeekPct = avg(monday - 7, monday - 1);
-  const bestNow = state.habits.map(h => ({h, s: streak(h)})).sort((a, b) => b.s - a.s)[0];
-  const record = Math.max(...state.habits.map(bestStreak));
+  const pool = state.habits.some(h => !h.freq) ? state.habits.filter(h => !h.freq) : state.habits;
+  const bestNow = pool.map(h => ({h, s: streak(h)})).sort((a, b) => b.s - a.s)[0];
+  const record = Math.max(0, ...pool.map(bestStreak));
   let perfect = 0; for (let d = t - 29; d <= t; d++) if (dayRate(d) === 1 && state.habits.some(h => h.type !== "quit" && isScheduled(h, d) && firstDay(h) <= d)) perfect++;
   const diff = (weekPct !== null && lastWeekPct !== null) ? weekPct - lastWeekPct : 0;
 
@@ -1464,6 +1856,7 @@ function renderStats() {
     stat(`🔥 ${bestNow.s}`, bestNow.s ? "лучшая серия сейчас" : "серия ещё впереди"),
     stat(String(perfect), plural(perfect, "идеальный день", "идеальных дня", "идеальных дней") + " за 30"),
     stat(String(record), "рекорд серии")));
+  wrap.append(forecastCard());
 
   // Тепловая карта: 18 недель
   const weeks = 18, start = monday - (weeks - 1) * 7;
@@ -1481,7 +1874,7 @@ function renderStats() {
   state.habits.map(h => ({h, r: rate(h, t - 29, t)})).sort((a, b) => b.r - a.r).forEach(({h, r}) =>
     rank.append(el("div", {class:"rank", onclick: () => openDetail(h.id)},
       icoEl(h),
-      el("div", {}, el("b", {}, h.name), el("small", {}, `🔥 ${streak(h)} · рекорд ${bestStreak(h)}`)),
+      el("div", {}, el("b", {}, h.name), el("small", {}, `🔥 ${streakUnit(h, streak(h))} · рекорд ${streakUnit(h, bestStreak(h))}`)),
       el("span", {class:"pct num", style:`color:${h.color}`}, r + "%"))));
   wrap.append(rank);
 
@@ -1495,8 +1888,10 @@ function invite() {
   const best = Math.max(0, ...state.habits.map(streak));
   const text = best >= 3 ? `Держу серию ${best} ${plural(best, "день", "дня", "дней")} подряд в ${APP_NAME} 🔥 Присоединяйся!`
                          : `Начинаю следить за привычками в ${APP_NAME} 🔥 Давай вместе!`;
-  const url = `https://t.me/share/url?url=${encodeURIComponent(BOT_LINK)}&text=${encodeURIComponent(text)}`;
+  const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink())}&text=${encodeURIComponent(text)}`;
+  state.flags.invited = true; state.flags.invites = (state.flags.invites || 0) + 1; save();
   if (inTG && can("6.1")) tg.openTelegramLink(url); else window.open(url, "_blank");
+  setTimeout(render, 600);
 }
 
 /* =====================================================================
@@ -1587,7 +1982,7 @@ function weekCard() {
   for (let d = lastMon; d < monday; d++) if (dayRateAll(d) === 1 && state.habits.some(h => h.type !== "quit" && isScheduled(h, d) && firstDay(h) <= d)) perfect++;
   const best = state.habits.map(h => ({h, s: streak(h)})).sort((a, b) => b.s - a.s)[0];
   const diff = prev !== null && prev !== pct ? ` (${pct > prev ? "+" : "−"}${Math.abs(pct - prev)}%)` : "";
-  const mood = pct >= 90 ? "Огонь! Ты в отличной форме 🔥" : pct >= 60 ? "Хорошая неделя — ещё чуть-чуть до идеальной 💪" : "Неделя была непростой. Начни эту с одной привычки 🌱";
+  const mood = pct >= 90 ? "Огонь! Ты в отличной форме 🔥" : pct >= 60 ? "Хорошая неделя — ещё чуть-чуть до идеальной 💪" : "Новая неделя — новый старт. Начни с одной привычки, и всё пойдёт 🌱";
   return el("div", {class:"card", style:"position:relative;margin-bottom:12px"},
     el("button", {style:"position:absolute;right:10px;top:8px;width:32px;height:32px;border-radius:50%;background:var(--soft);color:var(--hint)", "aria-label":"Скрыть",
       onclick: () => { state.flags.weekSeen = monday; save(); haptic("light"); render(); }}, "✕"),
@@ -1806,9 +2201,9 @@ const levelStart = L => { let x = 0; for (let i = 1; i < L; i++) x += levelCost(
 const titleOf = L => LEVEL_TITLES.filter(([l]) => l <= L).pop()[1];
 const badgeXP = b => b.xp || 30;
 function xpTotal() {
-  const marks = state.habits.reduce((s, h) => s + totalDays(h) * diffOf(h), 0);
+  const marks = allHabits().reduce((s, h) => s + totalDays(h) * diffOf(h), 0);
   const ids = new Set(unlockedBadges());
-  return marks + BADGES.filter(b => ids.has(b.id)).reduce((s, b) => s + badgeXP(b), 0);
+  return marks + BADGES.filter(b => ids.has(b.id)).reduce((s, b) => s + badgeXP(b), 0) + Object.keys(state.medals || {}).length * MEDAL_XP;
 }
 function levelOf(xp) {
   let L = 1, need = levelCost(1), rest = xp;
@@ -1816,21 +2211,53 @@ function levelOf(xp) {
   return { level: L, into: rest, need, title: titleOf(L) };
 }
 // Список всех уровней — раскрывается в карточке профиля
+const STAGES = {
+  "Искра":  { c:["#ffe08a","#ffb000"], d:"Ты зажёг первую искру — самое трудное уже позади." },
+  "Огонёк": { c:["#ffc078","#ff7a00"], d:"Огонёк разгорается: привычки начинают приживаться." },
+  "Костёр": { c:["#ff9a3c","#ff3d00"], d:"Твой костёр уже греет — его видно издалека." },
+  "Пламя":  { c:["#ff7a59","#e0245e"], d:"Пламя набрало силу. Тебя уже не остановить." },
+  "Пожар":  { c:["#ff5a36","#b3123b"], d:"Настоящий пожар дисциплины. Ты — пример для других." },
+  "Вулкан": { c:["#ff6a00","#7b1fa2"], d:"Сила, которую ты копил, вырывается наружу." },
+  "Солнце": { c:["#fff176","#ff9500"], d:"Ты светишь сам и освещаешь путь другим." },
+  "Звезда": { c:["#7f7fff","#00c6ff"], d:"Легенда Огонька. Твой свет виден отовсюду." },
+};
 function levelsList(lv, xp) {
-  const box = el("div", {class:"lvls"});
-  LEVEL_TITLES.forEach(([from], i) => {
-    const to = i + 1 < LEVEL_TITLES.length ? LEVEL_TITLES[i + 1][0] - 1 : null;
-    const t = titleOf(from), cur = lv.level >= from && (to === null || lv.level <= to), done = to !== null && lv.level > to;
-    const lvls = [];
-    for (let L = from; L <= (to === null ? Math.max(LEVEL_MAX_SHOW, lv.level + 2) : to); L++) lvls.push(L);
-    box.append(el("div", {class:"lvl-group" + (cur ? " cur" : done ? " done" : "")},
-      el("div", {class:"lvl-head"}, el("i", {}, LEVEL_EMOJI[t]), el("b", {}, t),
-        el("small", {}, to === null ? `ур. ${from}+` : from === to ? `ур. ${from}` : `ур. ${from}–${to}`)),
-      el("div", {class:"lvl-rows"}, lvls.map(L => el("div", {class:"lvl-row" + (L === lv.level ? " me" : L < lv.level ? " ok" : "")},
-        el("span", {}, L < lv.level ? "✓" : L === lv.level ? "●" : ""), el("b", {}, `Уровень ${L}`),
-        el("small", {class:"num"}, L === lv.level ? `${xp} из ${fmtN(levelStart(L + 1))}` : `${fmtN(levelStart(L))} опыта`))))));
+  const box = el("div", {class:"path"});
+  const curIdx = LEVEL_TITLES.findIndex(([from], i) => lv.level >= from && (i + 1 >= LEVEL_TITLES.length || lv.level < LEVEL_TITLES[i + 1][0]));
+  box.append(el("div", {class:"path-head"}, el("b", {}, "Путь огня"),
+    el("small", {class:"num"}, `${fmtN(xp)} опыта · звание ${curIdx + 1} из ${LEVEL_TITLES.length}`)));
+  LEVEL_TITLES.forEach(([from, t], i) => {
+    const next = LEVEL_TITLES[i + 1], to = next ? next[0] - 1 : null, st = STAGES[t];
+    const state_ = i < curIdx ? "done" : i === curIdx ? "cur" : "lock";
+    const node = el("div", {class:"stage-node", style:`--a:${st.c[0]};--b:${st.c[1]}`}, el("i", {}, LEVEL_EMOJI[t]));
+    const body = el("div", {class:"stage-body"},
+      el("div", {class:"stage-top"}, el("b", {}, t), el("span", {}, to === null ? `ур. ${from}+` : from === to ? `ур. ${from}` : `ур. ${from}–${to}`)),
+      el("p", {}, st.d));
+    if (state_ === "done") body.append(el("small", {class:"stage-ok"}, "✓ Пройдено"));
+    if (state_ === "lock") body.append(el("small", {class:"stage-lock"}, `Откроется на уровне ${from} · ещё ${fmtN(levelStart(from) - xp)} опыта`));
+    if (state_ === "cur") {
+      const pips = el("div", {class:"pips"});
+      const last = to === null ? lv.level + 2 : to;
+      for (let L = from; L <= last; L++) {
+        const k = L < lv.level ? "ok" : L === lv.level ? "me" : "";
+        const pip = el("span", {class:"pip " + k, style: L === lv.level ? `--p:${Math.round(lv.into / lv.need * 100)}%` : ""}, el("b", {}, String(L)));
+        pips.append(pip);
+        if (L < last) pips.append(el("i", {class:"pip-line" + (L < lv.level ? " ok" : "")}));
+      }
+      body.append(pips);
+      if (next) {
+        const need = levelStart(next[0]) - xp, span = levelStart(next[0]) - levelStart(from);
+        body.append(el("div", {class:"stage-bar"}, el("i", {style:`width:${Math.min(100, (1 - need / span) * 100)}%`})),
+          el("small", {class:"stage-next"}, `До звания «${next[1]}» ${LEVEL_EMOJI[next[1]]} — ${fmtN(need)} опыта. У тебя получится! 💪`));
+      } else body.append(el("small", {class:"stage-next"}, "Ты на вершине! Каждый новый уровень — ещё одна звезда ⭐"));
+    }
+    box.append(el("div", {class:"stage " + state_ + (next ? "" : " last"), style:`--a:${st.c[0]};--b:${st.c[1]}`}, node, body));
   });
-  box.append(el("div", {class:"tip", style:"margin-top:4px"}, "Опыт: за каждый выполненный день привычки — от 1 до 5 (по сложности), за награду — от 30 до 100."));
+  box.append(el("div", {class:"path-how"},
+    el("b", {}, "Как получать опыт"),
+    el("div", {}, el("span", {}, "✅"), "Выполненный день привычки", el("em", {}, "+1…5")),
+    el("div", {}, el("span", {}, "🏅"), "Награда", el("em", {}, "+30…100")),
+    el("div", {}, el("span", {}, "🎖️"), "Медаль месяца", el("em", {}, `+${MEDAL_XP}`))));
   return box;
 }
 let lvlOpen = false;
@@ -1853,7 +2280,7 @@ function renderProfile() {
 
   const ava = el("div", {class:"ava"});
   fillAvatar(ava, state.profile, name);
-  const avaWrap = el("button", {class:"ava-wrap", "aria-label":"Изменить профиль", onclick: openProfileEdit}, ava, el("span", {class:"ava-edit"}, "✏️"));
+  const avaWrap = el("button", {class:"ava-wrap", "aria-label":"Изменить профиль", onclick: openProfileEdit}, frameWrap(ava, state.shop.frame), el("span", {class:"ava-edit"}, "✏️"));
   const days = state.habits.length ? today() - Math.min(...state.habits.map(firstDay)) + 1 : 0;
   const xpNow = xpTotal();
   const lvlBox = el("div", {class:"lvl-wrap" + (lvlOpen ? " open" : "")}, lvlOpen ? levelsList(lv, xpNow) : null);
@@ -1861,15 +2288,20 @@ function renderProfile() {
       lvlOpen = !lvlOpen; haptic("select");
       xpBox.setAttribute("aria-expanded", String(lvlOpen)); lvlBox.classList.toggle("open", lvlOpen);
       lvlBox.innerHTML = ""; if (lvlOpen) lvlBox.append(levelsList(lv, xpNow));
+      const tipEl = xpBox.querySelector(".tip"); if (tipEl) tipEl.textContent = lvlOpen ? "Нажми, чтобы свернуть" : "Нажми, чтобы увидеть путь огня 🔥";
     }},
     el("div", {class:"xp-row"}, el("span", {}, `Уровень ${lv.level} → ${lv.level + 1}`, el("em", {class:"chev"}, "›")), el("small", {class:"num"}, `${lv.into} / ${lv.need} опыта`)),
     el("div", {class:"pbar"}, el("i", {style:`width:${lv.into / lv.need * 100}%`})),
-    el("div", {class:"tip", style:"margin-top:8px"}, "Нажми, чтобы увидеть все уровни"));
+    el("div", {class:"tip", style:"margin-top:8px"}, lvlOpen ? "Нажми, чтобы свернуть" : "Нажми, чтобы увидеть путь огня 🔥"));
   wrap.append(el("div", {class:"card"},
     el("div", {class:"prof"}, avaWrap, el("div", {class:"lvl-badge"}, `Ур. ${lv.level}`),
       el("h2", {}, name), el("p", {}, `${lv.title}${u.username ? " · @" + u.username : ""}`),
       el("button", {class:"edit-link", onclick: openProfileEdit}, "Изменить имя и аватар")),
     xpBox, lvlBox));
+  wrap.append(typeCard());
+  wrap.append(el("button", {class:"shop-card", onclick: () => openShop()}, el("i", {}, "🎨"),
+    el("div", {}, el("b", {}, "Оформление"), el("small", {}, "Рамки, темы, эффекты и стили карточек")), el("span", {}, "›")));
+  wrap.append(monthChallengeCard());
 
   wrap.append(el("div", {class:"stats"},
     stat(String(c.marks), plural(c.marks, "день выполнен", "дня выполнено", "дней выполнено")),
@@ -1880,14 +2312,15 @@ function renderProfile() {
   const ng = nextGoal(c);
   if (ng) wrap.append(el("div", {class:"card"}, el("div", {class:"next"}, el("i", {}, ng.b.e),
     el("div", {}, el("b", {}, `Следующая награда: ${ng.b.name}`),
-      el("small", {}, `Осталось ${ng.need - ng.have} · ${ng.b.d}`),
+      el("small", {}, `Осталось ${ng.need - ng.have} · ${ng.b.d}` + (() => { const f = forecasts().find(z => z.t === ng.b.name && z.d != null);
+        return f ? ` · ${f.d === 0 ? "сегодня" : f.d === 1 ? "завтра" : "≈ " + fmtDayLong(today() + f.d)}` : ""; })()),
       el("div", {class:"pbar"}, el("i", {style:`width:${Math.min(100, ng.have / ng.need * 100)}%;background:var(--accent)`}))))));
 
   wrap.append(el("div", {class:"card"}, el("h4", {}, "Награды", el("small", {}, `${got.size} из ${BADGES.length}`)),
     el("div", {class:"badges"}, BADGES.map(b => {
       const has = got.has(b.id), hidden = b.secret && !has;
       return el("button", {class:"badge" + (has ? "" : " lock"),
-        onclick: () => { haptic("select"); toast(hidden ? `🤫 Секретная награда · +${badgeXP(b)} опыта` : `${b.e} ${b.name} — ${b.d} · +${badgeXP(b)} опыта${has ? " ✅" : ""}`, 2800); }},
+        onclick: () => { haptic("select"); if (has) return showBadgePop(b, 0, true); toast(hidden ? `🤫 Секретная награда · +${badgeXP(b)} опыта` : `${b.e} ${b.name} — ${b.d} · +${badgeXP(b)} опыта`, 2800); }},
         el("i", {class: has ? (b.tier ? "t-" + b.tier : b.secret ? "t-secret" : "") : ""}, hidden ? "❓" : b.e),
         el("small", {}, hidden ? "Секрет" : b.name));
     }))));
@@ -1895,6 +2328,9 @@ function renderProfile() {
   const link = (url) => { if (inTG && can("6.1")) tg.openTelegramLink(url); else window.open(url, "_blank"); };
   wrap.append(el("div", {class:"menu"},
     el("button", {onclick: openSettings}, el("span", {}, "⚙️"), el("span", {}, "Настройки"), el("small", {}, "›")),
+    el("button", {onclick: () => openShop()}, el("span", {}, "🎨"), el("span", {}, "Оформление"), el("small", {}, "›")),
+    el("button", {onclick: openFavThoughts}, el("span", {}, "💛"), el("span", {}, `Любимые мысли${state.favThoughts.length ? " · " + state.favThoughts.length : ""}`), el("small", {}, "›")),
+    el("button", {onclick: openArchive}, el("span", {}, "🗄"), el("span", {}, `Архив привычек${state.archive.length ? " · " + state.archive.length : ""}`), el("small", {}, "›")),
     el("button", {onclick: invite}, el("span", {}, "🔥"), el("span", {}, "Позвать друга"), el("small", {}, "›")),
     el("button", {onclick: () => link(CHANNEL_LINK)}, el("span", {}, "📢"), el("span", {}, "Канал Огонька"), el("small", {}, "›"))));
   wrap.append(el("div", {class:"tip", style:"margin-bottom:8px"}, "Огонёк · бесплатно для всех"));
@@ -1996,7 +2432,7 @@ function checkLevel() {
 
 /* ---------------- Тема ---------------- */
 function applyTheme() {
-  const th = THEMES.find(x => x.id === state.settings.theme) || THEMES[0];
+  const th = ALL_THEMES().find(x => x.id === state.settings.theme) || THEMES[0];
   const root = document.documentElement.style;
   if (th.c) { root.setProperty("--accent", th.c); root.setProperty("--accent-text", "#ffffff"); }
   else { root.removeProperty("--accent"); root.removeProperty("--accent-text"); }
@@ -2006,9 +2442,11 @@ function applyTheme() {
 function openSettings() {
   haptic("light");
   const themes = el("div", {class:"themes"});
-  const drawThemes = () => { themes.innerHTML = ""; THEMES.forEach(th => themes.append(el("button", {class: state.settings.theme === th.id ? "on" : "",
-    onclick: () => { state.settings.theme = th.id; if (th.id !== "fire") state.flags.theme = true; applyTheme(); save(); haptic("select"); drawThemes(); }},
-    el("i", {style: th.c ? `background:${th.c}` : "background:var(--tg-theme-button-color, #2ea6ff)"}), th.name))); };
+  const drawThemes = () => { themes.innerHTML = ""; ALL_THEMES().forEach(th => { const has = true;
+    themes.append(el("button", {class: (state.settings.theme === th.id ? "on" : "") + (has ? "" : " locked"),
+      onclick: () => { if (!has) return openShop("themes");
+        state.settings.theme = th.id; if (th.id !== "fire") state.flags.theme = true; applyTheme(); save(); haptic("select"); drawThemes(); }},
+      el("i", {style: th.c ? `background:${th.c}` : "background:var(--tg-theme-button-color, #2ea6ff)"}), th.name)); }); };
   drawThemes();
 
   const sw = el("div", {class:"switch" + (state.settings.quote ? " on" : "")});
@@ -2058,6 +2496,7 @@ function openSettings() {
     notif,
     el("div", {class:"label"}, "Главный экран"), el("div", {class:"card", style:"padding:2px 14px"}, quoteRow),
     el("div", {class:"label"}, "Порядок привычек"), el("div", {class:"card", style:"padding:4px 14px"}, order),
+    el("button", {class:"btn sec", onclick: openArchive}, `🗄  Архив привычек${state.archive.length ? " (" + state.archive.length + ")" : ""}`),
     el("div", {class:"label"}, "Огонёк"),
     el("div", {class:"btns"},
       el("button", {class:"btn sec", onclick: () => link(CHANNEL_LINK)}, "📢  Канал Огонька"),
@@ -2070,8 +2509,8 @@ function openSettings() {
 function badgeContext() {
   const t = today();
   let marks = 0, best = 0, hours = 0, notes = 0, quit = 0;
-  state.habits.forEach(h => {
-    marks += totalDays(h); best = Math.max(best, bestStreak(h)); notes += Object.keys(h.notes || {}).length;
+  allHabits().forEach(h => {
+    marks += totalDays(h); if (!h.freq) best = Math.max(best, bestStreak(h)); notes += Object.keys(h.notes || {}).length;
     if (h.type === "time") for (const k in h.log) hours += h.log[k] / 3600;
     if (h.type === "quit") quit = Math.max(quit, bestStreak(h));
   });
@@ -2089,17 +2528,17 @@ function badgeContext() {
     }
   }
   let water = 0, steps = 0, focus2 = false, phoenix = false, lucky = false;
-  state.habits.forEach(h => {
+  allHabits().forEach(h => {
     const unit = (h.unit || "").toLowerCase();
     if (h.type === "count" && /стакан/.test(unit)) for (const k in h.log) water += h.log[k];
     if (h.type === "count" && /шаг/.test(unit)) for (const k in h.log) steps += h.log[k];
     if (h.type === "time") for (const k in h.log) if (h.log[k] >= 7200) focus2 = true;
-    const st = streak(h);
+    const st = h.freq ? 0 : streak(h);
     if (st === 77) lucky = true;
     if (st >= 7 && (h.type === "quit" ? (h.relapses || []).length > 0 : totalDays(h) > st)) phoenix = true;
   });
   return { marks, best, hours, notes, quit, perfect, perfectRow, weekend, maxDay, water, steps, focus2, phoenix, lucky,
-           habits: state.habits.length, shared: !!state.flags.shared, flags: state.flags || {} };
+           habits: state.habits.length, shared: !!state.flags.shared, flags: state.flags || {}, medals: Object.keys(state.medals || {}).length, typed: !!state.persona };
 }
 const unlockedBadges = () => {
   const c = badgeContext(), got = new Set(Array.isArray(state.badges) ? state.badges : []);
@@ -2113,93 +2552,975 @@ function checkBadges() {
   if (!Array.isArray(state.badges)) { state.badges = now; save(); return; }   // первый запуск — без поздравлений за старое
   const fresh = now.filter(id => !state.badges.includes(id));
   if (!fresh.length) return;
-  state.badges = state.badges.concat(fresh); save();
+  state.badges = state.badges.concat(fresh);
+  state.badgeDates = state.badgeDates || {}; fresh.forEach(id => { state.badgeDates[id] = today(); });
+  save();
   const b = BADGES.find(x => x.id === fresh[fresh.length - 1]);
-  const text = fresh.length > 1 ? `🏅 Новых наград: ${fresh.length}! Загляни в профиль` : `🏅 Новая награда: ${b.e} ${b.name}`;
   badgeLock = true;
-  setTimeout(() => { badgeLock = false; celebrate(text); haptic("success"); }, 900);
+  setTimeout(() => { badgeLock = false; if (sheetClose || storyClose) { celebrate(fresh.length > 1 ? `🏅 Новых наград: ${fresh.length}!` : `🏅 Новая награда: ${b.e} ${b.name}`); haptic("success"); }
+    else showBadgePop(b, fresh.length - 1); }, 900);
 }
 
 /* ---------------- Карточка для сторис ---------------- */
 function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
   ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-function drawCard(h) {
-  const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H;
-  const x = c.getContext("2d"), F = '-apple-system, "SF Pro Display", Roboto, "Segoe UI", sans-serif';
-  let g = x.createLinearGradient(0, 0, W * .3, H); g.addColorStop(0, "#22160f"); g.addColorStop(1, "#0b0706");
-  x.fillStyle = g; x.fillRect(0, 0, W, H);
-  g = x.createRadialGradient(W * .75, H * .22, 0, W * .75, H * .22, W * .8);
-  g.addColorStop(0, tint(h.color, .45)); g.addColorStop(1, tint(h.color, 0)); x.fillStyle = g; x.fillRect(0, 0, W, H);
-  g = x.createRadialGradient(W * .1, H * .95, 0, W * .1, H * .95, W * .7);
-  g.addColorStop(0, "rgba(255,90,0,.28)"); g.addColorStop(1, "rgba(255,90,0,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+/* =====================================================================
+   v11: мысль дня, магазин, испытания месяца, итоги месяца, прогноз,
+        архив, «мой день», приглашения
+   ===================================================================== */
+const allHabits = () => state.habits.concat(state.archive || []);
+const dateIn = k => k <= 0 ? (k === 0 ? "сегодня" : "") : k === 1 ? "завтра" : fmtDayLong(today() + k);
 
-  x.textBaseline = "alphabetic"; x.fillStyle = "#FFB36B"; x.font = `800 40px ${F}`;
-  x.fillText("🔥  О Г О Н Ё К", 96, 190);
-
-  if (h.icon && ICON_MAP[h.icon]) {
-    const [vb, d] = ICON_MAP[h.icon], [vx, vy, vw, vh] = vb.split(/\s+/).map(Number), sc = 150 / Math.max(vw, vh);
-    x.save(); x.translate(96 - vx * sc, 290 - vy * sc); x.scale(sc, sc); x.fillStyle = h.color; x.fill(new Path2D(d)); x.restore();
-  } else { x.font = `150px ${F}`; x.fillText(h.emoji, 90, 430); }
-  x.fillStyle = "#fff"; x.font = `800 76px ${F}`;
-  const words = h.name.split(" "); let line = "", y = 560;
-  words.forEach(w => { const t2 = line ? line + " " + w : w; if (x.measureText(t2).width > W - 192) { x.fillText(line, 96, y); y += 88; line = w; } else line = t2; });
-  x.fillText(line, 96, y);
-
-  const s = streak(h);
-  x.font = `900 300px ${F}`; g = x.createLinearGradient(96, 0, 700, 0); g.addColorStop(0, "#FFB000"); g.addColorStop(1, "#FF4D00");
-  x.fillStyle = g; x.fillText(String(s), 84, y + 320);
-  x.fillStyle = "#EAD6C6"; x.font = `700 56px ${F}`;
-  x.fillText(h.type === "quit" ? plural(s, "день без срыва", "дня без срыва", "дней без срыва") : plural(s, "день подряд", "дня подряд", "дней подряд"), 100, y + 400);
-
-  // сетка последних 35 дней
-  const t = today(), cols = 7, size = 100, gap = 16, gx = 96, gy = y + 470;
-  for (let i = 0; i < 35; i++) {
-    const d = t - 34 + i, cx = gx + (i % cols) * (size + gap), cy = gy + Math.floor(i / cols) * (size + gap);
-    const fr = d < firstDay(h) ? 0 : frac(h, d);
-    rr(x, cx, cy, size, size, 26);
-    if (fr >= 1) { const gg = x.createLinearGradient(cx, cy, cx + size, cy + size); gg.addColorStop(0, "#FFB000"); gg.addColorStop(1, "#FF4D00"); x.fillStyle = gg; }
-    else x.fillStyle = fr > 0 ? "rgba(255,138,0,.35)" : "rgba(255,255,255,.07)";
-    x.fill();
+/* ---------- Мысль дня: своя у каждого ---------- */
+function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+let thoughtPerm = null;
+function thoughtSeed() {
+  const u = tgUser();
+  if (u.id) return Number(u.id) % 2147483647;
+  if (!state.flags.seed) { state.flags.seed = 1 + Math.floor(Math.random() * 2e9); save(); }
+  return state.flags.seed;
+}
+function thoughtIndex(day) {
+  const seed = thoughtSeed();
+  if (!thoughtPerm || thoughtPerm.seed !== seed) {
+    const r = mulberry(seed), p = QUOTES.map((_, i) => i);
+    for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
+    thoughtPerm = { seed, p };
   }
-  x.fillStyle = "#fff"; x.font = `800 46px ${F}`; x.fillText("Начни свою серию:", 96, H - 150);
-  x.fillStyle = "#FFB36B"; x.font = `700 46px ${F}`; x.fillText("@ogonyok_app_bot", 96, H - 86);
+  const n = QUOTES.length;
+  return thoughtPerm.p[((day + seed) % n + n) % n];
+}
+const thoughtOf = day => QUOTES[thoughtIndex(day)];
+function thoughtCard(day) {
+  const i = thoughtIndex(day), fav = state.favThoughts.includes(i);
+  const heart = el("button", {class:"q-like" + (fav ? " on" : ""), "aria-label":"В любимые", onclick: e => {
+    e.stopPropagation();
+    const k = state.favThoughts.indexOf(i);
+    if (k >= 0) state.favThoughts.splice(k, 1); else state.favThoughts.unshift(i);
+    save(); haptic(k >= 0 ? "light" : "success");
+    heart.classList.toggle("on", k < 0); heart.textContent = k < 0 ? "❤️" : "🤍";
+    if (k < 0) toast("Сохранено в «Любимые мысли»");
+  }}, fav ? "❤️" : "🤍");
+  return el("div", {class:"quote"}, el("span", {}, "💬"),
+    el("div", {style:"flex:1"}, el("p", {}, QUOTES[i]), el("small", {}, "Мысль дня · только для тебя")), heart);
+}
+function openFavThoughts() {
+  haptic("light");
+  const list = el("div", {});
+  const draw = () => {
+    list.innerHTML = "";
+    if (!state.favThoughts.length) { list.append(el("div", {class:"tip", style:"padding:20px 0"}, "Пока пусто. Нажми 🤍 у мысли дня — и она сохранится здесь.")); return; }
+    state.favThoughts.forEach(i => list.append(el("div", {class:"fav-q"}, el("p", {}, QUOTES[i]),
+      el("button", {"aria-label":"Убрать", onclick: () => { state.favThoughts = state.favThoughts.filter(x => x !== i); save(); haptic("light"); draw(); }}, "✕"))));
+  };
+  draw();
+  openSheet([el("div", {class:"grab"}), el("h3", {}, "Любимые мысли"), list], () => render());
+}
+
+/* ---------- Привычки «N раз в неделю» ---------- */
+const weekStartOf = d => d - wdOf(d);
+function weekTotal(h, w) { let n = 0; for (let x = w; x < w + 7; x++) if (isDone(h, x)) n++; return n; }
+function weekDoneExcept(h, d) { const w = weekStartOf(d); let n = 0; for (let x = w; x < w + 7; x++) if (x !== d && isDone(h, x)) n++; return n; }
+function weekStreak(h) {
+  const t = today(), first = weekStartOf(firstDay(h));
+  let w = weekStartOf(t), n = 0;
+  if (weekTotal(h, w) >= h.freq) n++;
+  for (w -= 7; w >= first; w -= 7) { if (weekTotal(h, w) >= h.freq) n++; else break; }
+  return n;
+}
+function weekBest(h) {
+  const t = today(), cw = weekStartOf(t);
+  let best = 0, cur = 0;
+  for (let w = weekStartOf(firstDay(h)); w <= cw; w += 7) {
+    if (weekTotal(h, w) >= h.freq) { cur++; best = Math.max(best, cur); }
+    else if (w !== cw) cur = 0;
+  }
+  return best;
+}
+function weekRate(h, from, to) {
+  const t = today(), cw = weekStartOf(t);
+  let need = 0, got = 0;
+  for (let w = weekStartOf(Math.max(from, firstDay(h))); w <= Math.min(to, t); w += 7) {
+    const n = weekTotal(h, w);
+    if (w === cw && n < h.freq) continue;            // неделя ещё идёт
+    need += h.freq; got += Math.min(n, h.freq);
+  }
+  return need ? Math.round(got / need * 100) : 0;
+}
+const streakUnit = (h, s) => h.freq ? `${s} нед.` : String(s);
+
+/* ---------- Архив ---------- */
+async function archiveHabit(h) {
+  if (!await confirmBox(`Убрать «${h.name}» в архив? История и опыт сохранятся, вернуть можно в любой момент.`)) return;
+  if (state.timer && state.timer.id === h.id) stopTimer(true);
+  state.habits = state.habits.filter(x => x.id !== h.id);
+  h.archivedAt = Date.now(); state.archive.unshift(h);
+  save(true); haptic("success"); screen = "main"; render(); toast("Привычка в архиве 🗄");
+}
+function openArchive() {
+  haptic("light");
+  const list = el("div", {});
+  const draw = () => {
+    list.innerHTML = "";
+    if (!state.archive.length) { list.append(el("div", {class:"tip", style:"padding:20px 0"}, "Архив пуст. Убрать привычку можно на её странице — кнопка «В архив».")); return; }
+    state.archive.forEach(h => list.append(el("div", {class:"arch"},
+      icoEl(h),
+      el("div", {}, el("b", {}, h.name), el("small", {}, `${totalDays(h)} ${plural(totalDays(h), "день", "дня", "дней")} · рекорд ${streakUnit(h, bestStreak(h))}`)),
+      el("button", {class:"arch-back", onclick: () => {
+        state.archive = state.archive.filter(x => x.id !== h.id); delete h.archivedAt; state.habits.push(h);
+        save(true); haptic("success"); toast(`«${h.name}» снова в списке`); draw();
+      }}, "Вернуть"),
+      el("button", {class:"arch-del", "aria-label":"Удалить навсегда", onclick: async () => {
+        if (!await confirmBox(`Удалить «${h.name}» навсегда? История пропадёт.`)) return;
+        state.archive = state.archive.filter(x => x.id !== h.id); save(true); haptic("warning"); draw();
+      }}, "🗑"))));
+  };
+  draw();
+  openSheet([el("div", {class:"grab"}), el("h3", {}, "Архив привычек"),
+    el("div", {class:"tip", style:"text-align:left;margin:-6px 0 12px"}, "Привычки из архива не мешают на главном, но их опыт и история остаются."), list], () => render());
+}
+
+/* ---------- Оформление: рамки, темы, эффекты (всё бесплатно) ---------- */
+const SHOP = {
+  frames: [
+    {id:"fr_fire",    name:"Огненная", bg:"conic-gradient(#ff3d00,#ffb000,#ff7a00,#ff3d00)", spin:true, glow:"rgba(255,90,0,.6)"},
+    {id:"fr_ice",     name:"Лёд", bg:"conic-gradient(#e6fbff,#5ac8fa,#bff6ff,#2f9bd6,#e6fbff)", glow:"rgba(90,200,250,.5)"},
+    {id:"fr_neon",    name:"Неон", bg:"conic-gradient(#00f0ff,#ff2bd6,#00f0ff)", spin:true, glow:"rgba(255,43,214,.6)"},
+    {id:"fr_gold",    name:"Золото", bg:"conic-gradient(#fff1a8,#e0a800,#fff7cf,#b88400,#fff1a8)", glow:"rgba(224,168,0,.55)"},
+    {id:"fr_rainbow", name:"Радуга", bg:"conic-gradient(#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,#007aff,#af52de,#ff3b30)", spin:true},
+    {id:"fr_space",   name:"Космос", bg:"conic-gradient(#1a0b3d,#6b2cff,#0b1a4d,#b06bff,#1a0b3d)", spin:true, glow:"rgba(107,44,255,.6)"},
+    {id:"fr_diamond", name:"Алмаз", bg:"conic-gradient(#e8fbff,#9fe8ff,#ffffff,#c7b8ff,#e8fbff)", spin:true, glow:"rgba(159,232,255,.8)"},
+  ],
+  themes: [
+    {id:"lava",     name:"Лава",     c:"#ff3b1f"},
+    {id:"sakura",   name:"Сакура",   c:"#ff6fae"},
+    {id:"neon",     name:"Неон",     c:"#00b8d9"},
+    {id:"midnight", name:"Полночь",  c:"#5e5ce6"},
+    {id:"emerald",  name:"Изумруд",  c:"#00a86b"},
+    {id:"caramel",  name:"Карамель", c:"#c8782e"},
+    {id:"berry",    name:"Ягода",    c:"#c2185b"},
+    {id:"steel",    name:"Сталь",    c:"#5f7d8c"},
+  ],
+  effects: [
+    {id:"fx_sparks",  name:"Искры",    e:"✨", set:["✨","⭐","💫"]},
+    {id:"fx_fire",    name:"Огонь",    e:"🔥", set:["🔥","🧡","💥"]},
+    {id:"fx_confetti",name:"Конфетти", e:"🎉", set:["🎉","🎊","✨"]},
+    {id:"fx_hearts",  name:"Сердечки", e:"💖", set:["💖","💗","❤️"]},
+    {id:"fx_stars",   name:"Звёзды",   e:"🌟", set:["🌟","⭐","✨"]},
+    {id:"fx_snow",    name:"Снежинки", e:"❄️", set:["❄️","💎","✨"]},
+    {id:"fx_money",   name:"Богатство",e:"💸", set:["💸","💰","🪙"]},
+  ],
+};
+const ALL_THEMES = () => THEMES.concat(SHOP.themes);
+const owns = id => state.shop.owned.includes(id);
+function frameWrap(inner, frameId, size) {
+  const f = SHOP.frames.find(x => x.id === frameId);
+  if (!f) return inner;
+  return el("div", {class:"frame" + (f.spin ? " spin" : ""), style:`--fr:${f.bg};--glow:${f.glow || "transparent"}${size ? `;--fs:${size}px` : ""}`}, inner);
+}
+let lastPt = null;
+document.addEventListener("pointerdown", e => { lastPt = { x: e.clientX, y: e.clientY }; }, true);
+function fxBurst(effectId, pt) {
+  const fx = SHOP.effects.find(x => x.id === (effectId || state.shop.effect));
+  if (!fx) return;
+  const p = pt || lastPt || { x: innerWidth / 2, y: innerHeight / 2 };
+  const box = el("div", {class:"fxb", style:`left:${p.x}px;top:${p.y}px`});
+  for (let i = 0; i < 16; i++) {
+    const a = Math.PI * 2 * i / 16 + Math.random() * .4, r = 60 + Math.random() * 70;
+    box.append(el("i", {style:`--dx:${Math.cos(a) * r}px;--dy:${Math.sin(a) * r - 30}px;animation-delay:${Math.random() * .08}s;font-size:${14 + Math.random() * 14}px`}, fx.set[i % fx.set.length]));
+  }
+  document.body.append(box); setTimeout(() => box.remove(), 1100);
+}
+function openShop(startTab) {          // «Оформление»: всё бесплатно, выбираешь — и сразу стоит
+  haptic("light");
+  let cur = startTab || "frames";
+  const seg = el("div", {class:"seg seg4"}), body = el("div", {class:"shop-grid"});
+  const tabs = [["frames","Рамки"],["themes","Темы"],["effects","Эффекты"],["cards","Карточки"]];
+  const hint = el("div", {class:"tip", style:"text-align:left;margin:10px 0 0"});
+  const thumbs = {};
+  function pick(item, kind, pt) {
+    if (kind === "frames") state.shop.frame = item ? item.id : null;
+    if (kind === "effects") { state.shop.effect = item ? item.id : null; if (item) fxBurst(item.id, pt); }
+    if (kind === "themes") { state.settings.theme = item.id; if (item.id !== "fire") state.flags.theme = true; applyTheme(); }
+    if (item && kind !== "themes") state.flags.styled = true;
+    save(); haptic("select"); draw();
+  }
+  function card(item, kind) {
+    const on = kind === "frames" ? state.shop.frame === (item ? item.id : null) : kind === "effects" ? state.shop.effect === (item ? item.id : null) : state.settings.theme === item.id;
+    let prev;
+    if (kind === "frames") { const a = el("div", {class:"ava", style:"width:58px;height:58px;font-size:22px"}); fillAvatar(a, state.profile, profileName()); prev = item ? frameWrap(a, item.id, 58) : a; }
+    else if (kind === "themes") prev = el("i", {class:"shop-dot", style: item.c ? `background:${item.c}` : "background:var(--tg-theme-button-color, #2ea6ff)"});
+    else prev = el("i", {class:"shop-emo"}, item ? item.e : "🚫");
+    return el("button", {class:"shop-item" + (on ? " on" : ""), onclick: e => { const r = e.currentTarget.getBoundingClientRect(); pick(item, kind, {x: r.left + r.width / 2, y: r.top + 44}); }},
+      el("div", {class:"shop-prev"}, prev), el("b", {}, item ? item.name : kind === "frames" ? "Без рамки" : "Без эффекта"),
+      el("span", {class:"shop-btn" + (on ? " on" : "")}, on ? "Выбрано ✓" : "Выбрать"));
+  }
+  function draw() {
+    seg.innerHTML = "";
+    tabs.forEach(([k, l]) => seg.append(el("button", {class: cur === k ? "on" : "", onclick: () => { cur = k; haptic("select"); draw(); }}, l)));
+    body.innerHTML = "";
+    if (cur === "cards") {
+      body.className = "cs-grid";
+      CARD_STYLES.forEach(cs => { const on = (state.settings.cardStyle || "fire") === cs.id;
+        if (!thumbs[cs.id]) thumbs[cs.id] = styleThumb(cs.id);
+        body.append(el("button", {class:"cs-item" + (on ? " on" : ""), onclick: () => { state.settings.cardStyle = cs.id; state.flags.styled = true; save(); haptic("select"); draw(); }},
+          el("img", {src: thumbs[cs.id], alt: cs.name}), `${cs.e} ${cs.name}`)); });
+      hint.textContent = "В этом стиле будут все картинки для сторис: серия, мой день, награды, итоги месяца и тип. Сменить можно и прямо в окне «Поделиться».";
+      return;
+    }
+    body.className = "shop-grid";
+    if (cur !== "themes") body.append(card(null, cur));
+    (cur === "themes" ? ALL_THEMES() : SHOP[cur]).forEach(it => body.append(card(it, cur)));
+    hint.textContent = cur === "effects" ? "Эффект срабатывает, когда выполняешь привычку. Нажми — и сразу увидишь, как он выглядит." :
+                       cur === "frames" ? "Рамка появится вокруг аватарки в профиле." : "Тема меняет цвет кнопок, акцентов и итогов месяца.";
+  }
+  draw();
+  openSheet([el("div", {class:"grab"}), el("h3", {}, "🎨 Оформление"), el("div", {class:"tip", style:"text-align:left;margin:-8px 0 12px"}, "Всё бесплатно — выбирай что нравится."), seg, hint, el("div", {style:"height:12px"}), body], () => render());
+}
+
+/* ---------- Статистика месяца (для испытаний и итогов) ---------- */
+const MONTH_SHORT = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const MONTHS_PREP = ["январе","феврале","марте","апреле","мае","июне","июле","августе","сентябре","октябре","ноябре","декабре"];
+const MONTHS_NOM_L = MONTHS.map(m => m.toLowerCase());
+function monthRange(y, m) { const a = dayNum(new Date(y, m, 1)), b = dayNum(new Date(y, m + 1, 0)); return [a, b]; }
+function monthStats(y, m) {
+  const t = today(), [a, b] = monthRange(y, m), end = Math.min(b, t);
+  const hs = allHabits(), nonQuit = hs.filter(h => h.type !== "quit");
+  const st = { y, m, from: a, to: b, end, days: Math.max(0, end - a + 1), daysTotal: b - a + 1,
+               marks: 0, active: 0, perfect: 0, run: 0, xp: 0, hours: 0, notes: 0, quitDays: 0,
+               habits: [], wd: [0,0,0,0,0,0,0].map(() => ({p: 0, d: 0})) };
+  if (end < a) return st;
+  let curRun = 0;
+  for (let d = a; d <= end; d++) {
+    let doneN = 0;
+    nonQuit.forEach(h => { if (d >= firstDay(h) && isDone(h, d)) { doneN++; st.xp += diffOf(h); } });
+    st.marks += doneN;
+    if (doneN > 0) { st.active++; curRun++; st.run = Math.max(st.run, curRun); } else if (d !== t) curRun = 0;
+    const p = state.habits.filter(h => isScheduled(h, d) && firstDay(h) <= d);
+    if (p.some(h => h.type !== "quit") && p.every(h => isDone(h, d))) st.perfect++;
+    const pw = p.filter(h => h.type !== "quit"), w = wdOf(d);
+    if (pw.length && !(d === t && !pw.some(h => isDone(h, d)))) { st.wd[w].p += pw.length; st.wd[w].d += pw.filter(h => isDone(h, d)).length; }
+  }
+  hs.forEach(h => {
+    let done = 0, plan = 0, run = 0, best = 0;
+    for (let d = Math.max(a, firstDay(h)); d <= end; d++) {
+      const dn = isDone(h, d);
+      if (h.type === "quit") { if (dn) st.quitDays++; continue; }
+      if (dn) done++;
+      if (isScheduled(h, d)) { if (!(d === t && !dn)) plan++; if (dn) { run++; best = Math.max(best, run); } else if (d !== t) run = 0; }
+      if (h.type === "time") st.hours += (h.log[d] || 0) / 3600;
+    }
+    for (const k in h.notes) if (+k >= a && +k <= end) st.notes++;
+    if (h.type !== "quit" && (done || plan)) st.habits.push({ h, done, rate: plan ? Math.round(done / plan * 100) : 0, best });
+  });
+  st.habits.sort((x, z) => z.done - x.done || z.rate - x.rate);
+  let bw = -1, br = -1;
+  st.wd.forEach((v, i) => { if (v.p >= 2) { const r = v.d / v.p; if (r > br) { br = r; bw = i; } } });
+  st.bestWd = bw; st.bestWdRate = br > 0 ? Math.round(br * 100) : 0;
+  st.badges = Object.keys(state.badgeDates || {}).filter(id => state.badgeDates[id] >= a && state.badgeDates[id] <= end).length;
+  return st;
+}
+const WD_ACC = ["понедельник","вторник","среду","четверг","пятницу","субботу","воскресенье"];
+
+/* ---------- Испытания месяца ---------- */
+const MONTH_CH = [
+  {e:"❄️", name:"Новый старт",        k:"active",  n:20, d:"20 активных дней за январь"},
+  {e:"🧊", name:"Железная воля",      k:"run",     n:14, d:"14 активных дней подряд в феврале"},
+  {e:"🌷", name:"Весеннее пробуждение", k:"perfect", n:10, d:"10 идеальных дней в марте"},
+  {e:"🌧️", name:"Апрельский ливень",  k:"marks",   n:60, d:"60 выполнений за апрель"},
+  {e:"🌸", name:"Цветущий май",       k:"active",  n:25, d:"25 активных дней в мае"},
+  {e:"☀️", name:"Летний марафон",     k:"perfect", n:15, d:"15 идеальных дней в июне"},
+  {e:"🌊", name:"Волна июля",         k:"run",     n:21, d:"21 активный день подряд в июле"},
+  {e:"🌠", name:"Звездопад",          k:"marks",   n:80, d:"80 выполнений за август"},
+  {e:"🍂", name:"Снова в строй",      k:"active",  n:20, d:"20 активных дней в сентябре"},
+  {e:"🎃", name:"Огненный октябрь",   k:"perfect", n:12, d:"12 идеальных дней в октябре"},
+  {e:"🌫️", name:"Ноябрьский фокус",   k:"run",     n:20, d:"20 активных дней подряд в ноябре"},
+  {e:"🎄", name:"Финал года",         k:"marks",   n:100, d:"100 выполнений за декабрь"},
+];
+const MEDAL_XP = 80;
+const medalBadge = m => ({ e: MONTH_CH[m].e, name: MONTH_CH[m].name, d: "Медаль месяца · " + MONTH_CH[m].d, xp: MEDAL_XP, tier: "gold", medal: true });
+const CH_UNIT = { active: ["активный день","активных дня","активных дней"], run: ["день подряд","дня подряд","дней подряд"],
+                  perfect: ["идеальный день","идеальных дня","идеальных дней"], marks: ["выполнение","выполнения","выполнений"] };
+const medalKey = (y, m) => `${y}-${m}`;
+function monthChallenge(y, m) {
+  const ch = MONTH_CH[m], st = monthStats(y, m);
+  return { ch, st, have: st[ch.k], done: st[ch.k] >= ch.n || !!state.medals[medalKey(y, m)] };
+}
+let medalLock = false;
+function checkMedals() {
+  if (!loaded || medalLock || !state.habits.length) return;
+  const n = new Date(), list = [[n.getFullYear(), n.getMonth()]];
+  if (n.getDate() <= 3) { const p = new Date(n.getFullYear(), n.getMonth() - 1, 1); list.push([p.getFullYear(), p.getMonth()]); }
+  for (const [y, m] of list) {
+    const k = medalKey(y, m); if (state.medals[k]) continue;
+    const mc = monthChallenge(y, m);
+    if (mc.have >= mc.ch.n) {
+      state.medals[k] = { at: today() }; save();
+      medalLock = true;
+      setTimeout(() => { medalLock = false; if (popClose || sheetClose || storyClose) { celebrate(`🏅 Медаль месяца: ${mc.ch.e} ${mc.ch.name}! +${MEDAL_XP} опыта`); haptic("success"); }
+        else showBadgePop(medalBadge(m), 0); }, 2600);
+      return;
+    }
+  }
+}
+function monthChallengeCard() {
+  const n = new Date(), y = n.getFullYear(), m = n.getMonth(), mc = monthChallenge(y, m), ch = mc.ch;
+  const left = mc.st.to - today();
+  const fc = chForecast(mc);
+  const medals = el("div", {class:"medals"});
+  for (let i = 0; i < 12; i++) {
+    const got = !!state.medals[medalKey(y, i)], c = MONTH_CH[i];
+    medals.append(el("button", {class:"medal" + (got ? " got" : "") + (i === m ? " cur" : ""), onclick: () => { haptic("select");
+      if (got) return showBadgePop(medalBadge(i), 0, true);
+      toast(`${c.e} ${c.name} — ${c.d}${i < m ? " · в следующем году получится 💪" : i > m ? " · ещё впереди ✨" : " · ты можешь! 🔥"}`, 2800); }},
+      el("i", {}, c.e), el("small", {}, MONTH_SHORT[i])));
+  }
+  return el("div", {class:"card mch"},
+    el("h4", {}, "Испытание месяца", el("small", {}, mc.done ? "выполнено ✅" : `${left} ${plural(left, "день", "дня", "дней")} до конца`)),
+    el("div", {class:"next"}, el("i", {class: mc.done ? "medal-big got" : "medal-big"}, ch.e),
+      el("div", {}, el("b", {}, ch.name), el("small", {}, `${ch.d} · +${MEDAL_XP} опыта`),
+        el("div", {class:"pbar"}, el("i", {style:`width:${Math.min(100, mc.have / ch.n * 100)}%;background:var(--accent)`})),
+        el("small", {style:"margin:6px 0 0"}, `${Math.min(mc.have, ch.n)} из ${ch.n} ${plural(ch.n, ...CH_UNIT[ch.k])}${fc ? " · " + fc : ""}`))),
+    el("div", {class:"label", style:"margin:14px 0 8px"}, `Медали ${y} года`), medals);
+}
+
+/* ---------- Прогноз ---------- */
+function xpPerDay() {
+  const t = today(), from = Math.max(t - 13, Math.min(t, ...allHabits().map(firstDay)));
+  let xp = 0, marks = 0;
+  for (let d = from; d <= t; d++) allHabits().forEach(h => { if (h.type !== "quit" && d >= firstDay(h) && isDone(h, d)) { xp += diffOf(h); marks++; } });
+  const n = t - from + 1;
+  return { xp: xp / n, marks: marks / n };
+}
+function chForecast(mc) {
+  if (mc.done) return "";
+  const need = mc.ch.n - mc.have, left = mc.st.to - today() + 1;
+  if (need > left && mc.ch.k !== "marks") return "каждый день в деле — уже победа 💪";
+  if (mc.ch.k === "marks") {
+    const r = xpPerDay().marks; if (r <= 0) return "";
+    const k = Math.ceil(need / r);
+    return k <= left ? `успеешь ≈ ${dateIn(k)}` : `нужно ${Math.ceil(need / left * 10) / 10} в день`;
+  }
+  return `можно успеть к ${fmtDayLong(today() + need - 1)}`;
+}
+function forecasts() {
+  const out = [], t = today(), r = xpPerDay(), xp = xpTotal(), lv = levelOf(xp);
+  if (r.xp > 0) { const k = Math.ceil((lv.need - lv.into) / r.xp); out.push({e: LEVEL_EMOJI[titleOf(lv.level + 1)], t:`Уровень ${lv.level + 1}`, s:`ещё ${lv.need - lv.into} опыта`, d:k}); }
+  const c = badgeContext(), got = new Set(unlockedBadges());
+  // ближайшая награда за серию
+  let cur = 0, doneToday = false;
+  state.habits.forEach(h => { if (h.freq) return; const s = streak(h); if (s > cur) { cur = s; doneToday = h.type === "quit" || isDone(h, t); } });
+  for (const [id, n] of [["s3",3],["s7",7],["s21",21],["s30",30],["s66",66],["s100",100],["s180",180],["s365",365]]) {
+    if (got.has(id)) continue; if (cur >= n) continue;
+    const b = BADGES.find(x => x.id === id), k = n - cur - (doneToday ? 0 : 1);
+    out.push({e: b.e, t: b.name, s:`серия ${cur} → ${n}`, d: Math.max(0, k)}); break;
+  }
+  if (r.marks > 0) for (const [id, n] of [["m10",10],["m50",50],["m100",100],["m500",500],["m1000",1000]]) {
+    if (got.has(id) || c.marks >= n) continue;
+    const b = BADGES.find(x => x.id === id);
+    out.push({e: b.e, t: b.name, s:`${c.marks} из ${n} выполнений`, d: Math.ceil((n - c.marks) / r.marks)}); break;
+  }
+  const n = new Date(), mc = monthChallenge(n.getFullYear(), n.getMonth());
+  if (!mc.done) out.push({e: mc.ch.e, t: mc.ch.name, s:`${mc.have} из ${mc.ch.n}`, txt: chForecast(mc) || "держи темп"});
+  return out.sort((a, b) => (a.d ?? 999) - (b.d ?? 999));
+}
+function forecastCard() {
+  const f = forecasts();
+  return el("div", {class:"card"}, el("h4", {}, "🔮 Прогноз", el("small", {}, "если держать темп")),
+    f.length ? f.map(x => el("div", {class:"fc"}, el("i", {}, x.e), el("div", {}, el("b", {}, x.t), el("small", {}, x.s)),
+      el("span", {}, x.txt != null ? x.txt : x.d === 0 ? "сегодня" : x.d === 1 ? "завтра" : `≈ ${fmtDayLong(today() + x.d)}`)))
+      : el("div", {class:"tip", style:"text-align:left"}, "Выполняй привычки пару дней — и здесь появится прогноз наград и уровня."));
+}
+
+/* ---------- Цвета из выбранной темы ---------- */
+function accentHex() {
+  const v = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+  if (/^#[0-9a-f]{6}$/i.test(v)) return v;
+  if (/^#[0-9a-f]{3}$/i.test(v)) return "#" + v.slice(1).split("").map(c => c + c).join("");
+  const m = v.match(/rgba?\((\d+)[ ,]+(\d+)[ ,]+(\d+)/);
+  if (m) return "#" + [m[1], m[2], m[3]].map(n => (+n).toString(16).padStart(2, "0")).join("");
+  return "#ff7a00";
+}
+function hexHsl(hex) {
+  const n = parseInt(hex.slice(1), 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0;
+  if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+    h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; }
+  return [h, s * 100, l * 100];
+}
+function themePal() {
+  const [h, s0] = hexHsl(accentHex()), s = Math.max(45, Math.min(90, s0));
+  const c = (dh, l, sat) => `hsl(${((h + dh) % 360 + 360) % 360}, ${sat ?? s}%, ${l}%)`;
+  const ca = (dh, l, a) => `hsla(${((h + dh) % 360 + 360) % 360}, ${s}%, ${l}%, ${a})`;
+  return { c, ca, slides: [
+    [c(0, 52), c(28, 44)], [c(-28, 48), c(8, 36)], [c(18, 42), c(-12, 27)], [c(0, 40), c(0, 8, 30)],
+    [c(10, 54), c(-22, 42)], [c(0, 18), c(22, 40)], [c(0, 14), c(0, 48)], [c(0, 7, 20), c(0, 18)] ],
+    banner: [c(-35, 50), c(0, 50), c(30, 55)] };
+}
+
+/* ---------- Итоги месяца (как Wrapped) ---------- */
+function personaOf(st) {
+  const top = st.habits[0], ratePerfect = st.days ? st.perfect / st.days : 0, rateActive = st.days ? st.active / st.days : 0;
+  if (ratePerfect >= .7 && st.days >= 7) return {e:"🤖", t:"Машина дисциплины", d:"Почти каждый день — всё по плану. Так держать!", c:["#1d1d3b","#5e5ce6"]};
+  if (st.run >= 14) return {e:"🔥", t:"Неугасимый огонь", d:`${st.run} дней подряд в деле. Тебя не остановить.`, c:["#3b0d00","#ff5a00"]};
+  if (st.hours >= 10) return {e:"🧠", t:"Мастер фокуса", d:`${Math.round(st.hours)} часов чистой концентрации по таймеру.`, c:["#002b36","#00b8d9"]};
+  if (st.quitDays >= 20) return {e:"🛡️", t:"Несгибаемый", d:"Ты держишься и не сдаёшься. Это сила.", c:["#1b1b1b","#8e8e93"]};
+  if (st.habits.length >= 5 && rateActive >= .5) return {e:"🤹", t:"Многостаночник", d:`${st.habits.length} привычек одновременно — впечатляет.`, c:["#3b0030","#ff2d9a"]};
+  if (rateActive >= .6) return {e:"🌱", t:"Растущий огонёк", d:"Ты заходишь почти каждый день — привычки крепнут.", c:["#002e1a","#34c759"]};
+  return {e:"✨", t:"Искра", d:"Каждый огонь начинается с искры. Следующий месяц — твой.", c:["#2b1600","#ffb000"]};
+}
+function wrapMonths() {          // месяцы, по которым есть данные (последние 12)
+  const out = [], n = new Date(); if (!allHabits().length) return out;
+  const first = Math.min(...allHabits().map(firstDay));
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(n.getFullYear(), n.getMonth() - i, 1), [, b] = monthRange(d.getFullYear(), d.getMonth());
+    if (b < first) break;
+    out.push([d.getFullYear(), d.getMonth()]);
+  }
+  return out;
+}
+function wrapBanner(y, m, small) {
+  const isCur = y === new Date().getFullYear() && m === new Date().getMonth(), P = themePal();
+  return el("button", {class:"wrap-banner", style:`background-image:linear-gradient(120deg, ${P.banner[0]}, ${P.banner[1]} 55%, ${P.banner[2]});box-shadow:0 8px 22px ${P.ca(0, 45, .3)}`, onclick: () => openWrapped(y, m)},
+    el("div", {}, el("small", {}, isCur ? "Месяц ещё идёт — смотри, что уже есть" : "Твой месяц в цифрах"),
+      el("b", {}, `Итоги ${MONTHS_GEN[m]}`),
+      el("span", {class:"wb-cta"}, "Смотреть ▶")),
+    el("i", {}, "🎁"));
+}
+let storyClose = null;
+function openWrapped(y, m) {
+  haptic("medium");
+  const st = monthStats(y, m), pr = personaOf(st);
+  const pm = new Date(y, m - 1, 1), prev = monthStats(pm.getFullYear(), pm.getMonth());
+  const mc = monthChallenge(y, m), MN = MONTHS_NOM_L[m];
+  const isCur = y === new Date().getFullYear() && m === new Date().getMonth();
+  const top = st.habits[0], PAL = themePal().slides;
+  const cmp = prev.marks > 0 ? Math.round((st.marks - prev.marks) / prev.marks * 100) : null;
+  const S = [];
+  const big = (v, cls) => el("div", {class:"ws-big num " + (cls || ""), "data-count": String(v)}, "0");
+  S.push({bg:PAL[0], kids:[el("div", {class:"ws-kicker"}, "🔥 Огонёк"), el("h1", {}, `Твой ${MN}`), el("p", {}, isCur ? "Месяц ещё не закончился, но кое-что уже можно показать 👀" : "Давай посмотрим, каким он был")]});
+  S.push({bg:PAL[1], kids:[el("div", {class:"ws-kicker"}, "Выполнения"), big(st.marks), el("h2", {}, plural(st.marks, "раз ты выполнил привычку", "раза ты выполнил привычки", "раз ты выполнил привычки")),
+    el("p", {}, cmp === null ? "Это начало твоей истории в Огоньке ✨" : cmp >= 0 ? `Это на ${cmp}% больше, чем в ${MONTHS_PREP[pm.getMonth()]} 📈` : isCur ? `Ещё ${prev.marks - st.marks} — и ты обгонишь ${MONTHS_NOM_L[pm.getMonth()]}. Вперёд! 🚀` : `Следующий месяц — шанс побить рекорд ${MONTHS_GEN[pm.getMonth()]}. Ты сможешь! 💪`)]});
+  S.push({bg:PAL[2], kids:[el("div", {class:"ws-kicker"}, "Дни в деле"), el("div", {class:"ws-big num"}, el("span", {"data-count": String(st.active)}, "0"), el("small", {}, ` / ${st.days}`)),
+    el("h2", {}, plural(st.active, "день ты был в деле", "дня ты был в деле", "дней ты был в деле")),
+    el("p", {}, st.perfect ? `И ${st.perfect} ${plural(st.perfect, "идеальный день", "идеальных дня", "идеальных дней")}, когда выполнено всё ⭐` : "Идеальные дни ещё впереди ⭐")]});
+  if (top) S.push({bg:PAL[3], kids:[el("div", {class:"ws-kicker"}, "Привычка месяца"),
+    el("div", {class:"ws-ico", html: glyphHTML(Object.assign({}, top.h, {color:"#fff"}))}), el("h1", {}, top.h.name),
+    el("p", {}, `${top.done} ${plural(top.done, "раз", "раза", "раз")} · ${top.rate}% выполнения${top.best > 1 ? ` · серия ${top.best}` : ""}`)]});
+  S.push({bg:PAL[4], kids:[el("div", {class:"ws-kicker"}, "Самая длинная серия"), el("div", {class:"ws-big num"}, "🔥 ", el("span", {"data-count": String(st.run)}, "0")),
+    el("h2", {}, plural(st.run, "день подряд", "дня подряд", "дней подряд")),
+    st.bestWd >= 0 ? el("p", {}, `Твой самый сильный день — ${WD_ACC[st.bestWd]}: ${st.bestWdRate}% выполнения`) : null]});
+  S.push({bg:PAL[5], kids:[el("div", {class:"ws-kicker"}, "Ещё немного цифр"),
+    el("div", {class:"ws-list"},
+      el("div", {}, el("b", {class:"num"}, `+${fmtN(st.xp)}`), el("span", {}, "опыта за привычки")),
+      st.hours >= 0.5 ? el("div", {}, el("b", {class:"num"}, fmtDur(st.hours * 3600)), el("span", {}, "по таймеру")) : null,
+      st.quitDays ? el("div", {}, el("b", {class:"num"}, String(st.quitDays)), el("span", {}, "дней без вредной привычки")) : null,
+      st.notes ? el("div", {}, el("b", {class:"num"}, String(st.notes)), el("span", {}, plural(st.notes, "заметка", "заметки", "заметок"))) : null,
+      st.badges ? el("div", {}, el("b", {class:"num"}, String(st.badges)), el("span", {}, plural(st.badges, "новая награда", "новые награды", "новых наград"))) : null,
+      el("div", {}, el("b", {}, mc.done ? `${mc.ch.e} ✅` : `${mc.ch.e} ${Math.min(mc.have, mc.ch.n)}/${mc.ch.n}`), el("span", {}, `испытание «${mc.ch.name}»`)))]});
+  S.push({bg:PAL[6], kids:[el("div", {class:"ws-kicker"}, "Твой огонь месяца"), el("div", {class:"ws-persona"}, pr.e), el("h1", {}, pr.t), el("p", {}, pr.d)]});
+  const card = drawWrapCard(st, pr, mc);
+  const cardUrl = card.toDataURL("image/png");
+  S.push({bg:PAL[7], final:true, kids:[el("div", {class:"ws-kicker"}, "Сохрани и поделись"), el("img", {class:"ws-card", src: cardUrl, alt:"Итоги месяца"}),
+    el("button", {class:"btn", onclick: e => { e.stopPropagation(); shareCanvas(() => drawWrapCard(st, pr, mc), `Мой ${MN} в Огоньке 🔥 ${st.marks} выполнений, серия ${st.run} ${plural(st.run, "день", "дня", "дней")}`, () => {}); }}, "📤  Поделиться")]});
+
+  let i = 0, timer = null;
+  const ov = el("div", {class:"story"});
+  const bars = el("div", {class:"st-bars"}, S.map(() => el("i", {}, el("b", {}))));
+  const slide = el("div", {class:"st-slide"});
+  const close = el("button", {class:"st-close", "aria-label":"Закрыть", onclick: e => { e.stopPropagation(); storyClose(); }}, "✕");
+  ov.append(slide, bars, close);
+  function countUp(root) {
+    root.querySelectorAll("[data-count]").forEach(e => { const to = +e.dataset.count, t0 = performance.now();
+      const step = now => { const k = Math.min(1, (now - t0) / 900); e.textContent = fmtN(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step); });
+  }
+  function show(k) {
+    i = Math.max(0, Math.min(S.length - 1, k));
+    const s = S[i];
+    ov.style.background = `linear-gradient(160deg, ${s.bg[0]}, ${s.bg[1]})`;
+    slide.innerHTML = ""; slide.append(...s.kids); slide.classList.remove("in"); void slide.offsetWidth; slide.classList.add("in");
+    [...bars.children].forEach((b, j) => { b.className = j < i ? "done" : j === i ? "cur" : ""; });
+    countUp(slide); haptic("light");
+    clearTimeout(timer); if (!s.final) timer = setTimeout(() => show(i + 1), 5500);
+  }
+  ov.addEventListener("click", e => { if (e.target.closest("button,img")) return; e.clientX > innerWidth * .33 ? (i < S.length - 1 && show(i + 1)) : show(i - 1); });
+  storyClose = () => { clearTimeout(timer); storyClose = null; ov.classList.add("out"); setTimeout(() => ov.remove(), 200); if (tg && tg.BackButton && can("6.1") && !(screen === "detail" || sheetClose)) tg.BackButton.hide(); };
+  document.body.append(ov);
+  if (tg && tg.BackButton && can("6.1")) tg.BackButton.show();
+  const key = medalKey(y, m); state.flags.wrapViewed = true; if (state.flags.wrapSeen !== key) state.flags.wrapSeen = key; save();
+  show(0);
+}
+/* =====================================================================
+   v13: стили карточек (эстетики), карточки для сторис, окно награды
+   ===================================================================== */
+const CF = '-apple-system, "SF Pro Display", Roboto, "Segoe UI", sans-serif';
+const SERIF = '"Didot", "Bodoni 72", "Playfair Display", Georgia, "Times New Roman", serif';
+const ROUND = '"Arial Rounded MT Bold", "SF Pro Rounded", -apple-system, Roboto, sans-serif';
+const CARD_STYLES = [
+  {id:"fire",  name:"Огонёк",        e:"🔥"},
+  {id:"min",   name:"Минимал",       e:"🤍"},
+  {id:"clean", name:"Clean girl",    e:"🤎"},
+  {id:"y2k",   name:"Y2K",           e:"💿"},
+  {id:"acad",  name:"Dark academia", e:"📜"},
+  {id:"anime", name:"Аниме",         e:"🌸"},
+  {id:"neon",  name:"Неон",          e:"🌃"},
+];
+let csOverride = null;
+function sparkle(x, cx, cy, r, color) {
+  x.save(); x.fillStyle = color; x.beginPath();
+  x.moveTo(cx, cy - r); x.quadraticCurveTo(cx, cy, cx + r, cy); x.quadraticCurveTo(cx, cy, cx, cy + r);
+  x.quadraticCurveTo(cx, cy, cx - r, cy); x.quadraticCurveTo(cx, cy, cx, cy - r); x.fill(); x.restore();
+}
+function cloud(x, cx, cy, s, color) {
+  x.save(); x.fillStyle = color;
+  [[0, 0, 1], [-.9, .25, .7], [.9, .25, .75], [-.4, -.35, .75], [.45, -.3, .7]].forEach(([dx, dy, r]) => { x.beginPath(); x.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2); x.fill(); });
+  x.restore();
+}
+// Токены выбранного стиля. tintC — свои цвета (например, у типа личности)
+function CS(tintC) {
+  const id = csOverride || state.settings.cardStyle || "fire";
+  const P = themePal(), A = accentHex();
+  const S = { id, fg:"#fff", sub:"rgba(255,255,255,.66)", tile:"rgba(255,255,255,.09)", stroke:null, acc:P.c(0, 70), brand:P.c(0, 72),
+    big:[P.c(30, 62), P.c(-8, 52)], glow:null, dark:true,
+    font(kind, size) {
+      if (kind === "disp") return `900 ${size}px ${CF}`;
+      if (kind === "bold") return `800 ${size}px ${CF}`;
+      if (kind === "semi") return `700 ${size}px ${CF}`;
+      return `600 ${size}px ${CF}`;
+    },
+    bg(x, W, H) {
+      const c1 = tintC ? tintC[0] : P.c(0, 13, 40), c2 = tintC ? tintC[1] : P.c(0, 50);
+      let g = x.createLinearGradient(0, 0, W * .3, H); g.addColorStop(0, tintC ? "#151017" : P.c(0, 11, 35)); g.addColorStop(1, "#070506"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      g = x.createRadialGradient(W * .82, H * .14, 0, W * .82, H * .14, W * .95); g.addColorStop(0, tintC ? c2 + "cc" : P.ca(10, 50, .6)); g.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      g = x.createRadialGradient(0, H, 0, 0, H, W * .9); g.addColorStop(0, tintC ? c1 + "99" : P.ca(-20, 50, .32)); g.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    },
+    deco() {} };
+  if (id === "min") Object.assign(S, { fg:"#121212", sub:"rgba(18,18,18,.55)", tile:"rgba(18,18,18,.05)", acc:A, brand:"#121212", big:["#121212", "#121212"], dark:false,
+    bg(x, W, H) { x.fillStyle = "#f7f5f2"; x.fillRect(0, 0, W, H); },
+    deco(x, W, H) { x.fillStyle = A; x.fillRect(90, 205, 90, 8); } });
+  if (id === "clean") Object.assign(S, { fg:"#3d2b22", sub:"rgba(61,43,34,.6)", tile:"rgba(255,255,255,.58)", acc:"#b07a62", brand:"#8a5a46", big:["#8a5a46", "#c79a83"], dark:false,
+    font(kind, size) { if (kind === "disp") return `italic 500 ${size}px ${SERIF}`; if (kind === "bold") return `600 ${size}px ${SERIF}`; if (kind === "semi") return `600 ${size}px ${CF}`; return `500 ${size}px ${CF}`; },
+    bg(x, W, H) {
+      let g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#f7eee6"); g.addColorStop(1, "#e8d3c4"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      [[W * .9, H * .1, 520, "rgba(240,190,175,.55)"], [W * .05, H * .78, 600, "rgba(255,255,255,.6)"], [W * .7, H * .95, 420, "rgba(214,170,150,.35)"]].forEach(([cx, cy, r, col]) => {
+        g = x.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, col); g.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H); });
+    } });
+  if (id === "y2k") Object.assign(S, { fg:"#24104a", sub:"rgba(36,16,74,.62)", tile:"rgba(255,255,255,.48)", stroke:"rgba(255,255,255,.95)", acc:"#ff3fa4", brand:"#ff3fa4",
+    big:["#ff3fa4", "#7b5cff", "#18c8ff"], dark:false,
+    font(kind, size) { if (kind === "disp" || kind === "bold") return `900 ${size}px ${ROUND}`; if (kind === "semi") return `800 ${size}px ${ROUND}`; return `600 ${size}px ${CF}`; },
+    bg(x, W, H) {
+      let g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#ffc8ec"); g.addColorStop(.5, "#cdb9ff"); g.addColorStop(1, "#a6ecff"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      g = x.createRadialGradient(W * .3, H * .25, 0, W * .3, H * .25, W * .8); g.addColorStop(0, "rgba(255,255,255,.75)"); g.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    },
+    deco(x, W, H) { [[930, 120, 46], [990, 260, 22], [120, 1700, 40], [980, 1560, 30], [60, 900, 18], [880, 980, 16]].forEach(([a, b, r]) => sparkle(x, a, b, r, "#ffffff")); } });
+  if (id === "acad") Object.assign(S, { fg:"#efe3c8", sub:"rgba(239,227,200,.6)", tile:"rgba(239,227,200,.06)", stroke:"rgba(201,164,92,.55)", acc:"#c9a45c", brand:"#c9a45c",
+    big:["#e8cf8f", "#a8823c"],
+    font(kind, size) { if (kind === "disp") return `600 ${size}px ${SERIF}`; if (kind === "bold") return `600 ${size}px ${SERIF}`; if (kind === "semi") return `600 ${size}px Georgia, serif`; return `500 ${size}px Georgia, serif`; },
+    bg(x, W, H) {
+      let g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#2a2018"); g.addColorStop(1, "#110c09"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      g = x.createRadialGradient(W / 2, H * .4, 0, W / 2, H * .4, W); g.addColorStop(0, "rgba(120,90,50,.25)"); g.addColorStop(1, "rgba(0,0,0,.35)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    },
+    deco(x, W, H) { x.strokeStyle = "rgba(201,164,92,.6)"; x.lineWidth = 3; x.strokeRect(40, 40, W - 80, H - 80); x.lineWidth = 1.5; x.strokeRect(56, 56, W - 112, H - 112); } });
+  if (id === "anime") Object.assign(S, { fg:"#1f2550", sub:"rgba(31,37,80,.62)", tile:"rgba(255,255,255,.62)", acc:"#ff4f9a", brand:"#ff4f9a", big:["#ff4f9a", "#7a6cff"], dark:false,
+    font(kind, size) { if (kind === "disp" || kind === "bold") return `900 ${size}px ${ROUND}`; if (kind === "semi") return `800 ${size}px ${ROUND}`; return `600 ${size}px ${CF}`; },
+    bg(x, W, H) {
+      const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#79c4ff"); g.addColorStop(.6, "#cfe6ff"); g.addColorStop(1, "#ffd3ec"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+      cloud(x, 820, 150, 70, "rgba(255,255,255,.9)"); cloud(x, 960, 1800, 85, "rgba(255,255,255,.85)"); cloud(x, 1070, 1120, 60, "rgba(255,255,255,.75)");
+    },
+    deco(x, W, H) { [[960, 330, 26, "#fff"], [70, 1100, 22, "#ff8fc4"], [1000, 900, 18, "#fff"], [520, 1840, 20, "#ff8fc4"]].forEach(([a, b, r, c]) => sparkle(x, a, b, r, c)); } });
+  if (id === "neon") Object.assign(S, { fg:"#ffffff", sub:"rgba(255,255,255,.62)", tile:"rgba(255,255,255,.04)", stroke:"rgba(0,240,255,.55)", acc:"#00f0ff", brand:"#ff2bd6", big:["#ffffff", "#ffffff"], glow:"#ff2bd6",
+    bg(x, W, H) {
+      x.fillStyle = "#07040f"; x.fillRect(0, 0, W, H);
+      x.strokeStyle = "rgba(123,92,255,.13)"; x.lineWidth = 2;
+      for (let i = 0; i <= W; i += 90) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, H); x.stroke(); }
+      for (let j = 0; j <= H; j += 90) { x.beginPath(); x.moveTo(0, j); x.lineTo(W, j); x.stroke(); }
+      const g = x.createRadialGradient(W * .8, H * .15, 0, W * .8, H * .15, W * .8); g.addColorStop(0, "rgba(255,43,214,.3)"); g.addColorStop(1, "rgba(255,43,214,0)"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+    } });
+  return S;
+}
+function cardBase(S) {
+  const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+  S.bg(x, W, H); S.deco(x, W, H); x.textBaseline = "alphabetic"; x.textAlign = "left";
+  return { c, x, W, H };
+}
+function cText(x, S, str, X, Y, kind, size, color, align) {
+  x.save(); x.font = S.font(kind, size); x.textAlign = align || "left";
+  if (color === "big") {
+    const w = x.measureText(str).width, x0 = align === "center" ? X - w / 2 : X;
+    const g = x.createLinearGradient(x0, 0, x0 + Math.max(w, 1), 0); S.big.forEach((col, i) => g.addColorStop(i / Math.max(1, S.big.length - 1), col));
+    x.fillStyle = g; if (S.glow) { x.shadowColor = S.glow; x.shadowBlur = 40; }
+  } else x.fillStyle = color || S.fg;
+  x.fillText(str, X, Y); x.restore();
+}
+function cTile(x, S, tx, ty, w, h, r) { rr(x, tx, ty, w, h, r); x.fillStyle = S.tile; x.fill(); if (S.stroke) { x.strokeStyle = S.stroke; x.lineWidth = 3; x.stroke(); } }
+function cBrand(x, S) { cText(x, S, "🔥  О Г О Н Ё К", 90, 170, "semi", 40, S.brand); }
+function cFoot(x, S, line, W, H) {
+  if (line) cText(x, S, line, 90, H - 150, "bold", 46, S.fg);
+  cText(x, S, "@" + BOT_USERNAME, 90, H - 86, "semi", 46, S.brand);
+}
+function fitText(x, str, maxW) { let s = str; while (x.measureText(s).width > maxW && s.length > 3) s = s.slice(0, -2); return s === str ? s : s + "…"; }
+function wrapText(x, text, maxW) {
+  const words = String(text).split(" "), lines = []; let line = "";
+  words.forEach(w => { const t2 = line ? line + " " + w : w; if (x.measureText(t2).width > maxW && line) { lines.push(line); line = w; } else line = t2; });
+  if (line) lines.push(line); return lines;
+}
+function drawGlyph(x, h, cx, cy, size, color) {
+  if (h.icon && ICON_MAP[h.icon]) {
+    const [vb, d] = ICON_MAP[h.icon], [vx, vy, vw, vh] = vb.split(/\s+/).map(Number), sc = size / Math.max(vw, vh);
+    x.save(); x.translate(cx - (vw * sc) / 2 - vx * sc, cy - (vh * sc) / 2 - vy * sc); x.scale(sc, sc); x.fillStyle = color || h.color; x.fill(new Path2D(d)); x.restore();
+  } else { x.save(); x.fillStyle = "#000"; x.font = `${size}px ${CF}`; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(h.emoji || "🎯", cx, cy + size * .06); x.restore(); }
+}
+
+/* ---------- Карточка серии привычки ---------- */
+function drawCard(h) {
+  const S = CS(), { c, x, W, H } = cardBase(S);
+  cBrand(x, S);
+  rr(x, 90, 250, 190, 190, 52); x.fillStyle = tint(h.color, S.dark ? .28 : .22); x.fill();
+  drawGlyph(x, h, 185, 345, 112);
+  x.font = S.font("disp", 76); const lines = wrapText(x, h.name, W - 180).slice(0, 2);
+  let y = 560; lines.forEach(l => { cText(x, S, l, 90, y, "disp", 76); y += 88; });
+  const s = streak(h);
+  cText(x, S, String(s), 80, y + 300, "disp", 300, "big");
+  cText(x, S, h.type === "quit" ? plural(s, "день без срыва", "дня без срыва", "дней без срыва") : h.freq ? plural(s, "неделя подряд", "недели подряд", "недель подряд") : plural(s, "день подряд", "дня подряд", "дней подряд"), 96, y + 380, "semi", 56, S.sub);
+  const t = today(), size = 104, gap = 14, gx = 90, gy = y + 450;
+  for (let i = 0; i < 35; i++) {
+    const d = t - 34 + i, cx = gx + (i % 7) * (size + gap), cy = gy + Math.floor(i / 7) * (size + gap);
+    const fr = d < firstDay(h) ? 0 : frac(h, d);
+    rr(x, cx, cy, size, size, 28);
+    if (fr >= 1) { const gg = x.createLinearGradient(cx, cy, cx + size, cy + size); gg.addColorStop(0, S.big[0]); gg.addColorStop(1, S.big[S.big.length - 1]); x.fillStyle = S.id === "min" ? S.acc : gg; x.fill(); }
+    else { x.fillStyle = S.tile; x.fill(); if (fr > 0) { x.save(); x.globalAlpha = .25 + fr * .4; x.fillStyle = S.acc; x.fill(); x.restore(); } if (S.stroke) { x.strokeStyle = S.stroke; x.lineWidth = 2; x.stroke(); } }
+  }
+  cFoot(x, S, "Начни свою серию:", W, H);
   return c;
 }
 function openShare(h) {
   haptic("light");
-  const canvas = drawCard(h);
-  const url = canvas.toDataURL("image/png");
   const s = streak(h);
   const text = h.type === "quit" ? `${s} ${plural(s, "день", "дня", "дней")} без срыва — «${h.name}» 🔥 Держу серию в Огоньке`
-                                 : `${s} ${plural(s, "день", "дня", "дней")} подряд — «${h.name}» 🔥 Держу серию в Огоньке`;
-  const mark = () => { if (!state.flags.shared) { state.flags.shared = true; save(); } };
-  const btns = el("div", {class:"btns"});
-  canvas.toBlob(blob => {
-    const file = blob && new File([blob], "ogonyok.png", {type:"image/png"});
-    if (file && navigator.canShare && navigator.canShare({files:[file]})) {
-      btns.prepend(el("button", {class:"btn", onclick: async () => {
-        try { await navigator.share({files:[file], text}); mark(); } catch(e) {}
-      }}, "📤  Поделиться картинкой"));
-    } else if (!inTG) {
-      btns.prepend(el("a", {class:"btn", href:url, download:"ogonyok.png", style:"display:grid;place-items:center;text-decoration:none",
-        onclick: mark}, "⬇️  Скачать картинку"));
-    }
-  }, "image/png");
-  btns.append(el("button", {class:"btn sec", onclick: () => {
-    mark();
-    const u = `https://t.me/share/url?url=${encodeURIComponent(BOT_LINK)}&text=${encodeURIComponent(text)}`;
-    if (inTG && can("6.1")) tg.openTelegramLink(u); else window.open(u, "_blank");
-  }}, "✉️  Отправить другу"));
-  const img = el("img", {class:"share-img", src:url, alt:"Карточка серии"});
-  img.addEventListener("contextmenu", mark);
-  openSheet([
-    el("div", {class:"grab"}), el("h3", {}, "Поделиться серией"),
-    img,
-    el("div", {class:"tip", style:"margin:-4px 0 14px"}, "Зажми картинку → «Сохранить», потом добавь её в сторис"),
-    btns,
-  ], () => render());
-  setTimeout(mark, 4000);   // посмотрел карточку — считаем, что поделился
+             : h.freq ? `${s} ${plural(s, "неделя", "недели", "недель")} подряд — «${h.name}» 🔥 Держу серию в Огоньке`
+             : `${s} ${plural(s, "день", "дня", "дней")} подряд — «${h.name}» 🔥 Держу серию в Огоньке`;
+  shareCanvas(() => drawCard(h), text);
 }
+
+/* ---------- Карточка «мой день» ---------- */
+function drawDayCard(day) {
+  const S = CS(), { c, x, W, H } = cardBase(S);
+  cBrand(x, S);
+  const dt = fromDay(day), wdN = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"][dt.getDay()];
+  cText(x, S, day === today() ? "Мой день" : fmtDayLong(day), 84, 310, "disp", 104);
+  cText(x, S, `${wdN}, ${fmtDayLong(day)}`, 90, 380, "text", 44, S.sub);
+  const plan = state.habits.filter(h => isScheduled(h, day)), doneN = plan.filter(h => isDone(h, day)).length, f = plan.length ? doneN / plan.length : 0;
+  const cx = W - 230, cy = 300, R = 120;
+  x.save(); x.lineWidth = 34; x.lineCap = "round"; x.strokeStyle = S.dark ? "rgba(255,255,255,.12)" : "rgba(0,0,0,.08)"; x.beginPath(); x.arc(cx, cy, R, 0, Math.PI * 2); x.stroke();
+  if (f > 0) { const g = x.createLinearGradient(cx - R, cy - R, cx + R, cy + R); g.addColorStop(0, S.big[0]); g.addColorStop(1, S.id === "min" ? S.acc : S.big[S.big.length - 1]);
+    x.strokeStyle = g; if (S.glow) { x.shadowColor = S.glow; x.shadowBlur = 30; } x.beginPath(); x.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f); x.stroke(); }
+  x.restore();
+  cText(x, S, Math.round(f * 100) + "%", cx, cy + 12, "disp", 68, S.fg, "center");
+  cText(x, S, `${doneN} из ${plan.length}`, cx, cy + 58, "text", 32, S.sub, "center");
+  const rows = plan.slice().sort((a, b) => isDone(b, day) - isDone(a, day)).slice(0, 8);
+  let y = 500;
+  rows.forEach(h => {
+    const dn = isDone(h, day);
+    cTile(x, S, 84, y, 912, 130, 36);
+    rr(x, 112, y + 21, 88, 88, 26); x.fillStyle = tint(h.color, .25); x.fill();
+    drawGlyph(x, h, 156, y + 65, 52);
+    x.font = S.font("bold", 44); cText(x, S, fitText(x, h.name, 520), 230, y + 62, "bold", 44, dn ? S.fg : S.sub);
+    const s = streak(h), sub = h.type === "quit" ? `без срывов ${fmtSpan(Date.now() - lastStart(h))}` : h.type === "check" ? (s ? `🔥 ${streakUnit(h, s)}` : "") : progressText(h, day) + (s ? `  ·  🔥 ${streakUnit(h, s)}` : "");
+    cText(x, S, sub, 230, y + 104, "text", 32, S.sub);
+    const bx = 930, by = y + 65;
+    x.save(); x.beginPath(); x.arc(bx, by, 32, 0, Math.PI * 2);
+    if (dn) { x.fillStyle = h.color; x.fill(); x.strokeStyle = "#fff"; x.lineWidth = 7; x.lineCap = "round"; x.lineJoin = "round";
+      x.beginPath(); x.moveTo(bx - 14, by + 1); x.lineTo(bx - 4, by + 12); x.lineTo(bx + 15, by - 11); x.stroke(); }
+    else { x.strokeStyle = S.dark ? "rgba(255,255,255,.25)" : "rgba(0,0,0,.18)"; x.lineWidth = 5; x.stroke(); }
+    x.restore();
+    y += 148;
+  });
+  if (plan.length > rows.length) { cText(x, S, `+ ещё ${plan.length - rows.length}`, 96, y + 30, "semi", 36, S.sub); y += 70; }
+  if (!plan.length) { cText(x, S, "День отдыха 😌", 96, y + 40, "semi", 44, S.sub); y += 90; }
+  y = Math.max(y + 20, 980);
+  const cur = Math.max(0, ...state.habits.filter(h => !h.freq && h.type !== "quit").map(streak)), lv = levelOf(xpTotal());
+  [[`🔥 ${cur}`, plural(cur, "день подряд", "дня подряд", "дней подряд")], [`${LEVEL_EMOJI[lv.title]} ${lv.level}`, `уровень · ${lv.title}`]].forEach(([v, l], i) => {
+    const tx = 84 + i * 468; cTile(x, S, tx, y, 444, 220, 40);
+    cText(x, S, v, tx + 36, y + 120, "disp", 92); cText(x, S, l, tx + 38, y + 180, "text", 36, S.sub);
+  });
+  y = Math.max(y + 300, 1380);
+  cText(x, S, "МЫСЛЬ ДНЯ", 90, y, "semi", 32, S.sub);
+  x.font = S.font("bold", 44);
+  wrapText(x, "«" + thoughtOf(day) + "»", 900).slice(0, 4).forEach((ln, k) => cText(x, S, ln, 90, y + 64 + k * 58, "bold", 44));
+  cFoot(x, S, null, W, H);
+  return c;
+}
+function openDayShare() {
+  haptic("light");
+  const d = selDay, plan = state.habits.filter(h => isScheduled(h, d)), n = plan.filter(h => isDone(h, d)).length;
+  shareCanvas(() => drawDayCard(d), `Мой день в Огоньке: ${n} из ${plan.length} привычек ✅🔥`, () => { if (!state.flags.dayShared) { state.flags.dayShared = true; save(); } });
+}
+
+/* ---------- Карточка итогов месяца ---------- */
+function drawWrapCard(st, pr, mc) {
+  const S = CS(), { c, x, W, H } = cardBase(S);
+  cBrand(x, S);
+  cText(x, S, `Мой ${MONTHS_NOM_L[st.m]}`, 84, 320, "disp", 118);
+  cText(x, S, `${st.y} · итоги месяца`, 90, 392, "text", 44, S.sub);
+  [[fmtN(st.marks), "выполнений"], [`${st.active}/${st.days}`, "дней в деле"], [String(st.perfect), "идеальных дней"], [`🔥 ${st.run}`, "дней подряд"]].forEach(([v, l], i) => {
+    const tx = 84 + (i % 2) * 468, ty = 470 + Math.floor(i / 2) * 290;
+    cTile(x, S, tx, ty, 444, 262, 44);
+    cText(x, S, v, tx + 40, ty + 140, "disp", 108, i === 0 ? "big" : S.fg); cText(x, S, l, tx + 42, ty + 210, "text", 38, S.sub);
+  });
+  let y = 1100;
+  const top = st.habits[0];
+  if (top) {
+    cTile(x, S, 84, y, 912, 190, 44);
+    rr(x, 120, y + 35, 120, 120, 34); x.fillStyle = top.h.color; x.fill();
+    drawGlyph(x, top.h, 180, y + 95, 72, "#fff");
+    cText(x, S, "Привычка месяца", 280, y + 78, "text", 34, S.sub);
+    x.font = S.font("bold", 52); cText(x, S, fitText(x, top.h.name, 680), 280, y + 140, "bold", 52);
+    y += 230;
+  }
+  cTile(x, S, 84, y, 912, 220, 44);
+  x.save(); x.fillStyle = "#000"; x.font = `110px ${CF}`; x.fillText(pr.e, 116, y + 150); x.restore();
+  cText(x, S, "Мой огонь месяца", 280, y + 82, "text", 34, S.sub);
+  cText(x, S, pr.t, 280, y + 150, "bold", 56); y += 260;
+  cText(x, S, mc.done ? `${mc.ch.e} Медаль «${mc.ch.name}» получена` : `${mc.ch.e} «${mc.ch.name}»: ${Math.min(mc.have, mc.ch.n)} из ${mc.ch.n}`, 90, y + 40, "semi", 40, S.sub);
+  cFoot(x, S, "Зажги свой огонёк:", W, H);
+  return c;
+}
+
+/* ---------- Окно «Поделиться» со сменой стиля ---------- */
+function shareCanvas(make, text, onShared) {
+  const img = el("img", {class:"share-img", alt:""});
+  const btns = el("div", {class:"btns"});
+  const chips = el("div", {class:"cs-chips"});
+  let file = null, url = "";
+  const mark = () => { if (onShared) onShared(); if (!state.flags.shared) { state.flags.shared = true; save(); } };
+  const drawBtns = () => {
+    btns.innerHTML = "";
+    if (file && navigator.canShare && navigator.canShare({files:[file]}))
+      btns.append(el("button", {class:"btn", onclick: async () => { try { await navigator.share({files:[file], text}); mark(); } catch(e) {} }}, "📤  Поделиться картинкой"));
+    else if (!inTG) btns.append(el("a", {class:"btn", href:url, download:"ogonyok.png", style:"display:grid;place-items:center;text-decoration:none", onclick: mark}, "⬇️  Скачать картинку"));
+    btns.append(el("button", {class:"btn sec", onclick: () => { mark();
+      const u = `https://t.me/share/url?url=${encodeURIComponent(inviteLink())}&text=${encodeURIComponent(text)}`;
+      if (inTG && can("6.1")) tg.openTelegramLink(u); else window.open(u, "_blank"); }}, "✉️  Отправить другу"));
+  };
+  const refresh = () => {
+    const canvas = make(); url = canvas.toDataURL("image/png"); img.src = url; file = null; drawBtns();
+    canvas.toBlob(blob => { file = blob && new File([blob], "ogonyok.png", {type:"image/png"}); drawBtns(); }, "image/png");
+    chips.innerHTML = "";
+    const cur = state.settings.cardStyle || "fire";
+    CARD_STYLES.forEach(cs => chips.append(el("button", {class:"chip" + (cs.id === cur ? " on" : ""), onclick: () => {
+      state.settings.cardStyle = cs.id; save(); haptic("select"); refresh(); }}, `${cs.e} ${cs.name}`)));
+  };
+  if (storyClose) storyClose();
+  if (popClose) popClose();
+  refresh();
+  openSheet([el("div", {class:"grab"}), el("h3", {}, "Поделиться"), el("div", {class:"label", style:"margin-top:-6px"}, "Стиль карточки"), chips, img,
+    el("div", {class:"tip", style:"margin:-4px 0 14px"}, "Зажми картинку → «Сохранить», потом добавь её в сторис"), btns], () => render());
+  setTimeout(mark, 4000);
+}
+// Мини-превью стилей для «Оформления»
+function styleThumb(id) {
+  csOverride = id;
+  let big; try { big = state.habits.length ? drawDayCard(today()) : drawBadgeCard(BADGES[0]); } finally { csOverride = null; }
+  const t = document.createElement("canvas"); t.width = 216; t.height = 384; t.getContext("2d").drawImage(big, 0, 0, 216, 384);
+  return t.toDataURL("image/jpeg", .8);
+}
+
+/* ---------- Награда: окно и карточка ---------- */
+const TIER_GRAD = { bronze:["#f6cfa4","#b06a32"], silver:["#ffffff","#9aa5b1"], gold:["#fff1a8","#e0a800"], diamond:["#b8f3ff","#7a5cff"], secret:["#ff9ad5","#8e44ff"] };
+function badgeGrad(b) { const P = themePal(); return TIER_GRAD[b.tier || (b.secret ? "secret" : "")] || [P.c(25, 72), P.c(-5, 52)]; }
+const TIER_NAME = { bronze:"Бронза", silver:"Серебро", gold:"Золото", diamond:"Алмаз", secret:"Секретная" };
+let popClose = null;
+function showBadgePop(b, more, quiet) {
+  if (popClose) popClose(true);
+  haptic(quiet ? "light" : "success");
+  const [g1, g2] = badgeGrad(b);
+  const ov = el("div", {class:"bpop", onclick: e => { if (e.target === ov) close(); }});
+  const tierName = TIER_NAME[b.tier || (b.secret ? "secret" : "")];
+  const card = el("div", {class:"bpop-card"},
+    el("div", {class:"bpop-stage"}, el("div", {class:"bpop-rays", style:`--r1:${g1};--r2:${g2}`}),
+      el("div", {class:"bpop-medal", style:`background:linear-gradient(160deg,${g1},${g2})`}, el("span", {}, b.e))),
+    el("small", {class:"bpop-kick"}, quiet ? (tierName ? `Награда · ${tierName}` : "Твоя награда") : "🎉 Новая награда!"),
+    el("h2", {}, b.name), el("p", {}, b.d),
+    el("div", {class:"bpop-xp"}, `+${badgeXP(b)} опыта`),
+    more ? el("div", {class:"tip", style:"margin:-2px 0 12px"}, `И ещё ${more} ${plural(more, "награда", "награды", "наград")} — загляни в профиль`) : null,
+    el("button", {class:"btn", onclick: () => { close(true); shareCanvas(() => drawBadgeCard(b), `Новая награда в Огоньке: ${b.e} ${b.name}! 🔥`); }}, "📤  Поделиться"),
+    el("button", {class:"btn sec", style:"margin-top:8px", onclick: () => close()}, quiet ? "Закрыть" : "Круто!"));
+  ov.append(card);
+  function close(instant) {
+    if (popClose !== close) return; popClose = null;
+    if (instant) ov.remove(); else { ov.classList.add("out"); setTimeout(() => ov.remove(), 200); }
+    if (tg && tg.BackButton && can("6.1") && !(screen === "detail" || screen === "challenge" || sheetClose || storyClose)) tg.BackButton.hide();
+  }
+  popClose = close;
+  document.body.append(ov);
+  if (tg && tg.BackButton && can("6.1")) tg.BackButton.show();
+  if (!quiet) celebrate();
+}
+function drawBadgeCard(b) {
+  const S = CS(), { c, x, W, H } = cardBase(S);
+  cBrand(x, S);
+  const [g1, g2] = badgeGrad(b), cx = W / 2, cy = 720, R = 230;
+  x.save(); x.translate(cx, cy);
+  for (let i = 0; i < 16; i++) { x.rotate(Math.PI / 8); const g = x.createLinearGradient(0, 0, 0, -520); g.addColorStop(0, g1 + "aa"); g.addColorStop(1, g1 + "00");
+    x.fillStyle = g; x.beginPath(); x.moveTo(0, 0); x.lineTo(-40, -520); x.lineTo(40, -520); x.closePath(); x.fill(); }
+  x.restore();
+  x.save(); x.shadowColor = "rgba(0,0,0,.35)"; x.shadowBlur = 50; x.shadowOffsetY = 20;
+  const g = x.createLinearGradient(cx - R, cy - R, cx + R, cy + R); g.addColorStop(0, g1); g.addColorStop(1, g2);
+  x.fillStyle = g; x.beginPath(); x.arc(cx, cy, R, 0, Math.PI * 2); x.fill(); x.restore();
+  x.save(); x.strokeStyle = "rgba(255,255,255,.55)"; x.lineWidth = 10; x.beginPath(); x.arc(cx, cy, R - 26, 0, Math.PI * 2); x.stroke(); x.restore();
+  x.save(); x.fillStyle = "#000"; x.font = `200px ${CF}`; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(b.e, cx, cy + 12); x.restore();
+  cText(x, S, b.medal ? "МЕДАЛЬ МЕСЯЦА" : "НОВАЯ НАГРАДА", cx, 1080, "semi", 40, S.sub, "center");
+  x.font = S.font("disp", 104);
+  const nl = wrapText(x, b.name, W - 160).slice(0, 2); let y = 1200;
+  nl.forEach(l => { cText(x, S, l, cx, y, "disp", 104, "big", "center"); y += 116; });
+  x.font = S.font("text", 46);
+  wrapText(x, b.d, W - 200).slice(0, 3).forEach((l, k) => cText(x, S, l, cx, y + 20 + k * 60, "text", 46, S.sub, "center"));
+  y += 40 + 3 * 60;
+  const xpT = `+${badgeXP(b)} опыта`; x.font = S.font("bold", 46); const tw = x.measureText(xpT).width + 80;
+  cTile(x, S, cx - tw / 2, y, tw, 92, 46); cText(x, S, xpT, cx, y + 62, "bold", 46, S.fg, "center");
+  cText(x, S, `${profileName()} · ${fmtDayLong(today())}`, cx, y + 170, "text", 38, S.sub, "center");
+  cFoot(x, S, null, W, H);
+  return c;
+}
+
+/* ---------- Тест «Твой тип по привычкам» ---------- */
+// Оси: M/N — утро или ночь, P/S — план или порыв, B/R — тело или разум, F/L — рывок или марафон
+const TYPE_Q = [
+  {q:"Когда тебе легче всего делать важные дела?", a:[["Утром, пока все спят ☀️","M"],["Вечером и ночью 🌙","N"]]},
+  {q:"Как начинаешь новое дело?", a:[["Составляю план и список 📋","P"],["Просто начинаю, по ходу разберусь 🚀","S"]]},
+  {q:"Что заряжает тебя больше?", a:[["Тренировка, движение, спорт 💪","B"],["Книга, подкаст, новые знания 🧠","R"]]},
+  {q:"Как ты добиваешься целей?", a:[["Рывком: выкладываюсь на максимум ⚡","F"],["Понемногу, но каждый день 🐢","L"]]},
+  {q:"Идеальные выходные начинаются…", a:[["…с раннего подъёма и планов на день","M"],["…с того, что высыпаюсь до обеда","N"]]},
+  {q:"Твой телефон — это…", a:[["Календарь, заметки, напоминания","P"],["Хаос из скриншотов и идей","S"]]},
+  {q:"Хорошие привычки для тебя — это прежде всего…", a:[["Сильное и здоровое тело","B"],["Ясная голова и спокойствие","R"]]},
+  {q:"Если пропустил день…", a:[["Завтра сделаю в два раза больше","F"],["Ничего страшного, продолжаю в своём темпе","L"]]},
+];
+const TYPES = {
+  MPBF:{e:"⚔️", n:"Утренний воин", tag:"Встаёт раньше будильника и сразу в бой", d:"Ты любишь чёткий план и быстрый результат. Утро — твоё время силы, а тело — главный проект.", plus:"Дисциплина и скорость", minus:"Научиться отдыхать — и сил станет только больше", tip:"Добавь день отдыха в неделю — он сделает тебя сильнее", c:["#ff5e3a","#ff9500"]},
+  MPBL:{e:"🏛️", n:"Железный режим", tag:"Тот, на кого хочется равняться", d:"Каждый день по плану, шаг за шагом. Ты строишь себя так, как строят крепости, — надёжно и навсегда.", plus:"Невероятное постоянство", minus:"Добавлять немного нового, чтобы путь всегда радовал", tip:"Раз в месяц пробуй новую тренировку или маршрут", c:["#3a4a5c","#8fa3b8"]},
+  MPRF:{e:"♟️", n:"Стратег рассвета", tag:"Пока все спят, ты уже на три хода впереди", d:"Утро ты отдаёшь мозгу: учёба, планы, большие идеи. Любишь быстрые победы и красивые схемы.", plus:"Ясная голова и фокус", minus:"Подружить ум с телом — и ты станешь непобедимым", tip:"Добавь 10 минут движения после утренних дел", c:["#2b5876","#4e4376"]},
+  MPRL:{e:"🌳", n:"Мудрый садовник", tag:"Растит себя медленно, но верно", d:"Ты знаешь: большое вырастает из маленьких ежедневных шагов. Книги, режим, спокойствие — твоя почва.", plus:"Терпение и глубина", minus:"Начинать смелее — ты готов уже сейчас", tip:"Начинай раньше, чем почувствуешь готовность", c:["#2e7d32","#9ccc65"]},
+  MSBF:{e:"⚡", n:"Солнечная молния", tag:"Проснулся — и уже на пробежке", d:"Утренняя энергия бьёт ключом, а планы — это скучно. Ты действуешь на импульсе и заряжаешь всех вокруг.", plus:"Энергия и драйв", minus:"Держать огонь и в спокойные дни — у тебя получится", tip:"Придумай мини-версию привычки на «вялые» дни", c:["#ffb300","#ff6f00"]},
+  MSBL:{e:"🏃", n:"Рассветный бегун", tag:"Двигается каждый день, просто потому что нравится", d:"Без жёстких планов, но с любовью к утру и движению. Тебе важно не сколько, а то, что каждый день.", plus:"Лёгкость и радость в процессе", minus:"Ставить чёткие цели и видеть, как далеко ты зашёл", tip:"Поставь одну конкретную цель на месяц", c:["#00b4db","#0083b0"]},
+  MSRF:{e:"💡", n:"Искатель идей", tag:"Каждое утро — новое увлечение", d:"Ты любишь узнавать, пробовать и загораться новым. Утром мозг работает на максимум, а идей больше, чем времени.", plus:"Любопытство и креатив", minus:"Выбирать главное и доводить его до конца", tip:"Выбери 2–3 главные привычки и держи их месяц", c:["#f7971e","#ffd200"]},
+  MSRL:{e:"☕", n:"Тихое утро", tag:"Кофе, книга, тишина — и день удался", d:"Твоя сила — в спокойствии. Ты не гонишься за рекордами, а создаёшь утро, в котором хорошо.", plus:"Баланс и спокойствие", minus:"Браться за сложное пораньше — ты справишься", tip:"Одно трудное дело — до обеда", c:["#8d6e63","#d7b8a8"]},
+  NPBF:{e:"🌃", n:"Ночной атлет", tag:"Зал в 22:00 — лучший зал", d:"Днём дела, вечером железо. Ты любишь план тренировок и быстрый прогресс, а ночной город только заводит.", plus:"Мощь и целеустремлённость", minus:"Высыпаться: сон превращает усилия в результат", tip:"Ложись в одно время: мышцы растут во сне", c:["#141e30","#e52d27"]},
+  NPBL:{e:"🔨", n:"Лунный кузнец", tag:"Куёт себя каждый вечер", d:"Вечерняя рутина — твоё святое. Медленно, но неотвратимо ты делаешь из себя лучшую версию.", plus:"Надёжность и выдержка", minus:"Быть добрее к себе — это тоже сила", tip:"Хвали себя за маленькие шаги — это тоже топливо", c:["#232526","#90a4ae"]},
+  NPRF:{e:"🦉", n:"Ночной стратег", tag:"Лучшие идеи приходят после полуночи", d:"Ночь — твоё время думать, учиться и строить планы. Ты быстро схватываешь и любишь видеть результат сразу.", plus:"Острый ум и фокус в тишине", minus:"Наладить режим — и твой ум засияет ещё ярче", tip:"Заведи будильник «пора спать», а не только «пора вставать»", c:["#0f2027","#2c7a96"]},
+  NPRL:{e:"🌌", n:"Звёздный архитектор", tag:"Строит большие планы под звёздами", d:"Ты мыслишь на годы вперёд и спокойно идёшь к цели. Вечерами — чтение, учёба и мечты с чёткой схемой.", plus:"Видение и стратегия", minus:"Превращать планы в маленькие действия каждый день", tip:"Каждый вечер — один маленький шаг из плана", c:["#1a1a40","#7a5cff"]},
+  NSBF:{e:"🏙️", n:"Неоновый спринтер", tag:"Внезапная тренировка в полночь? Легко", d:"Ты живёшь на вдохновении и выкладываешься по максимуму, когда загоришься. Вечером энергии больше всего.", plus:"Страсть и смелость", minus:"Сохранять темп между вспышками вдохновения", tip:"Держи серию хотя бы по 5 минут — главное не прерывать", c:["#ff0080","#7928ca"]},
+  NSBL:{e:"🌙", n:"Ночной путник", tag:"Вечерние прогулки — его медитация", d:"Ты не любишь жёстких рамок, но любишь движение и свой ритм. Вечер — время для себя и своего тела.", plus:"Гибкость и свобода", minus:"Начинать без настроения — оно придёт в процессе", tip:"Привяжи привычку к тому, что и так делаешь каждый вечер", c:["#3a1c71","#d76d77"]},
+  NSRF:{e:"🎨", n:"Полуночный творец", tag:"Создаёт шедевры, когда мир спит", d:"Ночью ты рисуешь, пишешь, учишься и придумываешь. Вдохновение приходит волнами — и ты ловишь каждую.", plus:"Креативность и вдохновение", minus:"Добавить немного порядка — и идей станет ещё больше", tip:"Отмечай привычку сразу, как сделал, — пока не забыл", c:["#8e2de2","#4a00e0"]},
+  NSRL:{e:"✨", n:"Мечтатель-созвездие", tag:"Собирает себя из маленьких звёзд", d:"Ты идёшь своим путём и в своём темпе. Вечерние мысли, книги и мечты — из них ты постепенно строишь жизнь.", plus:"Глубина и доброта к себе", minus:"Делать первый шаг к мечте уже сегодня", tip:"Сделай мечту привычкой на 5 минут в день", c:["#614385","#516395"]},
+};
+const typeMatch = code => code[0] + (code[1] === "P" ? "S" : "P") + (code[2] === "B" ? "R" : "B") + code[3];
+function typeFromAnswers(ans) {
+  const hs = allHabits(), f = state.flags;
+  const names = hs.map(h => h.name.toLowerCase()).join(" ");
+  const body = (names.match(/трен|зал|спорт|бег|шаг|отжим|присед|йог|растяж|плав|пресс|кардио|подтяг/g) || []).length;
+  const mind = (names.match(/чит|книг|англ|язык|учёб|учеб|медит|дневник|курс|код|програм|урок/g) || []).length;
+  const avgD = hs.length ? hs.reduce((s, h) => s + diffOf(h), 0) / hs.length : 3;
+  const tie = { MN: f.early && !f.owl ? "M" : f.owl && !f.early ? "N" : null, PS: hs.length >= 4 ? "P" : hs.length && hs.length <= 2 ? "S" : null,
+                BR: body > mind ? "B" : mind > body ? "R" : null, FL: avgD >= 3.6 ? "F" : avgD <= 2.6 ? "L" : null };
+  return ["MN","PS","BR","FL"].map((ax, k) => {
+    const a = ans.filter(x => x === ax[0]).length, b = ans.filter(x => x === ax[1]).length;
+    return a > b ? ax[0] : b > a ? ax[1] : (tie[ax] || ans[k]);
+  }).join("");
+}
+function openTypeQuiz() {
+  haptic("medium");
+  if (popClose) popClose(true);
+  const ans = [];
+  const ov = el("div", {class:"story quiz"});
+  const bars = el("div", {class:"st-bars"}, TYPE_Q.map(() => el("i", {}, el("b", {}))));
+  const slide = el("div", {class:"st-slide"});
+  const close = el("button", {class:"st-close", "aria-label":"Закрыть", onclick: () => storyClose()}, "✕");
+  ov.append(slide, bars, close);
+  const PAL = themePal().slides;
+  function ask(i) {
+    const q = TYPE_Q[i], bg = PAL[i % PAL.length];
+    ov.style.background = `linear-gradient(160deg, ${bg[0]}, ${bg[1]})`;
+    [...bars.children].forEach((b, j) => b.className = j < i ? "done" : j === i ? "now" : "");
+    slide.innerHTML = "";
+    slide.append(el("div", {class:"ws-kicker"}, `Вопрос ${i + 1} из ${TYPE_Q.length}`), el("h1", {class:"qz-q"}, q.q),
+      el("div", {class:"qz-ans"}, q.a.map(([t, v]) => el("button", {onclick: () => { ans[i] = v; haptic("select"); i + 1 < TYPE_Q.length ? ask(i + 1) : finish(); }}, t))),
+      i ? el("button", {class:"qz-back", onclick: () => ask(i - 1)}, "‹ Назад") : el("p", {}, "8 коротких вопросов — и узнаешь свой тип. Отвечай честно, правильных ответов нет 🙂"));
+    slide.classList.remove("in"); void slide.offsetWidth; slide.classList.add("in");
+  }
+  function finish() {
+    [...bars.children].forEach(b => b.className = "done");
+    slide.innerHTML = ""; slide.append(el("div", {class:"qz-load"}, el("div", {class:"qz-spin"}, "🔮"), el("h2", {}, "Смотрю на твои ответы и привычки…")));
+    slide.classList.remove("in"); void slide.offsetWidth; slide.classList.add("in");
+    setTimeout(() => {
+      const code = typeFromAnswers(ans);
+      state.persona = { code, at: today() }; save(true);
+      storyClose(); showTypeResult(code, true);
+    }, 1600);
+  }
+  storyClose = () => { storyClose = null; ov.classList.add("out"); setTimeout(() => ov.remove(), 200);
+    if (tg && tg.BackButton && can("6.1") && !(screen === "detail" || sheetClose || popClose)) tg.BackButton.hide(); };
+  document.body.append(ov);
+  if (tg && tg.BackButton && can("6.1")) tg.BackButton.show();
+  ask(0);
+}
+function showTypeResult(code, fresh) {
+  const t = TYPES[code]; if (!t) return;
+  const m = TYPES[typeMatch(code)];
+  const ov = el("div", {class:"story scroll", style:`background:linear-gradient(165deg, ${t.c[0]}, ${t.c[1]})`});
+  const close = el("button", {class:"st-close", "aria-label":"Закрыть", onclick: () => storyClose()}, "✕");
+  const body = el("div", {class:"st-slide in tp"},
+    el("div", {class:"ws-kicker"}, fresh ? "🔮 Твой тип по привычкам" : "🔮 Твой тип"),
+    el("div", {class:"ws-persona"}, t.e), el("h1", {}, t.n), el("p", {class:"tp-tag"}, t.tag),
+    el("div", {class:"tp-code"}, code.split("").map(ch => el("span", {}, {M:"☀️ Утро",N:"🌙 Ночь",P:"📋 План",S:"🚀 Порыв",B:"💪 Тело",R:"🧠 Разум",F:"⚡ Рывок",L:"🐢 Марафон"}[ch]))),
+    el("p", {}, t.d),
+    el("div", {class:"ws-list"},
+      el("div", {}, el("b", {}, "💎"), el("span", {}, el("small", {}, "Твоя сила"), t.plus)),
+      el("div", {}, el("b", {}, "🌱"), el("span", {}, el("small", {}, "Зона роста"), t.minus)),
+      el("div", {}, el("b", {}, "🚀"), el("span", {}, el("small", {}, "Следующий шаг"), t.tip)),
+      el("div", {}, el("b", {}, m.e), el("span", {}, el("small", {}, "Лучшая пара"), m.n))),
+    el("button", {class:"btn tp-share", onclick: () => shareCanvas(() => drawTypeCard(code), `Мой тип по привычкам — ${t.e} ${t.n}! А ты кто? Пройди тест в Огоньке 🔥`)}, "📤  Поделиться"),
+    el("button", {class:"btn tp-again", onclick: () => { storyClose(); openTypeQuiz(); }}, "Пройти заново"));
+  ov.append(body, close);
+  storyClose = () => { storyClose = null; ov.classList.add("out"); setTimeout(() => ov.remove(), 200); render();
+    if (tg && tg.BackButton && can("6.1") && !(screen === "detail" || sheetClose || popClose)) tg.BackButton.hide(); };
+  document.body.append(ov);
+  if (tg && tg.BackButton && can("6.1")) tg.BackButton.show();
+  if (fresh) { celebrate(); haptic("success"); }
+}
+function drawTypeCard(code) {
+  const t = TYPES[code], S = CS(t.c), { c, x, W, H } = cardBase(S);
+  cBrand(x, S);
+  cText(x, S, "МОЙ ТИП ПО ПРИВЫЧКАМ", 90, 300, "semi", 40, S.sub);
+  x.save(); x.fillStyle = "#000"; x.font = `230px ${CF}`; x.fillText(t.e, 70, 560); x.restore();
+  x.font = S.font("disp", 112); let y = 720;
+  wrapText(x, t.n, W - 170).slice(0, 2).forEach(l => { cText(x, S, l, 84, y, "disp", 112, "big"); y += 124; });
+  x.font = S.font("text", 46);
+  wrapText(x, t.tag, W - 180).slice(0, 2).forEach(l => { cText(x, S, l, 90, y, "text", 46, S.sub); y += 60; });
+  y += 30;
+  [["💎 Моя сила", t.plus], ["🌱 Зона роста", t.minus], ["🚀 Следующий шаг", t.tip]].forEach(([k, v]) => {
+    x.font = S.font("bold", 42); const lines = wrapText(x, v, 780).slice(0, 2), h = 96 + lines.length * 54;
+    cTile(x, S, 84, y, 912, h, 40);
+    cText(x, S, k, 124, y + 62, "semi", 34, S.sub);
+    lines.forEach((l, i) => cText(x, S, l, 124, y + 118 + i * 54, "bold", 42));
+    y += h + 24;
+  });
+  const m = TYPES[typeMatch(code)];
+  cText(x, S, `Лучшая пара: ${m.e} ${m.n}`, 90, y + 40, "semi", 40, S.sub);
+  cFoot(x, S, "Узнай свой тип:", W, H);
+  return c;
+}
+function typeCard() {
+  const p = state.persona && TYPES[state.persona.code];
+  if (!p) return el("button", {class:"type-card", onclick: openTypeQuiz},
+    el("i", {}, "🔮"), el("div", {}, el("b", {}, "Узнай свой тип по привычкам"), el("small", {}, "8 вопросов · 1 минута · 16 типов")), el("span", {}, "›"));
+  return el("button", {class:"type-card has", style:`background:linear-gradient(135deg, ${p.c[0]}, ${p.c[1]})`, onclick: () => showTypeResult(state.persona.code)},
+    el("i", {}, p.e), el("div", {}, el("small", {}, "Твой тип"), el("b", {}, p.n)), el("span", {}, "›"));
+}
+
+/* ---------- Приглашения ---------- */
+function inviteLink() { const u = tgUser(); return u.id ? `${BOT_LINK}=ref_${u.id}` : BOT_LINK; }
 
 /* ---------------- Онбординг ---------------- */
 let onbStep = 0;
@@ -2308,6 +3629,8 @@ setInterval(() => {
   try { if (raw) { state = migrate(JSON.parse(raw)); if (useCloud) savedChunks = Math.ceil(raw.length / CHUNK); } }
   catch(e) { toast("Данные повреждены — начинаем заново"); }
   loaded = true;
+  { const sp = tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param, u = tgUser();
+    if (sp && /^ref_\d+$/.test(sp) && String(u.id || "") !== sp.slice(4) && !state.flags.refIn && (!state.onboarded || !state.habits.length)) { state.flags.refIn = sp.slice(4); save(); } }
   applyTheme();
   { const d = new Date(); if (d.getMonth() === 9 && d.getDate() === 27 && !state.flags.bday) { state.flags.bday = true; save(); } }
   if (state.timer && state.timer.day !== today()) stopTimer(true);
